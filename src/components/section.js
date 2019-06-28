@@ -9,7 +9,7 @@ function Section() {
     <React.Fragment>
       <CssBaseline />
       <Container maxWidth="sm" className="container">
-        <Typography component="div" className="section" style={{ backgroundColor: '#cfe8fc', height: '15vh' }} />
+        <Typography component="div" className="section" />
       </Container>
     </React.Fragment>
   );

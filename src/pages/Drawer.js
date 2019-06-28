@@ -12,10 +12,12 @@ import AccountIcon from '@material-ui/icons/AccountBox';
 import SearchIcon from '@material-ui/icons/Search';
 import PeopleIcon from '@material-ui/icons/People';
 
-import DrawerButton from './DrawerButton'
+import DrawerButton from '../components/DrawerButton'
+
 import MainPage from "./main/MainPage";
 import FindPage from "./find/Find";
 import MyPage from "./my/My";
+import AppBarCustom from './AppBar';
 
 
 const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -80,6 +82,7 @@ function SwipeableTemporaryDrawer() {
 
   return (
     <React.Fragment>
+      <AppBarCustom />
       {state.page}
       <div>
         <DrawerButton onClick={toggleDrawer('right', true)} />

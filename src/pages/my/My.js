@@ -1,5 +1,5 @@
 import React from 'react';
-import Section from '../main/section'
+import Section from '../../components/section'
 
 function my() {
     return (
