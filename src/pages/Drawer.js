@@ -12,11 +12,11 @@ import AccountIcon from '@material-ui/icons/AccountBox';
 import SearchIcon from '@material-ui/icons/Search';
 import PeopleIcon from '@material-ui/icons/People';
 
-import DrawerButton from '../components/DrawerButton'
+import DrawerButton from '../components/DrawerButton';
 
-import MainPage from "./main/MainPage";
-import FindPage from "./find/Find";
-import MyPage from "./my/My";
+import MainPage from './main/MainPage';
+import FindPage from './find/Find';
+import MyPage from './my/My';
 import AppBarCustom from './AppBar';
 
 
@@ -38,7 +38,7 @@ function SwipeableTemporaryDrawer() {
     page: <MainPage />,
   });
 
-  const toggleDrawer = (side, open) => event => {
+  const toggleDrawer = (side, open) => (event) => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
@@ -54,17 +54,17 @@ function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(side, false)}
     >
       <List>
-        <ListItem button key={'主页'} onClick={() => {state.page = <MainPage />}}>
+        <ListItem button key="主页" onClick={() => { state.page = <MainPage />; }}>
           <ListItemIcon><PeopleIcon /></ListItemIcon>
-          <ListItemText primary={'主页'} />
+          <ListItemText primary="主页" />
         </ListItem>
-        <ListItem button key={'发现'} onClick={() => {state.page = <FindPage />}}>
+        <ListItem button key="发现" onClick={() => { state.page = <FindPage />; }}>
           <ListItemIcon><SearchIcon /></ListItemIcon>
-          <ListItemText primary={'发现'} />
+          <ListItemText primary="发现" />
         </ListItem>
-        <ListItem button key={'我的'} onClick={() => {state.page = <MyPage />}}>
+        <ListItem button key="我的" onClick={() => { state.page = <MyPage />; }}>
           <ListItemIcon><AccountIcon /></ListItemIcon>
-          <ListItemText primary={'我的'} />
+          <ListItemText primary="我的" />
         </ListItem>
       </List>
       <Divider />
@@ -91,8 +91,9 @@ function SwipeableTemporaryDrawer() {
           open={state.right}
           onClose={toggleDrawer('right', false)}
           onOpen={toggleDrawer('right', true)}
-          disableBackdropTransition={!iOS} disableDiscovery={iOS}
-          >
+          disableBackdropTransition={!iOS}
+          disableDiscovery={iOS}
+        >
           {sideList('right')}
         </SwipeableDrawer>
       </div>

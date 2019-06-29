@@ -14,6 +14,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Login from '../components/login';
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -113,8 +114,7 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>主页</MenuItem>
     </Menu>
   );
 
@@ -145,7 +145,8 @@ export default function PrimarySearchAppBar() {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <Login handleMobileMenuClose={handleMobileMenuClose} />
+      {/* <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="Account of current user"
           aria-controls="primary-search-account-menu"
@@ -154,8 +155,8 @@ export default function PrimarySearchAppBar() {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+        <p>个人</p>
+      </MenuItem> */}
     </Menu>
   );
 
