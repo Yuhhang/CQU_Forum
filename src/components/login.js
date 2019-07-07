@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import axios from 'axios';
-import React from 'react';
+import React, { useContext } from 'react';
 import clsx from 'clsx';
 // import { ReCaptcha } from 'react-recaptcha-v3';
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,6 +20,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import userContext from '../context/userContext';
 // import CircularProgress from '@material-ui/core/CircularProgress';
 
 
@@ -69,6 +70,7 @@ function LoginAndOut(props) {
 
 export default function LoginDialog(props) {
   const { handleMobileMenuClose } = props; // 打开登陆界面时关闭面板以避免键盘冲突
+  const context = useContext(userContext); // global user context
 
   const [values, setValues] = React.useState({
     username: '',
@@ -81,8 +83,9 @@ export default function LoginDialog(props) {
     usernameErrorText: '',
     showProgress: false,
   });
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [register, setRegister] = React.useState(false);
+  const [isLoggedIn, setLoggedIn] = React.useState(false);
   // const [captchaLoading, setCaptchaLoading] = React.useState(true);
   // const [captchaToken, setCaptchaToken] = React.useState('');
 
@@ -136,7 +139,12 @@ export default function LoginDialog(props) {
   }
 
   function handleLogout() {
-    console.log('logout');
+    instance.get('/logout').then((res) => {
+      if (res.data.success) {
+        context.logout();
+        setLoggedIn(false);
+      }
+    });
   }
 
   function handleRegister() {
@@ -148,6 +156,12 @@ export default function LoginDialog(props) {
       setValues({ ...values, usernameError: true, usernameErrorText: '请填写用户名' });
       return false;
     }
+    // 字母开头，允许5-16字节，允许字母数字下划线
+    const usernameReg = /^[a-zA-Z][a-zA-Z0-9_]{4,15}$/;
+    if (register && !usernameReg.test(values.username)) {
+      setValues({ ...values, usernameError: true, usernameErrorText: '用户名以字母开头，5-16字节，允许字母数字下划线' });
+      return false;
+    }
     return true;
   }
 
@@ -156,14 +170,15 @@ export default function LoginDialog(props) {
       setValues({ ...values, passwordError: true, passwordErrorText: '请填写密码' });
       return false;
     }
-    if (values.password.length < 6) {
-      setValues({ ...values, passwordError: true, passwordErrorText: '密码不能少于6位' });
+    const pswdReg = /^[\s]*$/;
+    if (register && (values.password.length < 6 || !pswdReg.test(values.password))) {
+      setValues({ ...values, passwordError: true, passwordErrorText: '密码不能包含空格，且不能少于6位' });
       return false;
     }
     return true;
   }
 
-  function handleLoginAndRegister() {
+  function handleSubmit() {
     if (!checkUsername()) return;
     if (!checkPassword()) return;
 
@@ -171,10 +186,6 @@ export default function LoginDialog(props) {
       if (!checkPswdSame()) return;
     }
 
-    // 取消密码错误
-    if (values.passwordError === true) {
-      setValues({ ...values, passwordError: false });
-    }
     // 显示加载条并禁用提交
     setValues({ ...values, showProgress: true });
 
@@ -194,6 +205,16 @@ export default function LoginDialog(props) {
         if (res.data.login_status === 'success') { // 登陆成功
           setValues({ ...values, showProgress: false });
           setOpen(false);
+          setLoggedIn(true);
+          const userInfo = {
+            userName: values.username,
+            avatar: '',
+            auth: {
+              mode: 'admin',
+              sections: [],
+            },
+          };
+          context.login(userInfo);
         } else if (res.data.login_status === 'fail') { // 登陆失败
           setValues({
             ...values,
@@ -232,29 +253,27 @@ export default function LoginDialog(props) {
   }
 
   function canclePswdErr() {
-    if (values.password !== '' && values.passwordError === true) {
-      setValues({ ...values, passwordError: false });
+    if (values.passwordError === true) {
+      setValues({ ...values, passwordError: false, passwordErrorText: '' });
     }
   }
 
   function cancleUserErr() {
-    if (values.username !== '' && values.usernameError === true) {
-      setValues({ ...values, usernameError: false });
+    if (values.usernameError === true) {
+      setValues({ ...values, usernameError: false, usernameErrorText: '' });
     }
   }
 
-  // 输入处理函数（有缺陷）
+  // 输入处理函数
   const handleChange = prop => (event) => {
     setValues({ ...values, [prop]: event.target.value });
-    cancleUserErr();
-    canclePswdErr();
   };
 
 
   // Enter绑定登录
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-      handleLoginAndRegister();
+      handleSubmit();
     }
   };
 
@@ -273,7 +292,7 @@ export default function LoginDialog(props) {
   return (
     <div>
       <LoginAndOut
-        isLoggedIn={false}
+        isLoggedIn={isLoggedIn}
         handleClickOpen={handleClickOpen}
         handleLogout={handleLogout}
       />
@@ -295,6 +314,7 @@ export default function LoginDialog(props) {
                 type="text"
                 value={values.username}
                 onChange={handleChange('username')}
+                onFocus={cancleUserErr}
               />
               <FormHelperText className={classes.showUserHelperText} error={values.usernameError}>
                 {values.usernameErrorText}
@@ -308,6 +328,7 @@ export default function LoginDialog(props) {
                 type={values.showPassword ? 'text' : 'password'}
                 value={values.password}
                 onChange={handleChange('password')}
+                onFocus={canclePswdErr}
                 endAdornment={!register && (
                   <InputAdornment position="end">
                     <IconButton
@@ -370,7 +391,7 @@ export default function LoginDialog(props) {
           <Button onClick={handleRegister} color="secondary">
             {register ? '返回登陆' : '注册新用户'}
           </Button>
-          <Button onClick={handleLoginAndRegister} color="primary" disabled={values.showProgress}>
+          <Button onClick={handleSubmit} color="primary" disabled={values.showProgress}>
             {register ? '注册' : '登录'}
           </Button>
         </DialogActions>

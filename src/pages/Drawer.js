@@ -17,7 +17,7 @@ import DrawerButton from '../components/DrawerButton';
 import MainPage from './main/MainPage';
 import FindPage from './find/Find';
 import MyPage from './my/My';
-import AppBarCustom from './AppBar';
+import AppBar from './AppBar';
 
 
 const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -82,7 +82,7 @@ function SwipeableTemporaryDrawer() {
 
   return (
     <React.Fragment>
-      <AppBarCustom />
+      <AppBar />
       {state.page}
       <div>
         <DrawerButton onClick={toggleDrawer('right', true)} />

@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
   card: {
     display: 'flex',
     // height: '15vh',
-    margin: '10px'
+    margin: '10px',
   },
   details: {
     overflow: 'hidden',
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function MediaControlCard(props) {
-  console.log(props)
+  // console.log(props)
   const classes = useStyles();
   const theme = useTheme();
 

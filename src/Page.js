@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useReducer } from 'react';
+import NavBar from './pages/NavBar';
+import GlobalState from './context/GlobalState';
 // import { loadReCaptcha } from 'react-recaptcha-v3';
-import Drawer from './pages/Drawer';
-import Login from './components/login';
-
-
+// import Drawer from './pages/Drawer';
 // const siteKey = '6LeBQ6sUAAAAAK30E3NZs_oHm2XtedUkLpRO7MlW';
 // loadReCaptcha(siteKey);
 
 function Page() {
   return (
-    <Drawer />
-      // <Login />
+    <GlobalState>
+      <React.Fragment>
+        {/* <Drawer /> */}
+        <NavBar />
+      </React.Fragment>
+    </GlobalState>
   );
 }
 
