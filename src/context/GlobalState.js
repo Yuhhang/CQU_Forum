@@ -4,7 +4,7 @@ import loginContext from './userContext';
 import { userReducer, LOGIN, LOGOUT } from './userReducer';
 
 const GlobalState = (props) => {
-  const initialState = {
+  let initialState = {
     isLoggedIn: false,
     userName: '',
     avatar: '',
@@ -13,6 +13,11 @@ const GlobalState = (props) => {
       sections: [],
     },
   };
+
+  const userInfoTemp = localStorage.getItem('userInfo');
+  if (userInfoTemp !== undefined) {
+    initialState = JSON.parse(userInfoTemp);
+  }
 
   const [userState, dispatch] = useReducer(userReducer, initialState);
 
@@ -24,6 +29,7 @@ const GlobalState = (props) => {
     dispatch({ type: LOGOUT });
   };
 
+  const { children } = props;
   return (
     <loginContext.Provider
       value={{
@@ -32,7 +38,7 @@ const GlobalState = (props) => {
         logout,
       }}
     >
-      {props.children}
+      {children}
     </loginContext.Provider>
   );
 };

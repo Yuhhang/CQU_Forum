@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import axios from 'axios';
 import React, { useContext } from 'react';
 import clsx from 'clsx';
@@ -207,6 +206,7 @@ export default function LoginDialog(props) {
           setOpen(false);
           setLoggedIn(true);
           const userInfo = {
+            isLoggedIn: true,
             userName: values.username,
             avatar: '',
             auth: {
@@ -214,7 +214,8 @@ export default function LoginDialog(props) {
               sections: [],
             },
           };
-          context.login(userInfo);
+          context.login(userInfo); // 设置全局context
+          localStorage.setItem('userInfo', JSON.stringify(userInfo)); // 设置本地存储
         } else if (res.data.login_status === 'fail') { // 登陆失败
           setValues({
             ...values,

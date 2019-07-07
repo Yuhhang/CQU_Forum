@@ -114,34 +114,34 @@ export default function My() {
         <div className={classes.root}>
           <List component="nav">
             <Divider />
-            <ListItem button disabled={false}>
+            <ListItem button disabled={!userState.isLoggedIn}>
               <ListItemIcon>
                 <AssignmentIcon />
               </ListItemIcon>
               <ListItemText primary="个人信息" />
             </ListItem>
 
-            <ListItem button>
+            <ListItem button disabled={!userState.isLoggedIn}>
               <ListItemIcon>
                 <HistoryIcon />
               </ListItemIcon>
               <ListItemText primary="浏览历史" />
             </ListItem>
 
-            <ListItem button>
+            <ListItem button disabled={!userState.isLoggedIn}>
               <ListItemIcon>
                 <StarsIcon />
               </ListItemIcon>
               <ListItemText primary="我的收藏" />
             </ListItem>
 
-            <ListItem button>
+            <ListItem button disabled={!userState.isLoggedIn}>
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="我的发帖" />
             </ListItem>
-            <ListItem button>
+            <ListItem button disabled={!userState.isLoggedIn}>
               <ListItemIcon>
                 <PeopleIcon />
               </ListItemIcon>
