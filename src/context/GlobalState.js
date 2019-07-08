@@ -1,10 +1,24 @@
 import React, { useReducer } from 'react';
+import axios from 'axios';
 
 import loginContext from './userContext';
-import { userReducer, LOGIN, LOGOUT } from './userReducer';
+import {
+  userReducer,
+  SET_LOGIN,
+  SET_LOGOUT,
+  OPEN_LOGIN_DIALOG,
+  CLOSE_LOGIN_DIALOG,
+} from './userReducer';
+
+
+const instance = axios.create({
+  baseURL: 'http://server.messi1.top/api/',
+  timeout: 5000,
+});
 
 const GlobalState = (props) => {
   let initialState = {
+    openLoginDialog: false,
     isLoggedIn: false,
     userName: '',
     avatar: '',
@@ -15,18 +29,31 @@ const GlobalState = (props) => {
   };
 
   const userInfoTemp = localStorage.getItem('userInfo');
-  if (userInfoTemp !== undefined) {
+  if (userInfoTemp !== null) {
     initialState = JSON.parse(userInfoTemp);
   }
 
   const [userState, dispatch] = useReducer(userReducer, initialState);
 
-  const login = (userInfo) => {
-    dispatch({ type: LOGIN, userInfo });
+  const openLoginDialog = () => {
+    dispatch({ type: OPEN_LOGIN_DIALOG });
   };
 
-  const logout = () => {
-    dispatch({ type: LOGOUT });
+  const closeLoginDialog = () => {
+    dispatch({ type: CLOSE_LOGIN_DIALOG });
+  };
+
+  const setLogin = (userInfo) => {
+    dispatch({ type: SET_LOGIN, userInfo });
+  };
+
+  const setLogout = () => {
+    instance.get('/logout').then((res) => {
+      if (res.data.success) {
+        dispatch({ type: SET_LOGOUT });
+        localStorage.clear();
+      }
+    });
   };
 
   const { children } = props;
@@ -34,8 +61,10 @@ const GlobalState = (props) => {
     <loginContext.Provider
       value={{
         userState,
-        login,
-        logout,
+        setLogin,
+        setLogout,
+        openLoginDialog,
+        closeLoginDialog,
       }}
     >
       {children}

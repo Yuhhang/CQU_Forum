@@ -41,8 +41,22 @@ const useStyles = makeStyles(() => ({
 
 function LabelInfo(props) {
   const { status } = props;
+  const { openLoginDialog } = props;
   let icon = <ErrorIcon />;
   let label = '未登录';
+  if (!status || status === 'visitor') { // 点击登录
+    return (
+      <Chip
+        variant="default"
+        size="big"
+        icon={icon}
+        label={label}
+        clickable
+        color="primary"
+        onClick={openLoginDialog}
+      />
+    );
+  }
   switch (status) {
     case 'unVerified':
       icon = <ErrorIcon />;
@@ -73,7 +87,6 @@ function LabelInfo(props) {
       size="small"
       icon={icon}
       label={label}
-      clickable
       color="primary"
     />
   );
@@ -82,6 +95,9 @@ function LabelInfo(props) {
 export default function My() {
   const context = useContext(userContext);
   const { userState } = context;
+
+  const { isLoggedIn } = userState;
+  const { openLoginDialog } = userState;
   const classes = useStyles();
 
   return (
@@ -106,7 +122,7 @@ export default function My() {
                 </Typography>
               </Grid>
               <Grid item xs={8}>
-                <LabelInfo status={userState.auth.mode} />
+                <LabelInfo status={userState.auth.mode} openLoginDialog={openLoginDialog} />
               </Grid>
             </Grid>
           </Grid>
@@ -114,34 +130,34 @@ export default function My() {
         <div className={classes.root}>
           <List component="nav">
             <Divider />
-            <ListItem button disabled={!userState.isLoggedIn}>
+            <ListItem button disabled={!isLoggedIn}>
               <ListItemIcon>
                 <AssignmentIcon />
               </ListItemIcon>
               <ListItemText primary="个人信息" />
             </ListItem>
 
-            <ListItem button disabled={!userState.isLoggedIn}>
+            <ListItem button disabled={!isLoggedIn}>
               <ListItemIcon>
                 <HistoryIcon />
               </ListItemIcon>
               <ListItemText primary="浏览历史" />
             </ListItem>
 
-            <ListItem button disabled={!userState.isLoggedIn}>
+            <ListItem button disabled={!isLoggedIn}>
               <ListItemIcon>
                 <StarsIcon />
               </ListItemIcon>
               <ListItemText primary="我的收藏" />
             </ListItem>
 
-            <ListItem button disabled={!userState.isLoggedIn}>
+            <ListItem button disabled={!isLoggedIn}>
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="我的发帖" />
             </ListItem>
-            <ListItem button disabled={!userState.isLoggedIn}>
+            <ListItem button disabled={!isLoggedIn}>
               <ListItemIcon>
                 <PeopleIcon />
               </ListItemIcon>

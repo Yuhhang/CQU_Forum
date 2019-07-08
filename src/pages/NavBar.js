@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
@@ -22,6 +22,16 @@ const useStyles = makeStyles({
   },
 });
 
+function SetPath(props) {
+  const { path } = props;
+  const defaultPaths = new Set(['/', '/square', '/inbox', '/my']);
+  if (!defaultPaths.has(path)) {
+    console.log(path)
+    return <Redirect to="/" />;
+  }
+  return null;
+}
+
 export default function LabelBottomNavigation() {
   const classes = useStyles();
   const [value, setValue] = React.useState('index');
@@ -29,12 +39,15 @@ export default function LabelBottomNavigation() {
   function handleChange(event, newValue) {
     setValue(newValue);
   }
+  // console.log(window.location.pathname.substr(1, window.location.pathname.length - 1));
+  // <RedirectTo
 
   return (
     <React.Fragment>
       <CssBaseline />
       <Router>
         <AppBar />
+        {/* <SetPath path={window.location.pathname} /> */}
         <BottomNavigation value={value} onChange={handleChange} className={classes.navbar}>
           <BottomNavigationAction label="主页" value="index" icon={<ViewListIcon />} component={Link} to="/" />
           <BottomNavigationAction label="广场" value="square" icon={<CategoryIcon />} component={Link} to="/square" />

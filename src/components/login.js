@@ -1,5 +1,5 @@
-import axios from 'axios';
 import React, { useContext } from 'react';
+import axios from 'axios';
 import clsx from 'clsx';
 // import { ReCaptcha } from 'react-recaptcha-v3';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,8 +9,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -32,44 +30,10 @@ const instance = axios.create({
   timeout: 5000,
 });
 
-function LoginAndOut(props) {
-  const { isLoggedIn } = props;
-  const { handleClickOpen } = props;
-  const { handleLogout } = props;
-  if (isLoggedIn) {
-    return (
-      <MenuItem onClick={handleLogout}>
-        <IconButton
-          aria-label="Account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>登出</p>
-      </MenuItem>
-    );
-  }
-  return (
-    <MenuItem onClick={handleClickOpen}>
-      <IconButton
-        aria-label="Account of current user"
-        aria-controls="primary-search-account-menu"
-        aria-haspopup="true"
-        color="inherit"
-      >
-        <AccountCircle />
-      </IconButton>
-      <p>登录</p>
-    </MenuItem>
-  );
-}
-
-
-export default function LoginDialog(props) {
-  const { handleMobileMenuClose } = props; // 打开登陆界面时关闭面板以避免键盘冲突
+export default function LoginDialog() {
   const context = useContext(userContext); // global user context
+  const { userState } = context;
+  const { openLoginDialog } = userState;
 
   const [values, setValues] = React.useState({
     username: '',
@@ -82,9 +46,8 @@ export default function LoginDialog(props) {
     usernameErrorText: '',
     showProgress: false,
   });
-  const [open, setOpen] = React.useState(false);
   const [register, setRegister] = React.useState(false);
-  const [isLoggedIn, setLoggedIn] = React.useState(false);
+  // const [isLoggedIn, setLoggedIn] = React.useState(false);
   // const [captchaLoading, setCaptchaLoading] = React.useState(true);
   // const [captchaToken, setCaptchaToken] = React.useState('');
 
@@ -120,13 +83,8 @@ export default function LoginDialog(props) {
 
   const classes = useStyles();
 
-  function handleClickOpen() {
-    setOpen(true);
-    handleMobileMenuClose();
-  }
-
   function handleClose() {
-    setOpen(false);
+    context.closeLoginDialog();
   }
 
   function checkPswdSame() {
@@ -135,15 +93,6 @@ export default function LoginDialog(props) {
       return false;
     }
     return true;
-  }
-
-  function handleLogout() {
-    instance.get('/logout').then((res) => {
-      if (res.data.success) {
-        context.logout();
-        setLoggedIn(false);
-      }
-    });
   }
 
   function handleRegister() {
@@ -203,9 +152,10 @@ export default function LoginDialog(props) {
         // console.log(res.data);
         if (res.data.login_status === 'success') { // 登陆成功
           setValues({ ...values, showProgress: false });
-          setOpen(false);
-          setLoggedIn(true);
+          context.closeLoginDialog();
+          // setLoggedIn(true);
           const userInfo = {
+            openLoginDialog: false,
             isLoggedIn: true,
             userName: values.username,
             avatar: '',
@@ -214,8 +164,7 @@ export default function LoginDialog(props) {
               sections: [],
             },
           };
-          context.login(userInfo); // 设置全局context
-          localStorage.setItem('userInfo', JSON.stringify(userInfo)); // 设置本地存储
+          context.setLogin(userInfo); // 设置全局context
         } else if (res.data.login_status === 'fail') { // 登陆失败
           setValues({
             ...values,
@@ -289,16 +238,15 @@ export default function LoginDialog(props) {
   //   setCaptchaToken(recaptchaToken);
   //   setCaptchaLoading(false);
   // }
-
   return (
     <div>
-      <LoginAndOut
+      {/* <LoginAndOut
         isLoggedIn={isLoggedIn}
         handleClickOpen={handleClickOpen}
         handleLogout={handleLogout}
-      />
+      /> */}
       <Dialog
-        open={open}
+        open={openLoginDialog}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
         onKeyPress={handleKeyPress}

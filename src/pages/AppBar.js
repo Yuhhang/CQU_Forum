@@ -1,20 +1,19 @@
-import React from 'react';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import React, { useContext } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 // import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Login from '../components/login';
+import userContext from '../context/userContext';
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -55,6 +54,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function PrimarySearchAppBar() {
+  const context = useContext(userContext); // global user context
+  const { userState } = context;
+
+  const { isLoggedIn } = userState;
+
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -121,8 +125,16 @@ export default function PrimarySearchAppBar() {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <Login handleMobileMenuClose={handleMobileMenuClose} />
-      {/* <MenuItem onClick={handleProfileMenuOpen}>
+      <Login />
+      <MenuItem onClick={() => {
+        if (!isLoggedIn) { // 未登录
+          context.openLoginDialog();
+        } else {
+          context.setLogout();
+        }
+        handleMobileMenuClose();
+      }}
+      >
         <IconButton
           aria-label="Account of current user"
           aria-controls="primary-search-account-menu"
@@ -131,8 +143,8 @@ export default function PrimarySearchAppBar() {
         >
           <AccountCircle />
         </IconButton>
-        <p>个人</p>
-      </MenuItem> */}
+        <p>{isLoggedIn ? '登出' : '登录'}</p>
+      </MenuItem>
     </Menu>
   );
 
