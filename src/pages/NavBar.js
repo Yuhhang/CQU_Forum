@@ -9,7 +9,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from './AppBar';
-import Main from './main/MainPage';
+import Main from './index/index';
 import Inbox from './inbox/inbox';
 import My from './my/My';
 

@@ -48,7 +48,7 @@ function LabelInfo(props) {
     return (
       <Chip
         variant="default"
-        size="big"
+        size="medium"
         icon={icon}
         label={label}
         clickable
@@ -94,10 +94,10 @@ function LabelInfo(props) {
 
 export default function My() {
   const context = useContext(userContext);
+  const { openLoginDialog } = context;
   const { userState } = context;
 
   const { isLoggedIn } = userState;
-  const { openLoginDialog } = userState;
   const classes = useStyles();
 
   return (

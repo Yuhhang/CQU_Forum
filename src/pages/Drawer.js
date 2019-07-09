@@ -14,7 +14,7 @@ import PeopleIcon from '@material-ui/icons/People';
 
 import DrawerButton from '../components/DrawerButton';
 
-import MainPage from './main/MainPage';
+import IndexPage from './index/index';
 import FindPage from './find/Find';
 import MyPage from './my/My';
 import AppBar from './AppBar';
@@ -35,7 +35,7 @@ function SwipeableTemporaryDrawer() {
   const classes = useStyles();
   const [state, setState] = React.useState({
     right: false,
-    page: <MainPage />,
+    page: <IndexPage />,
   });
 
   const toggleDrawer = (side, open) => (event) => {
@@ -54,7 +54,7 @@ function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(side, false)}
     >
       <List>
-        <ListItem button key="主页" onClick={() => { state.page = <MainPage />; }}>
+        <ListItem button key="主页" onClick={() => { state.page = <IndexPage />; }}>
           <ListItemIcon><PeopleIcon /></ListItemIcon>
           <ListItemText primary="主页" />
         </ListItem>
