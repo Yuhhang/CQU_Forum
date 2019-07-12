@@ -11,10 +11,12 @@ import Menu from '@material-ui/core/Menu';
 import ForumIcon from '@material-ui/icons/Forum';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
+import CreateIcon from '@material-ui/icons/Create';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import Login from '../components/login';
 import userContext from '../context/userContext';
+import LoginDialog from '../components/LoginDialog';
+import PostDialog from '../components/PostDialog';
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -59,6 +61,7 @@ const useStyles = makeStyles(theme => ({
 export default function PrimarySearchAppBar() {
   const context = useContext(userContext); // global user context
   const { userState } = context;
+  const { setOpenPostDialog } = context;
 
   const { isLoggedIn } = userState;
 
@@ -112,6 +115,17 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
+      <MenuItem onClick={() => {
+        setOpenPostDialog();
+        handleMobileMenuClose();
+      }}
+      >
+        <IconButton color="inherit">
+          <CreateIcon />
+        </IconButton>
+        <p>发帖</p>
+      </MenuItem>
+      <PostDialog />
       <MenuItem>
         <IconButton aria-label="Show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="secondary">
@@ -128,22 +142,17 @@ export default function PrimarySearchAppBar() {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <Login />
+      <LoginDialog />
       <MenuItem onClick={() => {
         if (!isLoggedIn) { // 未登录
-          context.openLoginDialog();
+          context.setOpenLoginDialog();
         } else {
           context.setLogout();
         }
         handleMobileMenuClose();
       }}
       >
-        <IconButton
-          aria-label="Account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
+        <IconButton color="inherit">
           <AccountCircleIcon />
         </IconButton>
         <p>{isLoggedIn ? '登出' : '登录'}</p>

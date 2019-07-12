@@ -41,7 +41,7 @@ const useStyles = makeStyles(() => ({
 
 function LabelInfo(props) {
   const { status } = props;
-  const { openLoginDialog } = props;
+  const { setOpenLoginDialog } = props;
   let icon = <ErrorIcon />;
   let label = '未登录';
   if (!status || status === 'visitor') { // 点击登录
@@ -53,7 +53,7 @@ function LabelInfo(props) {
         label={label}
         clickable
         color="primary"
-        onClick={openLoginDialog}
+        onClick={setOpenLoginDialog}
       />
     );
   }
@@ -94,7 +94,7 @@ function LabelInfo(props) {
 
 export default function My() {
   const context = useContext(userContext);
-  const { openLoginDialog } = context;
+  const { setOpenLoginDialog } = context;
   const { userState } = context;
 
   const { isLoggedIn } = userState;
@@ -122,7 +122,7 @@ export default function My() {
                 </Typography>
               </Grid>
               <Grid item xs={8}>
-                <LabelInfo status={userState.auth.mode} openLoginDialog={openLoginDialog} />
+                <LabelInfo status={userState.auth.mode} openLoginDialog={setOpenLoginDialog} />
               </Grid>
             </Grid>
           </Grid>

@@ -84,7 +84,7 @@ export default function LoginDialog() {
   const classes = useStyles();
 
   function handleClose() {
-    context.closeLoginDialog();
+    context.setCloseLoginDialog();
   }
 
   function checkPswdSame() {
@@ -152,7 +152,7 @@ export default function LoginDialog() {
         // console.log(res.data);
         if (res.data.login_status === 'success') { // 登陆成功
           setValues({ ...values, showProgress: false });
-          context.closeLoginDialog();
+          context.setCloseLoginDialog();
           // setLoggedIn(true);
           const userInfo = {
             openLoginDialog: false,

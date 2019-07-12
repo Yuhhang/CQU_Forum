@@ -10,6 +10,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from './AppBar';
 import Main from './index/index';
+import Square from './square/Square';
 import Inbox from './inbox/inbox';
 import My from './my/My';
 
@@ -56,6 +57,7 @@ export default function LabelBottomNavigation() {
         </BottomNavigation>
 
         <Route path="/" exact component={Main} />
+        <Route path="/square" component={Square} />
         <Route path="/inbox" component={Inbox} />
         <Route path="/my" component={My} />
       </Router>

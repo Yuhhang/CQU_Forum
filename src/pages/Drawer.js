@@ -15,7 +15,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import DrawerButton from '../components/DrawerButton';
 
 import IndexPage from './index/index';
-import FindPage from './find/Find';
+import FindPage from './square/Find';
 import MyPage from './my/My';
 import AppBar from './AppBar';
 

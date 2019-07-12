@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Card from '../../components/card';
+import Card from '../../components/Card';
 
 const instance = axios.create({
   baseURL: 'http://server.messi1.top/api/',

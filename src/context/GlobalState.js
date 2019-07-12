@@ -6,8 +6,10 @@ import {
   userReducer,
   SET_LOGIN,
   SET_LOGOUT,
-  OPEN_LOGIN_DIALOG,
-  CLOSE_LOGIN_DIALOG,
+  SET_OPEN_LOGIN_DIALOG,
+  SET_CLOSE_LOGIN_DIALOG,
+  SET_OPEN_POST_DIALOG,
+  SET_CLOSE_POST_DIALOG,
 } from './userReducer';
 
 
@@ -19,6 +21,7 @@ const instance = axios.create({
 const GlobalState = (props) => {
   let initialState = {
     openLoginDialog: false,
+    openPostDialog: false,
     isLoggedIn: false,
     userName: '',
     avatar: '',
@@ -35,12 +38,20 @@ const GlobalState = (props) => {
 
   const [userState, dispatch] = useReducer(userReducer, initialState);
 
-  const openLoginDialog = () => {
-    dispatch({ type: OPEN_LOGIN_DIALOG });
+  const setOpenPostDialog = () => {
+    dispatch({ type: SET_OPEN_POST_DIALOG });
   };
 
-  const closeLoginDialog = () => {
-    dispatch({ type: CLOSE_LOGIN_DIALOG });
+  const setClosePostDialog = () => {
+    dispatch({ type: SET_CLOSE_POST_DIALOG });
+  };
+
+  const setOpenLoginDialog = () => {
+    dispatch({ type: SET_OPEN_LOGIN_DIALOG });
+  };
+
+  const setCloseLoginDialog = () => {
+    dispatch({ type: SET_CLOSE_LOGIN_DIALOG });
   };
 
   const setLogin = (userInfo) => {
@@ -63,8 +74,10 @@ const GlobalState = (props) => {
         userState,
         setLogin,
         setLogout,
-        openLoginDialog,
-        closeLoginDialog,
+        setOpenLoginDialog,
+        setCloseLoginDialog,
+        setOpenPostDialog,
+        setClosePostDialog,
       }}
     >
       {children}
