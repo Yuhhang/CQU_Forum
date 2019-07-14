@@ -18,6 +18,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import userContext from '../context/userContext';
 import LoginDialog from '../components/LoginDialog';
 import PostDialog from '../components/PostDialog';
+import MsgBar from '../components/MsgBar';
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -173,6 +174,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <div className={classes.grow}>
+      <MsgBar />
       <AppBar position="static">
         <Toolbar>
           {userState.showBackButton && backButton}

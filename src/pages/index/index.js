@@ -13,7 +13,8 @@ function MainPage() {
   // 只执行一次
   useEffect(() => {
     instance.get('/getPost').then((res) => {
-      const postList = res.data.map(post => (
+      const data = res.data.sort((a, b) => Date.parse(b.postTime) - Date.parse(a.postTime));
+      const postList = data.map(post => (
         <Card
           key={post.postId}
           postId={post.postId}
@@ -22,14 +23,14 @@ function MainPage() {
           title={post.title}
           content={post.content}
           viewNum={post.views}
-          postTime={post.postTime}
+          postTime={Date.parse(post.postTime)}
         />
       ));
       setPosts(postList);
     });
   }, []);
 
-  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const numbers = [1, 2, 3, 4, 5];
   const sectionLists = numbers.map(number => (
     <Card
       key={number}

@@ -6,6 +6,8 @@ export const SET_OPEN_POST_DIALOG = 'SET_OPEN_POST_DIALOG';
 export const SET_CLOSE_POST_DIALOG = 'SET_CLOSE_POST_DIALOG';
 export const SET_SHOW_BACK_BUTTON = 'SET_SHOW_BACK_BUTTON';
 export const SET_UNSHOW_BACK_BUTTON = 'SET_UNSHOW_BACK_BUTTON';
+export const SET_SHOW_MSG = 'SET_SHOW_MSG';
+export const SET_UNSHOW_MSG = 'SET_UNSHOW_MSG';
 
 const setLogin = (state, userInfo) => {
   if (state.isLoggedIn) {
@@ -58,6 +60,18 @@ const setunShowBackButton = state => ({
   backFunction: null,
 });
 
+const setShowMsgBar = (state, msg) => ({
+  ...state,
+  openMsgBar: true,
+  msgBarText: msg,
+});
+
+const setunShowMsgBar = state => ({
+  ...state,
+  openMsgBar: false,
+  msgBarText: '',
+});
+
 export const userReducer = (state, action) => {
   switch (action.type) {
     case SET_LOGIN:
@@ -76,6 +90,10 @@ export const userReducer = (state, action) => {
       return setShowBackButton(state, action.backFunction);
     case SET_UNSHOW_BACK_BUTTON:
       return setunShowBackButton(state);
+    case SET_SHOW_MSG:
+      return setShowMsgBar(state, action.msg);
+    case SET_UNSHOW_MSG:
+      return setunShowMsgBar(state);
     default:
       return state;
   }

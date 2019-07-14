@@ -118,19 +118,8 @@ export default function FormDialog() {
       .then((res) => {
         // console.log(res.data);
         if (res.data.post_status === 'success') { // 发帖成功
-          context.setCloseLoginDialog();
-          // setLoggedIn(true);
-          const userInfo = {
-            openLoginDialog: false,
-            isLoggedIn: true,
-            userName: values.username,
-            avatar: '',
-            auth: {
-              mode: 'admin',
-              sections: [],
-            },
-          };
-          context.setLogin(userInfo); // 设置全局context
+          context.setClosePostDialog();
+          context.setShowMsgBar('发帖成功');
         }
       })
       .catch(() => {
@@ -138,6 +127,9 @@ export default function FormDialog() {
 
       }).finally(() => {
         setShowProgress(false);
+        setTimeout(() => {
+          context.setunShowMsgBar();
+        }, 3000);
       });
   }
 
