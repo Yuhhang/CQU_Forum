@@ -13,6 +13,7 @@ import Main from './index/index';
 import Square from './square/Square';
 import Inbox from './inbox/inbox';
 import My from './my/My';
+import Section from '../components/Section';
 
 const useStyles = makeStyles({
   navbar: {
@@ -23,15 +24,15 @@ const useStyles = makeStyles({
   },
 });
 
-function SetPath(props) {
-  const { path } = props;
-  const defaultPaths = new Set(['/', '/square', '/inbox', '/my']);
-  if (!defaultPaths.has(path)) {
-    console.log(path)
-    return <Redirect to="/" />;
-  }
-  return null;
-}
+// function SetPath(props) {
+//   const { path } = props;
+//   const defaultPaths = new Set(['/', '/square', '/inbox', '/my']);
+//   if (!defaultPaths.has(path)) {
+//     console.log(path)
+//     return <Redirect to="/" />;
+//   }
+//   return null;
+// }
 
 export default function LabelBottomNavigation() {
   const classes = useStyles();
@@ -60,6 +61,7 @@ export default function LabelBottomNavigation() {
         <Route path="/square" component={Square} />
         <Route path="/inbox" component={Inbox} />
         <Route path="/my" component={My} />
+        <Route path="/section/:id" component={Section} />
       </Router>
     </React.Fragment>
 

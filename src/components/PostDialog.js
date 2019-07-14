@@ -1,63 +1,60 @@
-import React, { useContext, useState } from 'react';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
-import Switch from '@material-ui/core/Switch';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import MenuItem from '@material-ui/core/MenuItem';
 import Slide from '@material-ui/core/Slide';
+import Switch from '@material-ui/core/Switch';
+import TextField from '@material-ui/core/TextField';
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import userContext from '../context/userContext';
 
 const titleMaxLength = 20;
 const contentMaxLength = 1000;
 
+const instance = axios.create({
+  baseURL: 'http://server.messi1.top/api/',
+  timeout: 5000,
+});
+
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
-const currencies = [
-  {
-    value: 'USD',
-    label: '$',
-  },
-  {
-    value: 'EUR',
-    label: '€',
-  },
-  {
-    value: 'BTC',
-    label: '฿',
-  },
-  {
-    value: 'JPY',
-    label: '¥',
-  },
-  {
-    value: 'EUR1',
-    label: '€1',
-  },
-  {
-    value: 'BTC1',
-    label: '฿1',
-  },
-  {
-    value: 'JPY1',
-    label: '¥1',
-  },
-];
+
 export default function FormDialog() {
   const context = useContext(userContext); // global user context
   const { setClosePostDialog } = context;
   const { userState } = context;
 
-  const [values, setValues] = React.useState({
+  const [values, setValues] = useState({
     title: '',
     content: '',
-    section: '',
+    section_id: 0,
+    anonymous: false,
   });
-  const [titleErr, setTitleErr] = React.useState(false);
-  const [contentErr, setContentErr] = React.useState(false);
+  const [sectionList, setSectionList] = useState(JSON.parse(localStorage.getItem('sectionList')));
+  const [titleErr, setTitleErr] = useState(false);
+  const [contentErr, setContentErr] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
+
+  useEffect(() => {
+    if (sectionList !== null) {
+      return;
+    }
+    instance.get('/getSections')
+      .then((res) => {
+        setSectionList(res.data);
+        localStorage.setItem('sectionList', JSON.stringify(res.data));
+      })
+      .catch(() => {
+        // handle error
+
+      }).finally(() => {
+
+      });
+  }, []);
 
   const validateInput = (type) => {
     switch (type) {
@@ -102,6 +99,47 @@ export default function FormDialog() {
   function handleClose() {
     setClosePostDialog();
   }
+  function handleSubmit() {
+    if (!validateInput('title')) {
+      setTitleErr(true);
+      return;
+    }
+    if (!validateInput('content')) {
+      setContentErr(true);
+      return;
+    }
+    // 显示加载条并禁用提交
+    setShowProgress(true);
+
+    const url = 'addPost/';
+    instance.post(url, {
+      ...values,
+    })
+      .then((res) => {
+        // console.log(res.data);
+        if (res.data.post_status === 'success') { // 发帖成功
+          context.setCloseLoginDialog();
+          // setLoggedIn(true);
+          const userInfo = {
+            openLoginDialog: false,
+            isLoggedIn: true,
+            userName: values.username,
+            avatar: '',
+            auth: {
+              mode: 'admin',
+              sections: [],
+            },
+          };
+          context.setLogin(userInfo); // 设置全局context
+        }
+      })
+      .catch(() => {
+        // handle error
+
+      }).finally(() => {
+        setShowProgress(false);
+      });
+  }
 
   return (
     <div>
@@ -145,24 +183,31 @@ export default function FormDialog() {
             id="section"
             select
             label="分区"
-            value={values.section}
-            onChange={handleChange('section')}
+            value={values.section_id}
+            onChange={handleChange('section_id')}
             helperText="请选择一个发帖分区"
             margin="dense"
             variant="filled"
             fullWidth
           >
-            {currencies.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
+            {sectionList
+              && sectionList.map(item => (
+                <MenuItem key={item.section_id} value={item.section_id}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            {/* {!sectionList
+              && (
+                <MenuItem key="0" value="0" disabled>
+                  加载失败
+                </MenuItem>
+              )} */}
           </TextField>
           <FormControlLabel
             control={(
               <Switch
-                // checked
-                // onChange={ (e) => {console.log(e.currentTarget)}}
+                checked={values.anonymous}
+                onChange={() => { setValues({ ...values, anonymous: !values.anonymous }); }}
                 color="primary"
               />
             )}
@@ -173,10 +218,17 @@ export default function FormDialog() {
           <Button onClick={handleClose} color="secondary">
             取消
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button
+            disabled={showProgress}
+            onClick={handleSubmit}
+            color="primary"
+          >
             发布
           </Button>
         </DialogActions>
+        {showProgress
+          && <LinearProgress />
+        }
       </Dialog>
     </div>
   );

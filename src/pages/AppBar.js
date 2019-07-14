@@ -10,6 +10,7 @@ import Menu from '@material-ui/core/Menu';
 // import MenuIcon from '@material-ui/icons/Menu';
 import ForumIcon from '@material-ui/icons/Forum';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import MailIcon from '@material-ui/icons/Mail';
 import CreateIcon from '@material-ui/icons/Create';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -160,15 +161,29 @@ export default function PrimarySearchAppBar() {
     </Menu>
   );
 
+  const backButton = (
+    <IconButton onClick={() => {
+      userState.backFunction();
+      context.setunShowBackButton();
+    }}
+    >
+      <ArrowBackIosIcon />
+    </IconButton>
+  );
+
   return (
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          <Typography className={classes.title} variant="h6">
-            <ForumIcon />
-            民主湖
-          </Typography>
-
+          {userState.showBackButton && backButton}
+          {!userState.showBackButton
+            && (
+              <Typography className={classes.title} variant="h6">
+                <ForumIcon />
+                民主湖
+              </Typography>
+            )
+          }
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="Show 4 new mails" color="inherit">

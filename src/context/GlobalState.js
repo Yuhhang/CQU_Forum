@@ -10,6 +10,8 @@ import {
   SET_CLOSE_LOGIN_DIALOG,
   SET_OPEN_POST_DIALOG,
   SET_CLOSE_POST_DIALOG,
+  SET_SHOW_BACK_BUTTON,
+  SET_UNSHOW_BACK_BUTTON,
 } from './userReducer';
 
 
@@ -22,6 +24,8 @@ const GlobalState = (props) => {
   let initialState = {
     openLoginDialog: false,
     openPostDialog: false,
+    showBackButton: false,
+    backFunction: null,
     isLoggedIn: false,
     userName: '',
     avatar: '',
@@ -54,6 +58,14 @@ const GlobalState = (props) => {
     dispatch({ type: SET_CLOSE_LOGIN_DIALOG });
   };
 
+  const setShowBackButton = (backFunction) => {
+    dispatch({ type: SET_SHOW_BACK_BUTTON, backFunction });
+  };
+
+  const setunShowBackButton = () => {
+    dispatch({ type: SET_UNSHOW_BACK_BUTTON });
+  };
+
   const setLogin = (userInfo) => {
     dispatch({ type: SET_LOGIN, userInfo });
   };
@@ -78,6 +90,8 @@ const GlobalState = (props) => {
         setCloseLoginDialog,
         setOpenPostDialog,
         setClosePostDialog,
+        setShowBackButton,
+        setunShowBackButton,
       }}
     >
       {children}

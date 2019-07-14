@@ -66,6 +66,11 @@ const useStyles = makeStyles(theme => ({
     width: '35px',
     height: '35px',
   },
+  avatarSmall: {
+    backgroundColor: red[500],
+    width: '25px',
+    height: '25px',
+  },
   chip: {
     height: '20px',
     fontSize: '0.7rem',
@@ -81,9 +86,10 @@ export default function RecipeReviewCard(props) {
     title, content,
     postTime, userName,
     viewNum,
+    inSection,
   } = props;
   const cardTitle = <Chip className={classes.chip} label={sectionName} />;
-  const userNameDot = userName.concat(' · ');
+  const userNameDot = userName.concat(' • ');
   const cardSubTitle = (
     <div className={classes.subTitle}>
       <AlternateEmailIcon fontSize="small" />
@@ -95,12 +101,31 @@ export default function RecipeReviewCard(props) {
     setExpanded(!expanded);
   }
 
-  return (
-    <Card className={classes.card}>
+  function Header() {
+    if (inSection === undefined) {
+      return (
+        <CardHeader
+          className={classes.cardHeader}
+          avatar={(
+            <Avatar className={classes.avatar}>
+              {userName[0]}
+            </Avatar>
+          )}
+          action={(
+            <IconButton aria-label="Settings">
+              <MoreVertIcon />
+            </IconButton>
+          )}
+          title={cardTitle}
+          subheader={cardSubTitle}
+        />
+      );
+    }
+    return (
       <CardHeader
         className={classes.cardHeader}
         avatar={(
-          <Avatar className={classes.avatar}>
+          <Avatar className={classes.avatarSmall}>
             {userName[0]}
           </Avatar>
         )}
@@ -109,19 +134,24 @@ export default function RecipeReviewCard(props) {
             <MoreVertIcon />
           </IconButton>
         )}
-        title={cardTitle}
         subheader={cardSubTitle}
       />
+    );
+  }
+
+  return (
+    <Card className={classes.card}>
+      <Header />
       <CardContent className={classes.cardContent}>
         <Typography variant="h6" color="textPrimary">
           {title}
         </Typography>
         {!expanded
-        && (
-          <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p" noWrap>
-            {content}
-          </Typography>
-        )}
+          && (
+            <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p" noWrap>
+              {content}
+            </Typography>
+          )}
       </CardContent>
       <CardActions disableSpacing className={classes.cardAction}>
         <IconButton aria-label="views">

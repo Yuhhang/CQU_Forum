@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
@@ -9,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Slide from '@material-ui/core/Slide';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import React from 'react';
 
 const sectionNameMaxLength = 15;
@@ -16,10 +18,44 @@ const msgMaxLength = 200;
 
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
+const instance = axios.create({
+  baseURL: 'http://server.messi1.top/api/',
+  timeout: 5000,
+});
+
+function convertToBinary({ visitor, unVerified, verified }) {
+  let visitorBin = 0;
+  let unVerifiedBin = 0;
+  let verifiedBin = 0;
+  if (visitor.view) {
+    visitorBin += 8;
+  }
+  if (unVerified.view) {
+    unVerifiedBin += 8;
+  }
+  if (unVerified.post) {
+    unVerifiedBin += 4;
+  }
+  if (unVerified.comment) {
+    unVerifiedBin += 2;
+  }
+  if (verified.view) {
+    verifiedBin += 8;
+  }
+  if (verified.post) {
+    verifiedBin += 4;
+  }
+  if (verified.comment) {
+    verifiedBin += 2;
+  }
+  verifiedBin <<= 8;
+  unVerifiedBin <<= 12;
+  visitorBin <<= 16;
+  return verifiedBin | unVerifiedBin | visitorBin;
+}
+
 export default function FormDialog() {
-  // const context = useContext(userContext); // global user context
-  // const { setClosePostDialog } = context;
-  // const { userState } = context;
+  const [open, setOpen] = React.useState(false);
 
   const [values, setValues] = React.useState({
     sectionName: '',
@@ -27,6 +63,7 @@ export default function FormDialog() {
   });
   const [sectionNameErr, setSectionNameErr] = React.useState(false);
   const [msgErr, setMsgErr] = React.useState(false);
+  const [showProgress, setShowProgress] = React.useState(false);
   const [visitor, setVisitor] = React.useState({
     view: true,
     post: false,
@@ -92,8 +129,34 @@ export default function FormDialog() {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  function handleSubmit() {
+    setShowProgress(true);
+    const url = 'addSection/';
+    instance.post(url, {
+      name: values.sectionName,
+      msg: values.msg,
+      mode: convertToBinary({
+        visitor,
+        unVerified,
+        verified,
+      }),
+    })
+      .then((res) => {
+        // console.log(res.data);
+        if (res.data.login_status === 'success') { // 登陆成功
+
+        }
+      })
+      .catch(() => {
+        // handle error
+        setShowProgress(false);
+      }).finally(() => {
+        setShowProgress(false);
+      });
+  }
+
   function handleClose() {
-    // setClosePostDialog();
+    setOpen(false);
   }
 
   function FormRow() {
@@ -170,8 +233,11 @@ export default function FormDialog() {
 
   return (
     <div>
+      <Button variant="contained" onClick={() => setOpen(true)}>
+        添加分区
+      </Button>
       <Dialog
-        open
+        open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
         scroll="body"
@@ -179,7 +245,6 @@ export default function FormDialog() {
         <DialogTitle id="form-dialog-sectionName">添加分区</DialogTitle>
         <DialogContent>
           <TextField
-            requried
             error={sectionNameErr}
             id="sectionName"
             label="分区名称"
@@ -217,10 +282,17 @@ export default function FormDialog() {
           <Button onClick={handleClose} color="secondary">
             取消
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button
+            disabled={showProgress}
+            onClick={handleSubmit}
+            color="primary"
+          >
             提交
           </Button>
         </DialogActions>
+        {showProgress
+          && <LinearProgress />
+        }
       </Dialog>
     </div>
   );
