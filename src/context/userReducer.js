@@ -60,9 +60,10 @@ const setunShowBackButton = state => ({
   backFunction: null,
 });
 
-const setShowMsgBar = (state, msg) => ({
+const setShowMsgBar = (state, type, msg) => ({
   ...state,
   openMsgBar: true,
+  msgBarType: type,
   msgBarText: msg,
 });
 
@@ -91,7 +92,7 @@ export const userReducer = (state, action) => {
     case SET_UNSHOW_BACK_BUTTON:
       return setunShowBackButton(state);
     case SET_SHOW_MSG:
-      return setShowMsgBar(state, action.msg);
+      return setShowMsgBar(state, action.msgType, action.msg);
     case SET_UNSHOW_MSG:
       return setunShowMsgBar(state);
     default:

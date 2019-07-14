@@ -1,26 +1,41 @@
-import React, { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
+import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
-// import MenuIcon from '@material-ui/icons/Menu';
-import ForumIcon from '@material-ui/icons/Forum';
+import MenuItem from '@material-ui/core/MenuItem';
+import Slide from '@material-ui/core/Slide';
+import { makeStyles } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import MailIcon from '@material-ui/icons/Mail';
 import CreateIcon from '@material-ui/icons/Create';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+// import MenuIcon from '@material-ui/icons/Menu';
+import ForumIcon from '@material-ui/icons/Forum';
+import MailIcon from '@material-ui/icons/Mail';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import userContext from '../context/userContext';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import React, { useContext } from 'react';
 import LoginDialog from '../components/LoginDialog';
 import PostDialog from '../components/PostDialog';
-import MsgBar from '../components/MsgBar';
+import userContext from '../context/userContext';
+
+function HideOnScroll(props) {
+  const { children } = props;
+  const trigger = useScrollTrigger();
+
+  return (
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children}
+    </Slide>
+  );
+}
 
 const useStyles = makeStyles(theme => ({
+  appBar: {
+    marginBottom: '56px',
+  },
   grow: {
     flexGrow: 1,
   },
@@ -60,7 +75,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar(props) {
   const context = useContext(userContext); // global user context
   const { userState } = context;
   const { setOpenPostDialog } = context;
@@ -173,55 +188,56 @@ export default function PrimarySearchAppBar() {
   );
 
   return (
-    <div className={classes.grow}>
-      <MsgBar />
-      <AppBar position="static">
-        <Toolbar>
-          {userState.showBackButton && backButton}
-          {!userState.showBackButton
-            && (
-              <Typography className={classes.title} variant="h6">
-                <ForumIcon />
-                民主湖
-              </Typography>
-            )
-          }
-          <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-            <IconButton aria-label="Show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="Show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="Account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircleIcon />
-            </IconButton>
-          </div>
-          <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="Show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </div>
-        </Toolbar>
-      </AppBar>
+    <div className={classes.appBar}>
+      <HideOnScroll {...props}>
+        <AppBar>
+          <Toolbar>
+            {userState.showBackButton && backButton}
+            {!userState.showBackButton
+              && (
+                <Typography className={classes.title} variant="h6">
+                  <ForumIcon />
+                  民主湖
+                </Typography>
+              )
+            }
+            <div className={classes.grow} />
+            <div className={classes.sectionDesktop}>
+              <IconButton aria-label="Show 4 new mails" color="inherit">
+                <Badge badgeContent={4} color="secondary">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+              <IconButton aria-label="Show 17 new notifications" color="inherit">
+                <Badge badgeContent={17} color="secondary">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                edge="end"
+                aria-label="Account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircleIcon />
+              </IconButton>
+            </div>
+            <div className={classes.sectionMobile}>
+              <IconButton
+                aria-label="Show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
+      </HideOnScroll>
       {renderMobileMenu}
       {renderMenu}
     </div>

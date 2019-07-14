@@ -27,6 +27,7 @@ const GlobalState = (props) => {
     openLoginDialog: false,
     openPostDialog: false,
     openMsgBar: false,
+    msgBarType: '',
     msgBarText: '',
     showBackButton: false,
     backFunction: null,
@@ -70,8 +71,8 @@ const GlobalState = (props) => {
     dispatch({ type: SET_UNSHOW_BACK_BUTTON });
   };
 
-  const setShowMsgBar = (msg) => {
-    dispatch({ type: SET_SHOW_MSG, msg });
+  const setShowMsgBar = (msgType, msg) => {
+    dispatch({ type: SET_SHOW_MSG, msgType, msg });
   };
 
   const setunShowMsgBar = () => {

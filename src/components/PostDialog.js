@@ -119,17 +119,14 @@ export default function FormDialog() {
         // console.log(res.data);
         if (res.data.post_status === 'success') { // 发帖成功
           context.setClosePostDialog();
-          context.setShowMsgBar('发帖成功');
+          context.setShowMsgBar('success', '发帖成功');
         }
       })
       .catch(() => {
         // handle error
-
+        context.setShowMsgBar('error', '发生 错误');
       }).finally(() => {
         setShowProgress(false);
-        setTimeout(() => {
-          context.setunShowMsgBar();
-        }, 3000);
       });
   }
 

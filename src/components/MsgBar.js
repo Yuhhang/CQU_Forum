@@ -58,7 +58,7 @@ export default function SimpleSnackbar() {
         }}
       >
         <SnackbarContent
-          style={{ backgroundColor: switchTypeColor('success') }}
+          style={{ backgroundColor: switchTypeColor(userState.msgBarType) }}
           message={<span id="message-id">{userState.msgBarText}</span>}
           action={[
             // <Button key="undo" color="secondary" size="small" onClick={handleClose}>
