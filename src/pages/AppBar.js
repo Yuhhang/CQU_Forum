@@ -11,15 +11,16 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import CreateIcon from '@material-ui/icons/Create';
-// import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
 import ForumIcon from '@material-ui/icons/Forum';
 import MailIcon from '@material-ui/icons/Mail';
-import MoreIcon from '@material-ui/icons/MoreVert';
+// import MoreIcon from '@material-ui/icons/MoreVert';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import React, { useContext } from 'react';
 import LoginDialog from '../components/LoginDialog';
 import PostDialog from '../components/PostDialog';
 import userContext from '../context/userContext';
+import MsgBar from '../components/MsgBar';
 
 function HideOnScroll(props) {
   const { children } = props;
@@ -132,10 +133,12 @@ export default function PrimarySearchAppBar(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={() => {
-        setOpenPostDialog();
-        handleMobileMenuClose();
-      }}
+      <MenuItem
+        onClick={() => {
+          setOpenPostDialog();
+          handleMobileMenuClose();
+        }}
+        disabled={!isLoggedIn}
       >
         <IconButton color="inherit">
           <CreateIcon />
@@ -143,7 +146,7 @@ export default function PrimarySearchAppBar(props) {
         <p>发帖</p>
       </MenuItem>
       <PostDialog />
-      <MenuItem>
+      {/* <MenuItem>
         <IconButton aria-label="Show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="secondary">
             <MailIcon />
@@ -158,13 +161,14 @@ export default function PrimarySearchAppBar(props) {
           </Badge>
         </IconButton>
         <p>Notifications</p>
-      </MenuItem>
+      </MenuItem> */}
       <LoginDialog />
       <MenuItem onClick={() => {
         if (!isLoggedIn) { // 未登录
           context.setOpenLoginDialog();
         } else {
           context.setLogout();
+          context.setShowMsgBar('success', '成功退出');
         }
         handleMobileMenuClose();
       }}
@@ -189,6 +193,7 @@ export default function PrimarySearchAppBar(props) {
 
   return (
     <div className={classes.appBar}>
+      <MsgBar />
       <HideOnScroll {...props}>
         <AppBar>
           <Toolbar>
@@ -197,7 +202,7 @@ export default function PrimarySearchAppBar(props) {
               && (
                 <Typography className={classes.title} variant="h6">
                   <ForumIcon />
-                  民主湖
+                  民主湖[beta]
                 </Typography>
               )
             }
@@ -232,7 +237,7 @@ export default function PrimarySearchAppBar(props) {
                 onClick={handleMobileMenuOpen}
                 color="inherit"
               >
-                <MoreIcon />
+                <MenuIcon />
               </IconButton>
             </div>
           </Toolbar>

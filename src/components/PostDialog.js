@@ -195,6 +195,7 @@ export default function FormDialog() {
           <FormControlLabel
             control={(
               <Switch
+                disabled
                 checked={values.anonymous}
                 onChange={() => { setValues({ ...values, anonymous: !values.anonymous }); }}
                 color="primary"

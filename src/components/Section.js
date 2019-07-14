@@ -1,13 +1,12 @@
 import Avatar from '@material-ui/core/Avatar';
-import axios from 'axios';
-import blue from '@material-ui/core/colors/blue';
+import { grey } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import React, { useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import Card from './Card';
-import userContext from '../context/userContext';
 
 const instance = axios.create({
   baseURL: 'http://server.messi1.top/api/',
@@ -17,7 +16,7 @@ const instance = axios.create({
 const useStyles = makeStyles(theme => ({
   header: {
     padding: theme.spacing(3, 2),
-    backgroundColor: blue[100],
+    backgroundColor: grey[100],
     // display: 'flex',
     alignItems: 'center',
   },
@@ -33,21 +32,41 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function PaperSheet(props) {
-  const context = useContext(userContext); // global user context
-  const classes = useStyles();
+  // const context = useContext(userContext); // global user context
+  const [posts, setPosts] = useState(null);
+  const [sectionInfo, setSectionInfo] = useState(null);
+
   const { match } = props;
   const { params } = match;
   const { id } = params;
 
+  const classes = useStyles();
   // useEffect(() => {
   //   context.setShowBackButton(() => {
   //     props.history.goBack();
   //   });
   // }, []);
   useEffect(() => {
-    instance.get('/getPost')
+    instance.get('/getPostBySection?id='.concat(id))
       .then((res) => {
-        console.log(res);
+        if (!res.data[0]) {
+          setPosts('暂无数据');
+          return;
+        }
+        const data = res.data.sort((a, b) => Date.parse(b.postTime) - Date.parse(a.postTime));
+        const postList = data.map(post => (
+          <Card
+            key={post.postId}
+            postId={post.postId}
+            userName={post.userName}
+            sectionName={post.sectionName}
+            title={post.title}
+            content={post.content}
+            viewNum={post.views}
+            postTime={Date.parse(post.postTime)}
+          />
+        ));
+        setPosts(postList);
       })
       .catch(() => {
         // handle error
@@ -56,43 +75,33 @@ export default function PaperSheet(props) {
         // setCaptchaToken('');
         // setCaptchaLoading(true);
       });
+    const sectionList = JSON.parse(localStorage.getItem('sectionList'));
+    const currentSection = sectionList.filter(section => section.section_id == id);
+    setSectionInfo(currentSection[0]);
   }, []);
-
-  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const sectionLists = numbers.map(number => (
-    <Card
-      key={number}
-      postId="postid"
-      userName="一位不知名的用户"
-      sectionName="大数据与软件学院"
-      title="民主湖论坛就是个🌶🐓"
-      content="symbol function guess clear dust shine sets equal largest concerned consider lovely machine cannot fuel bread done common coming wing half tip broad day"
-      viewNum={233}
-      postTime={1562687612327}
-      inSection
-    />
-  ));
-
 
   return (
     <div>
       <button type="button" onClick={() => { props.history.goBack(); }}>GO BACK</button>
-      <Paper className={classes.header}>
-        <Grid container justify="center" alignContent="center">
-          <Grid className={classes.avatarGrid} item xs={3}>
-            <Avatar className={classes.avatar}>H</Avatar>
+      {sectionInfo
+      && (
+        <Paper className={classes.header}>
+          <Grid container justify="center" alignContent="center">
+            <Grid className={classes.avatarGrid} item xs={3}>
+              <Avatar className={classes.avatar}>H</Avatar>
+            </Grid>
+            <Grid item xs={9}>
+              <Typography variant="h6">
+                {sectionInfo.name}
+              </Typography>
+              <Typography variant="caption" component="p">
+                {sectionInfo.msg || '暂无介绍'}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={9}>
-            <Typography variant="h6">
-              分区名称
-            </Typography>
-            <Typography variant="caption" component="p">
-              Paper can be used to build surface or other elements for your application.
-            </Typography>
-          </Grid>
-        </Grid>
-      </Paper>
-      {sectionLists}
+        </Paper>
+      )}
+      {posts}
     </div>
   );
 }

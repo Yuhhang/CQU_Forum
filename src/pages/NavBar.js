@@ -41,8 +41,6 @@ export default function LabelBottomNavigation() {
   function handleChange(event, newValue) {
     setValue(newValue);
   }
-  // console.log(window.location.pathname.substr(1, window.location.pathname.length - 1));
-  // <RedirectTo
 
   return (
     <React.Fragment>

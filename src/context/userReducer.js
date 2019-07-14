@@ -25,7 +25,7 @@ const setLogin = (state, userInfo) => {
   };
 };
 
-const setLogout = () => {
+const setLogout = (state) => {
   const initialState = {
     openLoginDialog: false,
     isLoggedIn: false,
@@ -37,7 +37,10 @@ const setLogout = () => {
     },
   };
 
-  return initialState;
+  return {
+    ...state,
+    ...initialState,
+  };
 };
 
 const setOpenLoginDialog = state => ({ ...state, openLoginDialog: true });
@@ -78,7 +81,7 @@ export const userReducer = (state, action) => {
     case SET_LOGIN:
       return setLogin(state, action.userInfo);
     case SET_LOGOUT:
-      return setLogout();
+      return setLogout(state);
     case SET_OPEN_LOGIN_DIALOG:
       return setOpenLoginDialog(state);
     case SET_CLOSE_LOGIN_DIALOG:

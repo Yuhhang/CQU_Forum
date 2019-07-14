@@ -10,7 +10,6 @@ const instance = axios.create({
 function MainPage() {
   const [posts, setPosts] = useState(null);
 
-  // 只执行一次
   useEffect(() => {
     instance.get('/getPost').then((res) => {
       const data = res.data.sort((a, b) => Date.parse(b.postTime) - Date.parse(a.postTime));

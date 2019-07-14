@@ -155,16 +155,16 @@ export default function LoginDialog() {
           context.setCloseLoginDialog();
           // setLoggedIn(true);
           const userInfo = {
-            openLoginDialog: false,
             isLoggedIn: true,
             userName: values.username,
             avatar: '',
             auth: {
-              mode: 'admin',
+              mode: res.data.mode,
               sections: [],
             },
           };
           context.setLogin(userInfo); // 设置全局context
+          context.setShowMsgBar('success', '登陆成功');
         } else if (res.data.login_status === 'fail') { // 登陆失败
           setValues({
             ...values,
