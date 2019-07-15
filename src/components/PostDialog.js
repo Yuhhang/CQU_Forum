@@ -99,6 +99,7 @@ export default function FormDialog() {
   function handleClose() {
     setClosePostDialog();
   }
+
   function handleSubmit() {
     if (!validateInput('title')) {
       setTitleErr(true);

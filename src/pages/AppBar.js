@@ -202,7 +202,7 @@ export default function PrimarySearchAppBar(props) {
               && (
                 <Typography className={classes.title} variant="h6">
                   <ForumIcon />
-                  民主湖[beta]
+                  民主湖[alpha]
                 </Typography>
               )
             }

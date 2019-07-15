@@ -1,4 +1,5 @@
 import Avatar from '@material-ui/core/Avatar';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -10,14 +11,14 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
+import CommentIcon from '@material-ui/icons/Comment';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ShareIcon from '@material-ui/icons/Share';
-import WhatshotIcon from '@material-ui/icons/Whatshot';
 import clsx from 'clsx';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import RelativeTime from './RelativeTime';
-import ButtonBase from '@material-ui/core/ButtonBase';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -88,10 +89,14 @@ export default function RecipeReviewCard(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const {
-    postId, sectionName,
-    title, content,
-    postTime, userName,
-    viewNum,
+    postId,
+    sectionName,
+    title,
+    content,
+    postTime,
+    userName,
+    // viewNum,
+    commentCount,
     inSection,
   } = props;
   const cardTitle = <Chip className={classes.chip} label={sectionName} />;
@@ -148,25 +153,28 @@ export default function RecipeReviewCard(props) {
   return (
     <Card className={classes.card}>
       <Header />
-      <ButtonBase className={classes.cardContentButton}>
-        <CardContent className={classes.cardContent}>
-          <Typography variant="h6" color="textPrimary">
-            {title}
-          </Typography>
-          {!expanded
-            && (
-              <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p" noWrap>
-                {content}
-              </Typography>
-            )}
-        </CardContent>
-      </ButtonBase>
+      <Link to={'/post/'.concat(postId)} style={{ textDecoration: 'none' }}>
+        <ButtonBase className={classes.cardContentButton}>
+          <CardContent className={classes.cardContent}>
+            <Typography variant="h6" color="textPrimary">
+              {title}
+            </Typography>
+            {!expanded
+              && (
+                <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p" noWrap>
+                  {content}
+                </Typography>
+              )}
+          </CardContent>
+        </ButtonBase>
+      </Link>
       <CardActions disableSpacing className={classes.cardAction}>
         <IconButton aria-label="views">
-          <WhatshotIcon fontSize="small" />
+          <CommentIcon fontSize="small" />
         </IconButton>
         <Typography variant="body2" color="textSecondary" component="p">
-          {viewNum}
+          {/* {viewNum} */}
+          {commentCount}
         </Typography>
         <IconButton aria-label="Share">
           <ShareIcon fontSize="small" />

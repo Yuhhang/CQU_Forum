@@ -9,7 +9,7 @@ const instance = axios.create({
 
 let fetchPostLock = false;
 
-const offsetBase = 5;
+const offsetBase = 20;
 let offsetCount = 1;
 
 function MainPage() {
@@ -25,6 +25,7 @@ function MainPage() {
         sectionName={post.sectionName}
         title={post.title}
         content={post.content}
+        commentCount={post.commentCount}
         viewNum={post.views}
         postTime={`${post.postTime}000`} // MySQL里的时间戳是秒, JS中的是毫秒
       />
@@ -43,8 +44,13 @@ function MainPage() {
     }
     instance.get(url).then((res) => {
       if (res.data.length === 0) {
+        fetchPostLock = true; // 禁止后续刷新
         return;
       }
+      setTimeout(() => {
+        fetchPostLock = false;
+      }, 5000);
+
       let { data } = res;
       latestPostTime = data[0].postTime > latestPostTime ? data[0].postTime : latestPostTime;
       // const data = res.data.sort((a, b) => Date.parse(b.postTime) - Date.parse(a.postTime));
@@ -66,12 +72,9 @@ function MainPage() {
 
   window.onscroll = () => {
     if (((window.innerHeight + window.scrollY) > document.body.offsetHeight) && !fetchPostLock) {
-      fetchPostLock = !fetchPostLock;
+      fetchPostLock = true;
       fetchNewData(offsetCount * offsetBase);
       offsetCount += 1;
-      setTimeout(() => {
-        fetchPostLock = !fetchPostLock;
-      }, 3000);
     }
   };
 
@@ -86,7 +89,11 @@ function MainPage() {
     const pullPost = setInterval(() => {
       fetchNewData(-1);
     }, 1000 * 30);
-    return () => clearInterval(pullPost);
+
+    return () => {
+      clearInterval(pullPost);
+      window.onscroll = null;
+    };
   }, []);
 
   const numbers = [1, 2, 3, 4, 5];

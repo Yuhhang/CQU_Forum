@@ -53,17 +53,19 @@ export default function PaperSheet(props) {
           setPosts('暂无数据');
           return;
         }
-        const data = res.data.sort((a, b) => Date.parse(b.postTime) - Date.parse(a.postTime));
+        const data = res.data.sort((a, b) => b.postTime - a.postTime);
         const postList = data.map(post => (
           <Card
+            inSection
             key={post.postId}
             postId={post.postId}
             userName={post.userName}
             sectionName={post.sectionName}
             title={post.title}
             content={post.content}
+            commentCount={post.commentCount}
             viewNum={post.views}
-            postTime={Date.parse(post.postTime)}
+            postTime={`${post.postTime}000`}
           />
         ));
         setPosts(postList);

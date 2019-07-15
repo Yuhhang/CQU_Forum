@@ -14,6 +14,7 @@ import Square from './square/Square';
 import Inbox from './inbox/inbox';
 import My from './my/My';
 import Section from '../components/Section';
+import PostDetail from '../components/PostDetail';
 
 const useStyles = makeStyles({
   navbar: {
@@ -60,6 +61,7 @@ export default function LabelBottomNavigation() {
         <Route path="/inbox" component={Inbox} />
         <Route path="/my" component={My} />
         <Route path="/section/:id" component={Section} />
+        <Route path="/post/:id" component={PostDetail} />
       </Router>
     </React.Fragment>
 
