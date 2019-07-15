@@ -17,6 +17,7 @@ import WhatshotIcon from '@material-ui/icons/Whatshot';
 import clsx from 'clsx';
 import React from 'react';
 import RelativeTime from './RelativeTime';
+import ButtonBase from '@material-ui/core/ButtonBase';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -33,7 +34,12 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     fontSize: '0.8rem',
   },
+  cardContentButton: {
+    width: '100%',
+  },
   cardContent: {
+    width: '100%',
+    textAlign: 'left',
     paddingTop: '0px',
     paddingBottom: '0px',
   },
@@ -142,17 +148,19 @@ export default function RecipeReviewCard(props) {
   return (
     <Card className={classes.card}>
       <Header />
-      <CardContent className={classes.cardContent}>
-        <Typography variant="h6" color="textPrimary">
-          {title}
-        </Typography>
-        {!expanded
-          && (
-            <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p" noWrap>
-              {content}
-            </Typography>
-          )}
-      </CardContent>
+      <ButtonBase className={classes.cardContentButton}>
+        <CardContent className={classes.cardContent}>
+          <Typography variant="h6" color="textPrimary">
+            {title}
+          </Typography>
+          {!expanded
+            && (
+              <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p" noWrap>
+                {content}
+              </Typography>
+            )}
+        </CardContent>
+      </ButtonBase>
       <CardActions disableSpacing className={classes.cardAction}>
         <IconButton aria-label="views">
           <WhatshotIcon fontSize="small" />
