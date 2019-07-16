@@ -18,16 +18,12 @@ import CommentIcon from '@material-ui/icons/Comment';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ShareIcon from '@material-ui/icons/Share';
-import axios from 'axios';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import CommentDialog from './CommentDialog';
-import RelativeTime from './RelativeTime';
-
-const instance = axios.create({
-  baseURL: 'http://server.messi1.top/api/',
-  timeout: 5000,
-});
+import RelativeTime from '../RelativeTime';
+import CommentItem from './CommentItem';
+import instance from '../axios';
 
 const useStyles = makeStyles(theme => ({
   text: {
@@ -86,36 +82,6 @@ const useStyles = makeStyles(theme => ({
     height: '25px',
   },
 }));
-
-function Item(props) {
-  const {
-    commentId,
-    userId,
-    userNick,
-    content,
-    replyTo,
-    anonymous,
-    commentTime,
-  } = props;
-  const classes = useStyles();
-  const relativeTime = <RelativeTime postTime={commentTime} />;
-  const commentTitle = (
-    <div>
-      {userNick.concat(' • ')}
-      {relativeTime}
-    </div>
-  );
-
-  return (
-    <ListItem button key={commentId}>
-      <ListItemAvatar>
-        <Avatar className={classes.avatar}>H</Avatar>
-        {/* <Avatar alt="Profile Picture" src={person} /> */}
-      </ListItemAvatar>
-      <ListItemText primary={commentTitle} secondary={content} />
-    </ListItem>
-  );
-}
 
 function PostInfo() {
   const {
@@ -189,7 +155,7 @@ export default function CommentSection(props) {
         }
         let data = res.data.sort((a, b) => b.commentTime - a.commentTime);
         data = data.map(item => (
-          <Item
+          <CommentItem
             key={item.commentId}
             commentId={item.commentId}
             userId={item.userId}

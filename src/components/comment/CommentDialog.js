@@ -8,14 +8,9 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
 import EditIcon from '@material-ui/icons/Edit';
-import axios from 'axios';
 import React, { useContext, useState } from 'react';
-import userContext from '../context/userContext';
-
-const instance = axios.create({
-  baseURL: 'http://server.messi1.top/api/',
-  timeout: 5000,
-});
+import userContext from '../../context/userContext';
+import instance from '../axios';
 
 export default function CommentDialog(props) {
   const {

@@ -4,14 +4,9 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Card from './Card';
-
-const instance = axios.create({
-  baseURL: 'http://server.messi1.top/api/',
-  timeout: 5000,
-});
+import instance from './axios';
 
 const useStyles = makeStyles(theme => ({
   header: {

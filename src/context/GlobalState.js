@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import axios from 'axios';
+import instance from '../components/axios';
 
 import loginContext from './userContext';
 import {
@@ -16,11 +16,6 @@ import {
   SET_UNSHOW_MSG,
 } from './userReducer';
 
-
-const instance = axios.create({
-  baseURL: 'http://server.messi1.top/api/',
-  timeout: 5000,
-});
 
 const GlobalState = (props) => {
   let initialState = {

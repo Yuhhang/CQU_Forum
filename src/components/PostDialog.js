@@ -9,17 +9,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Slide from '@material-ui/core/Slide';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
-import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import userContext from '../context/userContext';
+import instance from './axios';
 
 const titleMaxLength = 20;
 const contentMaxLength = 1000;
-
-const instance = axios.create({
-  baseURL: 'http://server.messi1.top/api/',
-  timeout: 5000,
-});
 
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 

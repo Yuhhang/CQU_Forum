@@ -1,4 +1,3 @@
-import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
@@ -12,16 +11,12 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import React from 'react';
+import instance from '../../components/axios';
 
 const sectionNameMaxLength = 15;
 const msgMaxLength = 200;
 
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
-
-const instance = axios.create({
-  baseURL: 'http://server.messi1.top/api/',
-  timeout: 5000,
-});
 
 function convertToBinary({ visitor, unVerified, verified }) {
   let visitorBin = 0;

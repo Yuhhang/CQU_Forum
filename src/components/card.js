@@ -23,8 +23,8 @@ import RelativeTime from './RelativeTime';
 const useStyles = makeStyles(theme => ({
   card: {
     borderRadius: 0,
-    // margin: 'auto',
-    // maxWidth: '400',
+    margin: 'auto',
+    maxWidth: '500px',
   },
   cardHeader: {
     paddingTop: '8px',

@@ -1,13 +1,7 @@
 import Grid from '@material-ui/core/Grid';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import SectionEntry from './SectionEntry';
-
-const instance = axios.create({
-  baseURL: 'http://server.messi1.top/api/',
-  timeout: 5000,
-});
-
+import instance from '../../components/axios';
 
 export default function SectionBlock() {
   const [sectionList, setSectionList] = useState(JSON.parse(localStorage.getItem('sectionList')));

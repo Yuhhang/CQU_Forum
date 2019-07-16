@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react';
 import Card from '../../components/Card';
+import instance from '../../components/axios';
 
-const instance = axios.create({
-  baseURL: 'http://server.messi1.top/api/',
-  timeout: 5000,
-});
+const useStyles = makeStyles(() => ({
+  root: {
+    marginBottom: '56px',
+  },
+}));
 
 let fetchPostLock = false;
 
@@ -15,6 +17,7 @@ let offsetCount = 1;
 function MainPage() {
   const [posts, setPosts] = useState(null);
   let latestPostTime = null;
+  const classes = useStyles();
 
   function renderCard(data) {
     const postList = data.map(post => (
@@ -110,7 +113,7 @@ function MainPage() {
     />
   ));
   return (
-    <div>
+    <div className={classes.root}>
       {posts}
       {/* {sectionLists} */}
     </div>

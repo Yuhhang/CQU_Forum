@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import axios from 'axios';
 import clsx from 'clsx';
 // import { ReCaptcha } from 'react-recaptcha-v3';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,17 +17,13 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import userContext from '../context/userContext';
+import instance from './axios';
 // import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 // const siteKey = '6LeBQ6sUAAAAAK30E3NZs_oHm2XtedUkLpRO7MlW';
 // loadReCaptcha(siteKey);
 // www.recaptcha.net
-
-const instance = axios.create({
-  baseURL: 'http://server.messi1.top/api/',
-  timeout: 5000,
-});
 
 export default function LoginDialog() {
   const context = useContext(userContext); // global user context

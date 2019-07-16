@@ -1,7 +1,7 @@
 import { grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import CommentSection from './CommentSection';
+import CommentSection from './comment/CommentSection';
 
 // const useStyles = makeStyles(theme => ({
 //   header: {
