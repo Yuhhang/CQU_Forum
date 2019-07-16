@@ -154,7 +154,12 @@ export default function RecipeReviewCard(props) {
     <Card className={classes.card}>
       <Header />
       <Link to={'/post/'.concat(postId)} style={{ textDecoration: 'none' }}>
-        <ButtonBase className={classes.cardContentButton}>
+        <ButtonBase
+          className={classes.cardContentButton}
+          onClick={() => {
+            localStorage.setItem('currentPostInfo', JSON.stringify(props));
+          }}
+        >
           <CardContent className={classes.cardContent}>
             <Typography variant="h6" color="textPrimary">
               {title}

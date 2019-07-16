@@ -1,5 +1,4 @@
 import AppBar from '@material-ui/core/AppBar';
-import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -11,16 +10,13 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import CreateIcon from '@material-ui/icons/Create';
-import MenuIcon from '@material-ui/icons/Menu';
 import ForumIcon from '@material-ui/icons/Forum';
-import MailIcon from '@material-ui/icons/Mail';
-// import MoreIcon from '@material-ui/icons/MoreVert';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import MenuIcon from '@material-ui/icons/Menu';
 import React, { useContext } from 'react';
 import LoginDialog from '../components/LoginDialog';
+import MsgBar from '../components/MsgBar';
 import PostDialog from '../components/PostDialog';
 import userContext from '../context/userContext';
-import MsgBar from '../components/MsgBar';
 
 function HideOnScroll(props) {
   const { children } = props;
@@ -84,43 +80,17 @@ export default function PrimarySearchAppBar(props) {
   const { isLoggedIn } = userState;
 
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  function handleProfileMenuOpen(event) {
-    setAnchorEl(event.currentTarget);
-  }
 
   function handleMobileMenuClose() {
     setMobileMoreAnchorEl(null);
   }
 
-  function handleMenuClose() {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  }
-
   function handleMobileMenuOpen(event) {
     setMobileMoreAnchorEl(event.currentTarget);
   }
-
-  const menuId = 'primary-search-account-menu';
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>主页</MenuItem>
-    </Menu>
-  );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
@@ -145,7 +115,6 @@ export default function PrimarySearchAppBar(props) {
         </IconButton>
         <p>发帖</p>
       </MenuItem>
-      <PostDialog />
       {/* <MenuItem>
         <IconButton aria-label="Show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="secondary">
@@ -162,7 +131,6 @@ export default function PrimarySearchAppBar(props) {
         </IconButton>
         <p>Notifications</p>
       </MenuItem> */}
-      <LoginDialog />
       <MenuItem onClick={() => {
         if (!isLoggedIn) { // 未登录
           context.setOpenLoginDialog();
@@ -208,26 +176,33 @@ export default function PrimarySearchAppBar(props) {
             }
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              <IconButton aria-label="Show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <IconButton aria-label="Show 17 new notifications" color="inherit">
-                <Badge badgeContent={17} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                edge="end"
-                aria-label="Account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
+              <MenuItem
+                onClick={() => {
+                  setOpenPostDialog();
+                  handleMobileMenuClose();
+                }}
+                disabled={!isLoggedIn}
               >
-                <AccountCircleIcon />
-              </IconButton>
+                <IconButton color="inherit">
+                  <CreateIcon />
+                </IconButton>
+                <p>发帖</p>
+              </MenuItem>
+              <MenuItem onClick={() => {
+                if (!isLoggedIn) { // 未登录
+                  context.setOpenLoginDialog();
+                } else {
+                  context.setLogout();
+                  context.setShowMsgBar('success', '成功退出');
+                }
+                handleMobileMenuClose();
+              }}
+              >
+                <IconButton color="inherit">
+                  <AccountCircleIcon />
+                </IconButton>
+                <p>{isLoggedIn ? '登出' : '登录'}</p>
+              </MenuItem>
             </div>
             <div className={classes.sectionMobile}>
               <IconButton
@@ -244,7 +219,8 @@ export default function PrimarySearchAppBar(props) {
         </AppBar>
       </HideOnScroll>
       {renderMobileMenu}
-      {renderMenu}
+      <PostDialog />
+      <LoginDialog />
     </div>
   );
 }

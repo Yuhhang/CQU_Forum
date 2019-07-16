@@ -122,7 +122,7 @@ export default function My() {
                 </Typography>
               </Grid>
               <Grid item xs={8}>
-                <LabelInfo status={userState.auth.mode} openLoginDialog={setOpenLoginDialog} />
+                <LabelInfo status={userState.auth.mode} setOpenLoginDialog={setOpenLoginDialog} />
               </Grid>
             </Grid>
           </Grid>

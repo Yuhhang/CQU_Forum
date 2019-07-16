@@ -119,7 +119,7 @@ export default function LoginDialog() {
       return false;
     }
     const pswdReg = /^[\s]*$/;
-    if (register && (values.password.length < 6 || !pswdReg.test(values.password))) {
+    if (register && (values.password.length < 6 || pswdReg.test(values.password))) {
       setValues({ ...values, passwordError: true, passwordErrorText: '密码不能包含空格，且不能少于6位' });
       return false;
     }

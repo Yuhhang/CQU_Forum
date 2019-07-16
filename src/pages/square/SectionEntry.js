@@ -1,3 +1,4 @@
+import ButtonBase from '@material-ui/core/ButtonBase';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
@@ -7,7 +8,6 @@ import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import RelativeTime from '../../components/RelativeTime';
-import ButtonBase from '@material-ui/core/ButtonBase';
 
 const useStyles = makeStyles(() => ({
   card: {

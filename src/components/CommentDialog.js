@@ -1,4 +1,4 @@
-import { FormControlLabel, Switch } from '@material-ui/core';
+import { FormControlLabel, Switch, Fab } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -7,6 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
+import EditIcon from '@material-ui/icons/Edit';
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import userContext from '../context/userContext';
@@ -27,7 +28,8 @@ export default function CommentDialog(props) {
   const [showProgress, setShowProgress] = useState(false);
 
   const context = useContext(userContext); // global user context
-
+  const { userState } = context;
+  const { isLoggedIn } = userState;
   function handleClickOpen() {
     setOpen(true);
   }
@@ -53,9 +55,12 @@ export default function CommentDialog(props) {
     })
       .then((res) => {
         // console.log(res.data);
-        if (res.data.comment_status === 'success') { // 发帖成功
+        if (res.data.comment_status === 'success') {
           context.setShowMsgBar('success', '评论成功');
+          setContent('');
+          return;
         }
+        context.setShowMsgBar('error', '发生错误');
       })
       .catch(() => {
         // handle error
@@ -68,10 +73,13 @@ export default function CommentDialog(props) {
 
   return (
     <div>
-      <Button variant="contained" color="primary" onClick={handleClickOpen}>
-        发评论
-        <SendIcon />
-      </Button>
+      <Fab
+        disabled={!isLoggedIn}
+        color="primary"
+        onClick={handleClickOpen}
+      >
+        <EditIcon />
+      </Fab>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">发表评论</DialogTitle>
         <DialogContent>
