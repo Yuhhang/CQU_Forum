@@ -41,6 +41,7 @@ const useStyles = makeStyles(theme => ({
   },
   list: {
     marginBottom: theme.spacing(2),
+    paddingBottom: '100px',
   },
   subheader: {
     backgroundColor: theme.palette.background.paper,
