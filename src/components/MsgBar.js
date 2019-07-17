@@ -15,7 +15,7 @@ function switchTypeColor(type) {
     case 'success':
       return green[600];
     default:
-      return green[600];
+      return '';
   }
 }
 
@@ -36,10 +36,7 @@ export default function SimpleSnackbar() {
   //   setOpen(true);
   // }
 
-  function handleClose(event, reason) {
-    if (reason === 'clickaway') {
-      return;
-    }
+  function handleClose() {
     context.setunShowMsgBar(false);
   }
 
@@ -48,7 +45,7 @@ export default function SimpleSnackbar() {
       <Snackbar
         anchorOrigin={{
           vertical: 'top',
-          horizontal: 'left',
+          horizontal: 'center',
         }}
         open={userState.openMsgBar}
         autoHideDuration={3000}

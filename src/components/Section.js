@@ -45,7 +45,7 @@ export default function PaperSheet(props) {
     instance.get('/getPostBySection?id='.concat(id))
       .then((res) => {
         if (!res.data[0]) {
-          setPosts('暂无数据');
+          setPosts('暂无发帖');
           return;
         }
         const data = res.data.sort((a, b) => b.postTime - a.postTime);

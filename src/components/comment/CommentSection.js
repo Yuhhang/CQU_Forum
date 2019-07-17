@@ -150,7 +150,7 @@ export default function CommentSection(props) {
     instance.get('/getComment?postId='.concat(postId))
       .then((res) => {
         if (!res.data[0]) {
-          setComments('暂无数据');
+          setComments('暂无评论');
           return;
         }
         let data = res.data.sort((a, b) => b.commentTime - a.commentTime);

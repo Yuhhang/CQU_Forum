@@ -1,7 +1,10 @@
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect, useState } from 'react';
-import Card from '../../components/Card';
+import React, { useContext, useEffect, useState } from 'react';
 import instance from '../../components/axios';
+import Card from '../../components/Card';
+import userContext from '../../context/userContext';
+
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -13,10 +16,12 @@ let fetchPostLock = false;
 
 const offsetBase = 20;
 let offsetCount = 1;
+let latestPostTime = 0;
 
 function MainPage() {
+  const context = useContext(userContext); // global user context
   const [posts, setPosts] = useState(null);
-  let latestPostTime = null;
+  const [showProgress, setShowProgress] = useState(false);
   const classes = useStyles();
 
   function renderCard(data) {
@@ -45,32 +50,44 @@ function MainPage() {
     } else {
       url = '/getPost?offset='.concat(offset);
     }
-    instance.get(url).then((res) => {
-      if (res.data.length === 0) {
-        fetchPostLock = true; // 禁止后续刷新
-        return;
-      }
-      setTimeout(() => {
-        fetchPostLock = false;
-      }, 5000);
+    instance.get(url)
+      .then((res) => {
+        if (!res.data || res.data.length === 0) {
+          if (offset !== -1) {
+            context.setShowMsgBar('dufault', '没有更多帖子了');
+          }
+          fetchPostLock = true; // 禁止后续刷新
+          return;
+        }
+        setTimeout(() => {
+          fetchPostLock = false;
+        }, 5000);
 
-      let { data } = res;
-      latestPostTime = data[0].postTime > latestPostTime ? data[0].postTime : latestPostTime;
-      // const data = res.data.sort((a, b) => Date.parse(b.postTime) - Date.parse(a.postTime));
-      if (dataOld && JSON.stringify(dataOld[0]) === JSON.stringify(data[0])) {
-        return;
-      }
+        let { data } = res;
+        latestPostTime = data[0].postTime > latestPostTime ? data[0].postTime : latestPostTime;
+        // const data = res.data.sort((a, b) => Date.parse(b.postTime) - Date.parse(a.postTime));
+        if (dataOld && JSON.stringify(dataOld[0]) === JSON.stringify(data[0])) {
+          return;
+        }
 
-      data = dataOld
-        // 合并并去除重复项
-        ? dataOld.concat(data.filter(
-          item => !(dataOld.find(x => x.postId === item.postId) || false),
-        ))
-        : data;
-      data = data.sort((a, b) => b.postTime - a.postTime);
-      localStorage.setItem('postList', JSON.stringify(data));
-      renderCard(data);
-    });
+        data = dataOld
+          // 合并并去除重复项
+          ? dataOld.concat(data.filter(
+            item => !(dataOld.find(x => x.postId === item.postId) || false),
+          ))
+          : data;
+        data = data.sort((a, b) => b.postTime - a.postTime);
+        localStorage.setItem('postList', JSON.stringify(data));
+        renderCard(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        if (offset === 0) {
+          setShowProgress(false);
+        }
+      });
   }
 
   window.onscroll = () => {
@@ -85,9 +102,14 @@ function MainPage() {
     const dataOld = JSON.parse(localStorage.getItem('postList'));
     if (dataOld !== null) {
       renderCard(dataOld);
+      latestPostTime = dataOld[0].postTime;
+      offsetCount = parseInt(dataOld.length / offsetBase, 10);
+      fetchNewData(-1);
+    } else {
+      fetchNewData(0);
+      setShowProgress(true);
     }
 
-    fetchNewData(0);
 
     const pullPost = setInterval(() => {
       fetchNewData(-1);
@@ -114,6 +136,9 @@ function MainPage() {
   ));
   return (
     <div className={classes.root}>
+      {showProgress
+        && <LinearProgress />
+      }
       {posts}
       {/* {sectionLists} */}
     </div>
