@@ -121,26 +121,12 @@ function MainPage() {
     };
   }, []);
 
-  const numbers = [1, 2, 3, 4, 5];
-  const sectionLists = numbers.map(number => (
-    <Card
-      key={number}
-      postId="postid"
-      userName="一位不知名的用户"
-      sectionName="大数据与软件学院"
-      title="民主湖论坛就是个🌶🐓"
-      content="symbol function guess clear dust shine sets equal largest concerned consider lovely machine cannot fuel bread done common coming wing half tip broad day"
-      viewNum={233}
-      postTime={1562687612327}
-    />
-  ));
   return (
     <div className={classes.root}>
       {showProgress
         && <LinearProgress />
       }
       {posts}
-      {/* {sectionLists} */}
     </div>
   );
 }

@@ -1,8 +1,8 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import * as serviceWorker from './serviceWorker';
 import Page from './Page';
+import * as serviceWorker from './serviceWorker';
 
 function Section() {
   return (
