@@ -4,7 +4,9 @@ import Typography from '@material-ui/core/Typography';
 import ReplyIcon from '@material-ui/icons/Reply';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import userContext from '../../context/userContext';
+import instance from '../axios';
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -25,15 +27,32 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function CommentAction() {
+export default function CommentAction(props) {
+  const context = useContext(userContext); // global user context
+
+  const {
+    commentId,
+    likeCountInit,
+    dislikeCountInit,
+  } = props;
+
   const classes = useStyles();
   const [like, setLike] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
+  const [likeCount, setLikeCount] = useState(likeCountInit);
 
   const [dislike, setDislike] = useState(false);
-  const [dislikeCount, setDislikeCount] = useState(0);
+  const [dislikeCount, setDislikeCount] = useState(dislikeCountInit);
 
   const handleLike = () => {
+    instance.get(`likeComment?commentId=${commentId}&cancel=${like}`)
+      .then((res) => {
+        if (res.data.like_status === 'success') {
+          context.setShowMsgBar('success', '点赞成功');
+        }
+      })
+      .catch(() => {
+        context.setShowMsgBar('fail', '网络错误');
+      });
     if (like) {
       setLikeCount(likeCount - 1);
     } else {
@@ -43,6 +62,15 @@ export default function CommentAction() {
   };
 
   const handleDislike = () => {
+    instance.get(`dislikeComment?commentId=${commentId}&cancel=${dislike}`)
+      .then((res) => {
+        if (res.data.dislike_status === 'success') {
+          context.setShowMsgBar('success', '踩成功');
+        }
+      })
+      .catch(() => {
+        context.setShowMsgBar('fail', '网络错误');
+      });
     if (dislike) {
       setDislikeCount(dislikeCount - 1);
     } else {
@@ -53,7 +81,7 @@ export default function CommentAction() {
 
   return (
     <div className={classes.action}>
-      <IconButton className={classes.button} aria-label="Reply">
+      <IconButton disabled className={classes.button} aria-label="Reply">
         <ReplyIcon />
         <Typography>
           回复
@@ -62,7 +90,7 @@ export default function CommentAction() {
       <IconButton
         className={classes.button}
         aria-label="disLike"
-        color={dislike ? 'primary' : ''}
+        color={dislike ? 'primary' : 'default'}
         disabled={like}
         onClick={handleDislike}
       >
@@ -74,7 +102,7 @@ export default function CommentAction() {
       <IconButton
         className={classes.button}
         aria-label="like"
-        color={like ? 'primary' : ''}
+        color={like ? 'primary' : 'default'}
         disabled={dislike}
         onClick={handleLike}
       >

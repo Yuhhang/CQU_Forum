@@ -96,8 +96,8 @@ function PostInfo() {
   const date = new Date(postTime * 1000);
   const dateStr = date.getMonth().toString().concat('月')
   + date.getDate().toString().concat('日 ')
-  + date.getHours().toString().concat(':')
-  + date.getMinutes().toString();
+  + date.getHours().toString().concat('时')
+  + date.getMinutes().toString().concat('分');
 
   const classes = useStyles();
 
@@ -162,6 +162,8 @@ export default function CommentSection(props) {
             userId={item.userId}
             userNick={item.userNick}
             content={item.content}
+            likeCount={item.likeCount}
+            dislikeCount={item.dislikeCount}
             replyTo={item.replyTo}
             anonymous={item.anonymous}
             commentTime={`${item.commentTime}000`}

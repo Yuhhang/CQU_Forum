@@ -19,7 +19,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import RelativeTime from './RelativeTime';
-import Slide from '@material-ui/core/Slide';
+// import Slide from '@material-ui/core/Slide';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -152,57 +152,57 @@ export default function RecipeReviewCard(props) {
   }
 
   return (
-    <Slide direction="left" in mountOnEnter unmountOnExit>
-      <Card className={classes.card}>
-        <Header />
-        <Link to={'/post/'.concat(postId)} style={{ textDecoration: 'none' }}>
-          <ButtonBase
-            className={classes.cardContentButton}
-            onClick={() => {
-              localStorage.setItem('currentPostInfo', JSON.stringify(props));
-            }}
-          >
-            <CardContent className={classes.cardContent}>
-              <Typography variant="h6" color="textPrimary">
-                {title}
-              </Typography>
-              {!expanded
-                && (
-                  <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p" noWrap>
-                    {content}
-                  </Typography>
-                )}
-            </CardContent>
-          </ButtonBase>
-        </Link>
-        <CardActions disableSpacing className={classes.cardAction}>
-          <IconButton aria-label="views">
-            <CommentIcon fontSize="small" />
-          </IconButton>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {/* {viewNum} */}
-            {commentCount}
-          </Typography>
-          <IconButton aria-label="Share">
-            <ShareIcon fontSize="small" />
-          </IconButton>
-          <IconButton
-            className={clsx(classes.expand, {
-              [classes.expandOpen]: expanded,
-            })}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="Show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </CardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent className={classes.expandContent}>
-            {content}
+  // <Slide direction="left" in mountOnEnter unmountOnExit>
+    <Card className={classes.card}>
+      <Header />
+      <Link to={'/post/'.concat(postId)} style={{ textDecoration: 'none' }}>
+        <ButtonBase
+          className={classes.cardContentButton}
+          onClick={() => {
+            localStorage.setItem('currentPostInfo', JSON.stringify(props));
+          }}
+        >
+          <CardContent className={classes.cardContent}>
+            <Typography variant="h6" color="textPrimary">
+              {title}
+            </Typography>
+            {!expanded
+              && (
+                <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p" noWrap>
+                  {content}
+                </Typography>
+              )}
           </CardContent>
-        </Collapse>
-      </Card>
-    </Slide>
+        </ButtonBase>
+      </Link>
+      <CardActions disableSpacing className={classes.cardAction}>
+        <IconButton aria-label="views">
+          <CommentIcon fontSize="small" />
+        </IconButton>
+        <Typography variant="body2" color="textSecondary" component="p">
+          {/* {viewNum} */}
+          {commentCount}
+        </Typography>
+        <IconButton aria-label="Share">
+          <ShareIcon fontSize="small" />
+        </IconButton>
+        <IconButton
+          className={clsx(classes.expand, {
+            [classes.expandOpen]: expanded,
+          })}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="Show more"
+        >
+          <ExpandMoreIcon />
+        </IconButton>
+      </CardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent className={classes.expandContent}>
+          {content}
+        </CardContent>
+      </Collapse>
+    </Card>
+  // </Slide>
   );
 }

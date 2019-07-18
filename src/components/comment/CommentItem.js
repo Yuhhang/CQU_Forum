@@ -1,4 +1,5 @@
 import Avatar from '@material-ui/core/Avatar';
+import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -7,7 +8,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import RelativeTime from '../RelativeTime';
 import CommentAction from './CommentAction';
-import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -34,6 +34,8 @@ export default function Item(props) {
     userId,
     userNick,
     content,
+    likeCount,
+    dislikeCount,
     replyTo,
     anonymous,
     commentTime,
@@ -67,6 +69,9 @@ export default function Item(props) {
         </ListItem>
         <CommentAction
           className={classes.action}
+          commentId={commentId}
+          likeCountInit={likeCount}
+          dislikeCountInit={dislikeCount}
         />
         <Divider light />
       </div>
