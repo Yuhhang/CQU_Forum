@@ -21,15 +21,18 @@ export default function SectionBlock() {
 
       });
   }, []);
-  const sectionListDump = sectionList.map(section => (
-    <SectionEntry
-      key={section.section_id}
-      sectionId={section.section_id}
-      sectionName={section.name}
-      mode={section.mode}
-      msg={section.msg}
-    />
-  ));
+  let sectionListDump = '暂无数据';
+  if (sectionList !== null) {
+    sectionListDump = sectionList.map(section => (
+      <SectionEntry
+        key={section.section_id}
+        sectionId={section.section_id}
+        sectionName={section.name}
+        mode={section.mode}
+        msg={section.msg}
+      />
+    ));
+  }
   return (
     <Grid container>
       {sectionListDump}

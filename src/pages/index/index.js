@@ -65,7 +65,6 @@ function MainPage() {
 
         let { data } = res;
         latestPostTime = data[0].postTime > latestPostTime ? data[0].postTime : latestPostTime;
-        // const data = res.data.sort((a, b) => Date.parse(b.postTime) - Date.parse(a.postTime));
         if (dataOld && JSON.stringify(dataOld[0]) === JSON.stringify(data[0])) {
           return;
         }
@@ -80,8 +79,10 @@ function MainPage() {
         localStorage.setItem('postList', JSON.stringify(data));
         renderCard(data);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        offsetCount = 1;
+        // localStorage.clear();
+        // window.location.reload();
       })
       .finally(() => {
         if (offset === 0) {
@@ -111,12 +112,12 @@ function MainPage() {
     }
 
 
-    const pullPost = setInterval(() => {
-      fetchNewData(-1);
-    }, 1000 * 30);
+    // const pullPost = setInterval(() => {
+    //   fetchNewData(-1);
+    // }, 1000 * 30);
 
     return () => {
-      clearInterval(pullPost);
+      // clearInterval(pullPost);
       window.onscroll = null;
     };
   }, []);

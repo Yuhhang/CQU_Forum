@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function CommentAction(props) {
   const context = useContext(userContext); // global user context
-
+  const { userState } = context;
   const {
     commentId,
     likeCountInit,
@@ -91,7 +91,7 @@ export default function CommentAction(props) {
         className={classes.button}
         aria-label="disLike"
         color={dislike ? 'primary' : 'default'}
-        disabled={like}
+        disabled={!userState.isLoggedIn || like}
         onClick={handleDislike}
       >
         <ThumbDownIcon />
@@ -103,7 +103,7 @@ export default function CommentAction(props) {
         className={classes.button}
         aria-label="like"
         color={like ? 'primary' : 'default'}
-        disabled={dislike}
+        disabled={!userState.isLoggedIn || dislike}
         onClick={handleLike}
       >
         <ThumbUpIcon />
