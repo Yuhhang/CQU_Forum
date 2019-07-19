@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
+import VerifyDialog from './VerifyDialog';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -97,7 +98,8 @@ export default function FullWidthTabs() {
 
   return (
     <div>
-      <AppBar position="static" color="default">
+      <VerifyDialog />
+      {/* <AppBar position="static" color="default">
         <Tabs
           value={value}
           onChange={handleChange}
@@ -120,7 +122,7 @@ export default function FullWidthTabs() {
         </TabContainer>
         <TabContainer dir={theme.direction}>Item Two</TabContainer>
         <TabContainer dir={theme.direction}>Item Three</TabContainer>
-      </SwipeableViews>
+      </SwipeableViews> */}
     </div>
   );
 }

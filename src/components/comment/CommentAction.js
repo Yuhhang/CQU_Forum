@@ -48,14 +48,15 @@ export default function CommentAction(props) {
     instance.get(`likeComment?commentId=${commentId}&cancel=${like}`)
       .then((res) => {
         if (res.data.like_status === 'success') {
-          context.setShowMsgBar('success', '操作成功');
           if (res.data.toggle) {
             setLikeCount(likeCount + 1);
+            context.setShowMsgBar('success', '赞成功');
           } else {
             setLikeCount(likeCount - 1);
+            context.setShowMsgBar('success', '取消赞成功');
           }
         } else {
-          context.setShowMsgBar('default', '操作重复');
+          context.setShowMsgBar('default', '赞过了');
         }
       })
       .catch(() => {
@@ -69,18 +70,19 @@ export default function CommentAction(props) {
     instance.get(`dislikeComment?commentId=${commentId}&cancel=${dislike}`)
       .then((res) => {
         if (res.data.dislike_status === 'success') {
-          context.setShowMsgBar('success', '操作成功');
           if (res.data.toggle) {
             setDislikeCount(dislikeCount + 1);
+            context.setShowMsgBar('success', '踩成功');
           } else {
             setDislikeCount(dislikeCount - 1);
+            context.setShowMsgBar('success', '取消踩成功');
           }
         } else {
-          context.setShowMsgBar('default', '操作重复');
+          context.setShowMsgBar('default', '踩过了');
         }
       })
       .catch(() => {
-        setDislike(!dislike); // 恢复未点赞
+        setDislike(!dislike);
         context.setShowMsgBar('error', '网络错误');
       });
   };
