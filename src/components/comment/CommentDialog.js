@@ -53,6 +53,7 @@ export default function CommentDialog(props) {
         if (res.data.comment_status === 'success') {
           context.setShowMsgBar('success', '评论成功');
           setContent('');
+          window.location.reload();
           return;
         }
         context.setShowMsgBar('error', '发生错误');

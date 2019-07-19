@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import React, { useContext, useEffect, useState } from 'react';
 import userContext from '../context/userContext';
 import instance from './axios';
+import { returnStatement } from '@babel/types';
 
 const titleMaxLength = 20;
 const contentMaxLength = 1000;
@@ -32,6 +33,7 @@ export default function FormDialog() {
   const [sectionList, setSectionList] = useState(JSON.parse(localStorage.getItem('sectionList')));
   const [titleErr, setTitleErr] = useState(false);
   const [contentErr, setContentErr] = useState(false);
+  const [sectionIdErr, setSectionIdErr] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
 
   useEffect(() => {
@@ -54,7 +56,7 @@ export default function FormDialog() {
   const validateInput = (type) => {
     switch (type) {
       case 'title':
-        if (values.title.length > titleMaxLength) {
+        if (values.title.length > titleMaxLength || values.title.length === 0) {
           return false;
         }
         return true;
@@ -63,7 +65,11 @@ export default function FormDialog() {
           return false;
         }
         return true;
-
+      case 'section_id':
+        if (values.section_id === 0) {
+          return false;
+        }
+        return true;
       default:
         return false;
     }
@@ -85,6 +91,13 @@ export default function FormDialog() {
           setContentErr(false);
         }
         break;
+      case 'section_id':
+        if (!validateInput('section_id') && !sectionIdErr) {
+          setSectionIdErr(true);
+        } else if (validateInput('section_id') && sectionIdErr) {
+          setSectionIdErr(false);
+        }
+        break;
       default:
         break;
     }
@@ -104,6 +117,10 @@ export default function FormDialog() {
       setContentErr(true);
       return;
     }
+    if (!validateInput('section_id')) {
+      setSectionIdErr(true);
+      return;
+    }
     // 显示加载条并禁用提交
     setShowProgress(true);
 
@@ -116,6 +133,12 @@ export default function FormDialog() {
         if (res.data.post_status === 'success') { // 发帖成功
           context.setClosePostDialog();
           context.setShowMsgBar('success', '发帖成功');
+          setValues({
+            title: '',
+            content: '',
+            section_id: 0,
+            anonymous: false,
+          });
         } else {
           context.setShowMsgBar('error', '发生错误');
         }
@@ -123,7 +146,8 @@ export default function FormDialog() {
       .catch(() => {
         // handle error
         context.setShowMsgBar('error', '发生错误');
-      }).finally(() => {
+      })
+      .finally(() => {
         setShowProgress(false);
       });
   }
@@ -167,6 +191,7 @@ export default function FormDialog() {
             helperText={`${values.content.length}/${contentMaxLength}`}
           />
           <TextField
+            error={sectionIdErr}
             id="section"
             select
             label="分区"

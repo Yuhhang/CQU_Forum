@@ -44,39 +44,45 @@ export default function CommentAction(props) {
   const [dislikeCount, setDislikeCount] = useState(dislikeCountInit);
 
   const handleLike = () => {
+    setLike(!like); // 先变换状态，避免网络延迟造成重复点击
     instance.get(`likeComment?commentId=${commentId}&cancel=${like}`)
       .then((res) => {
         if (res.data.like_status === 'success') {
-          context.setShowMsgBar('success', '点赞成功');
+          context.setShowMsgBar('success', '操作成功');
+          if (res.data.toggle) {
+            setLikeCount(likeCount + 1);
+          } else {
+            setLikeCount(likeCount - 1);
+          }
+        } else {
+          context.setShowMsgBar('default', '操作重复');
         }
       })
       .catch(() => {
-        context.setShowMsgBar('fail', '网络错误');
+        setLike(!like); // 恢复未点赞
+        context.setShowMsgBar('error', '网络错误');
       });
-    if (like) {
-      setLikeCount(likeCount - 1);
-    } else {
-      setLikeCount(likeCount + 1);
-    }
-    setLike(!like);
   };
 
   const handleDislike = () => {
+    setDislike(!dislike);
     instance.get(`dislikeComment?commentId=${commentId}&cancel=${dislike}`)
       .then((res) => {
         if (res.data.dislike_status === 'success') {
-          context.setShowMsgBar('success', '踩成功');
+          context.setShowMsgBar('success', '操作成功');
+          if (res.data.toggle) {
+            setDislikeCount(dislikeCount + 1);
+          } else {
+            setDislikeCount(dislikeCount - 1);
+          }
+        } else {
+          context.setShowMsgBar('default', '操作重复');
         }
       })
       .catch(() => {
-        context.setShowMsgBar('fail', '网络错误');
+        setDislike(!dislike); // 恢复未点赞
+        context.setShowMsgBar('error', '网络错误');
       });
-    if (dislike) {
-      setDislikeCount(dislikeCount - 1);
-    } else {
-      setDislikeCount(dislikeCount + 1);
-    }
-    setDislike(!dislike);
   };
 
   return (

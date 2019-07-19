@@ -13,6 +13,7 @@ import Main from './index/index';
 import Square from './square/Square';
 import Inbox from './inbox/inbox';
 import My from './my/My';
+import UserInfo from './my/UserInfo';
 import Section from '../components/Section';
 import PostDetail from '../components/PostDetail';
 
@@ -59,7 +60,8 @@ export default function LabelBottomNavigation() {
         <Route path="/" exact component={Main} />
         <Route path="/square" component={Square} />
         <Route path="/inbox" component={Inbox} />
-        <Route path="/my" component={My} />
+        <Route path="/my" exact component={My} />
+        <Route path="/my/userInfo" component={UserInfo} />
         <Route path="/section/:id" component={Section} />
         <Route path="/post/:id" component={PostDetail} />
       </Router>

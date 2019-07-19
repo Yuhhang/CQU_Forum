@@ -93,8 +93,8 @@ function PostInfo() {
     commentCount,
   } = JSON.parse(localStorage.getItem('currentPostInfo'));
 
-  const date = new Date(postTime * 1000);
-  const dateStr = date.getMonth().toString().concat('月')
+  const date = new Date(parseInt(postTime, 10));
+  const dateStr = (date.getMonth() + 1).toString().concat('月')
   + date.getDate().toString().concat('日 ')
   + date.getHours().toString().concat('时')
   + date.getMinutes().toString().concat('分');
@@ -122,7 +122,7 @@ function PostInfo() {
         <Typography variant="h6" color="textPrimary">
           {title}
         </Typography>
-        <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p" noWrap>
+        <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p">
           {content}
         </Typography>
       </CardContent>
@@ -151,7 +151,6 @@ export default function CommentSection(props) {
     instance.get('/getComment?postId='.concat(postId))
       .then((res) => {
         if (!res.data[0]) {
-          setComments('暂无评论');
           return;
         }
         let data = res.data.sort((a, b) => b.commentTime - a.commentTime);
@@ -184,11 +183,14 @@ export default function CommentSection(props) {
       <PostInfo />
       <Paper square className={classes.paper}>
         <Typography className={classes.text} variant="h5" gutterBottom>
-          评论
+          {comments ? '评论' : '暂无评论'}
         </Typography>
-        <List className={classes.list}>
-          {comments}
-        </List>
+        {comments
+        && (
+          <List className={classes.list}>
+            {comments}
+          </List>
+        )}
       </Paper>
       <div className={classes.commentButton}>
         <CommentDialog postId={postId} />
