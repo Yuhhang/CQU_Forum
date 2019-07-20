@@ -4,9 +4,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import instance from '../../components/axios';
 import userContext from '../../context/userContext';
 
@@ -20,7 +21,7 @@ const useStyles = makeStyles(() => ({
 export default function VerifyDialog() {
   const context = useContext(userContext); // global user context
 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [mailAddr, setMailAddr] = useState('');
   const [mailErr, setMailErr] = useState(false);
   const [captcha, setCaptcha] = useState('');
@@ -49,9 +50,9 @@ export default function VerifyDialog() {
         // console.log(res.data);
         if (res.data.status === 'success') {
           setOpen(false);
-          context.setShowMsgBar('success', '验证成功');
+          context.setShowMsgBar('success', '验证成功，请重新登录');
         } else {
-          context.setShowMsgBar('error', '验证码错误');
+          context.setShowMsgBar('error', res.data.msg);
         }
       })
       .catch(() => {
@@ -81,7 +82,7 @@ export default function VerifyDialog() {
           setMailSent(true);
           context.setShowMsgBar('success', '发送成功，请查看邮箱');
         } else {
-          context.setShowMsgBar('error', '发生错误');
+          context.setShowMsgBar('error', res.data.msg);
         }
       })
       .catch(() => {
@@ -95,11 +96,11 @@ export default function VerifyDialog() {
 
   return (
     <div>
-      <Button
+      <MenuItem
         onClick={() => setOpen(true)}
       >
-        打开
-      </Button>
+        账号验证
+      </MenuItem>
       <Dialog
         open={open}
         onClose={handleClose}

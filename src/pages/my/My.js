@@ -65,7 +65,7 @@ function LabelInfo(props) {
       break;
     case 'verified':
       icon = <SchoolIcon />;
-      label = 'xx学院';
+      label = '认证用户';
       break;
     case 'teacher':
       icon = <AssignmentIndIcon />;

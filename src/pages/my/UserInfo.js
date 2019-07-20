@@ -1,18 +1,17 @@
-import AppBar from '@material-ui/core/AppBar';
+import Divider from '@material-ui/core/Divider';
 import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
 import React from 'react';
-import SwipeableViews from 'react-swipeable-views';
 import VerifyDialog from './VerifyDialog';
 
 const useStyles = makeStyles(theme => ({
@@ -98,7 +97,21 @@ export default function FullWidthTabs() {
 
   return (
     <div>
-      <VerifyDialog />
+      <Paper className={classes.paper}>
+        <Typography variant="h5" component="h3">
+          账号信息
+        </Typography>
+        <MenuList>
+          <MenuItem>昵称</MenuItem>
+          <Divider />
+          <MenuItem>密码</MenuItem>
+          <Divider />
+          <VerifyDialog />
+          <Divider />
+          <MenuItem>申请管理员</MenuItem>
+          <Divider />
+        </MenuList>
+      </Paper>
       {/* <AppBar position="static" color="default">
         <Tabs
           value={value}
