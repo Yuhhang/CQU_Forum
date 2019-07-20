@@ -7,23 +7,16 @@ import CardHeader from '@material-ui/core/CardHeader';
 import { red } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import CommentIcon from '@material-ui/icons/Comment';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ShareIcon from '@material-ui/icons/Share';
-import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
-import CommentDialog from './CommentDialog';
-import RelativeTime from '../RelativeTime';
-import CommentItem from './CommentItem';
 import instance from '../axios';
+import CommentDialog from './CommentDialog';
+import CommentItem from './CommentItem';
 
 const useStyles = makeStyles(theme => ({
   text: {
@@ -91,7 +84,7 @@ function PostInfo() {
     title,
     content,
     commentCount,
-  } = JSON.parse(localStorage.getItem('currentPostInfo'));
+  } = JSON.parse(sessionStorage.getItem('currentPostInfo'));
 
   const date = new Date(parseInt(postTime, 10));
   const dateStr = (date.getMonth() + 1).toString().concat('月')
@@ -159,7 +152,7 @@ export default function CommentSection(props) {
             key={item.commentId}
             commentId={item.commentId}
             userId={item.userId}
-            userNick={item.userNick}
+            nickName={item.nickName}
             content={item.content}
             likeCount={item.likeCount}
             dislikeCount={item.dislikeCount}

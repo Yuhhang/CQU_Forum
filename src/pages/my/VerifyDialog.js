@@ -3,17 +3,14 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import MenuItem from '@material-ui/core/MenuItem';
-import Slide from '@material-ui/core/Slide';
-import Switch from '@material-ui/core/Switch';
-import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useContext, useEffect, useState } from 'react';
+import TextField from '@material-ui/core/TextField';
+import React, { useState, useContext } from 'react';
 import instance from '../../components/axios';
+import userContext from '../../context/userContext';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   dialog: {
     margin: 'auto',
     maxWidth: '600px',
@@ -21,6 +18,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function VerifyDialog() {
+  const context = useContext(userContext); // global user context
+
   const [open, setOpen] = useState(true);
   const [mailAddr, setMailAddr] = useState('');
   const [mailErr, setMailErr] = useState(false);
@@ -35,12 +34,33 @@ export default function VerifyDialog() {
     return cquMailReg.test(mailAddr);
   };
 
-  const handleChange = () => (event) => {
-    setMailAddr(event.target.value);
-  };
-
   function handleClose() {
     setOpen(false);
+  }
+
+  function handleSendCaptcha() {
+    setShowProgress(true);
+
+    const url = 'mailAuth/';
+    instance.post(url, {
+      captcha,
+    })
+      .then((res) => {
+        // console.log(res.data);
+        if (res.data.status === 'success') {
+          setOpen(false);
+          context.setShowMsgBar('success', '验证成功');
+        } else {
+          context.setShowMsgBar('error', '验证码错误');
+        }
+      })
+      .catch(() => {
+        // handle error
+        context.setShowMsgBar('error', '发生错误');
+      })
+      .finally(() => {
+        setShowProgress(false);
+      });
   }
 
   function handleSendMail() {
@@ -59,14 +79,14 @@ export default function VerifyDialog() {
         // console.log(res.data);
         if (res.data.status === 'success') {
           setMailSent(true);
-          // context.setShowMsgBar('success', '发帖成功');
+          context.setShowMsgBar('success', '发送成功，请查看邮箱');
         } else {
-          // context.setShowMsgBar('error', '发生错误');
+          context.setShowMsgBar('error', '发生错误');
         }
       })
       .catch(() => {
         // handle error
-        // context.setShowMsgBar('error', '发生错误');
+        context.setShowMsgBar('error', '发生错误');
       })
       .finally(() => {
         setShowProgress(false);
@@ -96,7 +116,7 @@ export default function VerifyDialog() {
             margin="normal"
             variant="filled"
             value={mailAddr}
-            onChange={handleChange()}
+            onChange={e => setMailAddr(e.target.value)}
             onFocus={() => {
               if (mailErr) {
                 setMailErr(false);
@@ -118,9 +138,8 @@ export default function VerifyDialog() {
             id="content"
             label="验证码"
             type="text"
-            name="content"
             value={captcha}
-            onChange={handleChange('content')}
+            onChange={e => setCaptcha(e.target.value)}
             margin="normal"
             variant="filled"
           />
@@ -131,7 +150,7 @@ export default function VerifyDialog() {
           </Button>
           <Button
             disabled={showProgress || !mailSent}
-            // onClick={handleSubmit}
+            onClick={handleSendCaptcha}
             color="primary"
           >
             验证

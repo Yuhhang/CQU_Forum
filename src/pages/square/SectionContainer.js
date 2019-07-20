@@ -4,7 +4,7 @@ import SectionEntry from './SectionEntry';
 import instance from '../../components/axios';
 
 export default function SectionBlock() {
-  const [sectionList, setSectionList] = useState(JSON.parse(localStorage.getItem('sectionList')));
+  const [sectionList, setSectionList] = useState(JSON.parse(sessionStorage.getItem('sectionList')));
   useEffect(() => {
     if (sectionList !== null) {
       return;
@@ -12,7 +12,7 @@ export default function SectionBlock() {
     instance.get('/getSections')
       .then((res) => {
         setSectionList(res.data);
-        localStorage.setItem('sectionList', JSON.stringify(res.data));
+        sessionStorage.setItem('sectionList', JSON.stringify(res.data));
       })
       .catch(() => {
         // handle error

@@ -29,7 +29,7 @@ function MainPage() {
       <Card
         key={post.postId}
         postId={post.postId}
-        userName={post.userName}
+        userName={post.nickName}
         sectionName={post.sectionName}
         title={post.title}
         content={post.content}
@@ -42,7 +42,7 @@ function MainPage() {
   }
 
   function fetchNewData(offset) {
-    const dataOld = JSON.parse(localStorage.getItem('postList'));
+    const dataOld = JSON.parse(sessionStorage.getItem('postList'));
     let url = '';
     if (offset === -1) {
       // 获取最新发帖
@@ -76,12 +76,12 @@ function MainPage() {
           ))
           : data;
         data = data.sort((a, b) => b.postTime - a.postTime);
-        localStorage.setItem('postList', JSON.stringify(data));
+        sessionStorage.setItem('postList', JSON.stringify(data));
         renderCard(data);
       })
       .catch(() => {
         offsetCount = 1;
-        // localStorage.clear();
+        // sessionStorage.clear();
         // window.location.reload();
       })
       .finally(() => {
@@ -100,7 +100,7 @@ function MainPage() {
   };
 
   useEffect(() => {
-    const dataOld = JSON.parse(localStorage.getItem('postList'));
+    const dataOld = JSON.parse(sessionStorage.getItem('postList'));
     if (dataOld !== null) {
       renderCard(dataOld);
       latestPostTime = dataOld[0].postTime;

@@ -32,7 +32,7 @@ export default function Item(props) {
   const {
     commentId,
     userId,
-    userNick,
+    nickName,
     content,
     likeCount,
     dislikeCount,
@@ -44,7 +44,7 @@ export default function Item(props) {
   const relativeTime = <RelativeTime postTime={commentTime} />;
   const commentTitle = (
     <div>
-      {userNick.concat(' • ')}
+      {nickName.concat(' • ')}
       {relativeTime}
     </div>
   );

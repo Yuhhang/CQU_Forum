@@ -54,7 +54,7 @@ export default function PaperSheet(props) {
             inSection
             key={post.postId}
             postId={post.postId}
-            userName={post.userName}
+            userName={post.nickName}
             sectionName={post.sectionName}
             title={post.title}
             content={post.content}
@@ -72,7 +72,7 @@ export default function PaperSheet(props) {
         // setCaptchaToken('');
         // setCaptchaLoading(true);
       });
-    const sectionList = JSON.parse(localStorage.getItem('sectionList'));
+    const sectionList = JSON.parse(sessionStorage.getItem('sectionList'));
     const currentSection = sectionList.filter(section => section.section_id == id);
     setSectionInfo(currentSection[0]);
   }, []);

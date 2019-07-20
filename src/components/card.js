@@ -159,7 +159,7 @@ export default function PostCard(props) {
         <ButtonBase
           className={classes.cardContentButton}
           onClick={() => {
-            localStorage.setItem('currentPostInfo', JSON.stringify(props));
+            sessionStorage.setItem('currentPostInfo', JSON.stringify(props));
           }}
         >
           <CardContent className={classes.cardContent}>

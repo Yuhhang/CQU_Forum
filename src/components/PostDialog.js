@@ -29,7 +29,7 @@ export default function FormDialog() {
     section_id: 0,
     anonymous: false,
   });
-  const [sectionList, setSectionList] = useState(JSON.parse(localStorage.getItem('sectionList')));
+  const [sectionList, setSectionList] = useState(JSON.parse(sessionStorage.getItem('sectionList')));
   const [titleErr, setTitleErr] = useState(false);
   const [contentErr, setContentErr] = useState(false);
   const [sectionIdErr, setSectionIdErr] = useState(false);
@@ -42,7 +42,7 @@ export default function FormDialog() {
     instance.get('/getSections')
       .then((res) => {
         setSectionList(res.data);
-        localStorage.setItem('sectionList', JSON.stringify(res.data));
+        sessionStorage.setItem('sectionList', JSON.stringify(res.data));
       })
       .catch(() => {
         // handle error

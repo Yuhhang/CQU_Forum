@@ -82,7 +82,7 @@ const GlobalState = (props) => {
     instance.get('/logout').then((res) => {
       if (res.data.success) {
         dispatch({ type: SET_LOGOUT });
-        localStorage.clear();
+        localStorage.removeItem('userInfo');
       }
     });
   };

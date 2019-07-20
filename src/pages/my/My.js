@@ -23,6 +23,7 @@ import SchoolIcon from '@material-ui/icons/School'; // Verified Icon
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'; // Admin Icon
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd'; // Teacher Icon
 import userContext from '../../context/userContext';
+import { Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles(() => ({
@@ -130,12 +131,14 @@ export default function My() {
         <div className={classes.root}>
           <List component="nav">
             <Divider />
-            <ListItem button disabled={!isLoggedIn}>
-              <ListItemIcon>
-                <AssignmentIcon />
-              </ListItemIcon>
-              <ListItemText primary="个人信息" />
-            </ListItem>
+            <Link to="/my/userInfo" style={{ textDecoration: 'none', color: 'black' }}>
+              <ListItem button disabled={!isLoggedIn}>
+                <ListItemIcon>
+                  <AssignmentIcon />
+                </ListItemIcon>
+                <ListItemText primary="个人信息" />
+              </ListItem>
+            </Link>
 
             <ListItem button disabled={!isLoggedIn}>
               <ListItemIcon>

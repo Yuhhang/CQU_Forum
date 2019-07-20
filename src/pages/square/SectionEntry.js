@@ -44,7 +44,7 @@ export default function CenteredGrid(props) {
   let postTitle = '';
   let username = '';
   let postTimeTemp = currentDayTime;
-  const postList = JSON.parse(localStorage.getItem('postList'));
+  const postList = JSON.parse(sessionStorage.getItem('postList'));
   postList.forEach((item) => {
     if ((item.sectionId === sectionId) && (item.postTime - currentDayTime > 0)) {
       postCount += 1;
