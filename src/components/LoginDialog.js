@@ -151,7 +151,7 @@ export default function LoginDialog() {
           // setLoggedIn(true);
           const userInfo = {
             isLoggedIn: true,
-            userName: values.username,
+            userName: res.data.nick_name,
             avatar: '',
             auth: {
               mode: res.data.mode,

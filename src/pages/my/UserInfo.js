@@ -11,8 +11,11 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
-import React from 'react';
+import React, { useContext } from 'react';
+import ChangeNickNameDialog from './ChangeNickNameDialog';
 import VerifyDialog from './VerifyDialog';
+import userContext from '../../context/userContext';
+
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -37,6 +40,8 @@ function TabContainer({ children, dir }) {
 
 
 export default function FullWidthTabs() {
+  const context = useContext(userContext);
+
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
@@ -102,7 +107,7 @@ export default function FullWidthTabs() {
           账号信息
         </Typography>
         <MenuList>
-          <MenuItem>昵称</MenuItem>
+          <ChangeNickNameDialog />
           <Divider />
           <MenuItem>密码</MenuItem>
           <Divider />

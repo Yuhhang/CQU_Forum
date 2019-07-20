@@ -1,29 +1,29 @@
-import React, { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { blue } from '@material-ui/core/colors';
+import { Container } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
-import Grid from '@material-ui/core/Grid';
-import FaceIcon from '@material-ui/icons/Face';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
 import Chip from '@material-ui/core/Chip';
+import { blue } from '@material-ui/core/colors';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Container } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import HistoryIcon from '@material-ui/icons/History';
-import StarsIcon from '@material-ui/icons/Stars';
-import SendIcon from '@material-ui/icons/Send';
-import PeopleIcon from '@material-ui/icons/People';
-import InfoIcon from '@material-ui/icons/Info';
-import ErrorIcon from '@material-ui/icons/Error'; // Not Verified Icon
-import SchoolIcon from '@material-ui/icons/School'; // Verified Icon
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'; // Admin Icon
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd'; // Teacher Icon
-import userContext from '../../context/userContext';
+import ErrorIcon from '@material-ui/icons/Error'; // Not Verified Icon
+import FaceIcon from '@material-ui/icons/Face';
+import HistoryIcon from '@material-ui/icons/History';
+import InfoIcon from '@material-ui/icons/Info';
+import PeopleIcon from '@material-ui/icons/People';
+import SchoolIcon from '@material-ui/icons/School'; // Verified Icon
+import SendIcon from '@material-ui/icons/Send';
+import StarsIcon from '@material-ui/icons/Stars';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'; // Admin Icon
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import userContext from '../../context/userContext';
 
 
 const useStyles = makeStyles(() => ({
