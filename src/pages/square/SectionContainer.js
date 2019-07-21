@@ -21,7 +21,7 @@ export default function SectionBlock() {
 
       });
   }, []);
-  let sectionListDump = '暂无数据';
+  let sectionListDump = null;
   if (sectionList !== null) {
     sectionListDump = sectionList.map(section => (
       <SectionEntry
@@ -35,7 +35,7 @@ export default function SectionBlock() {
   }
   return (
     <Grid container>
-      {sectionListDump}
+      {sectionListDump || '暂无数据'}
     </Grid>
 
   );

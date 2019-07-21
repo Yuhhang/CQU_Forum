@@ -131,14 +131,12 @@ export default function My() {
         <div className={classes.root}>
           <List component="nav">
             <Divider />
-            <Link to="/my/userInfo" style={{ textDecoration: 'none', color: 'black' }}>
-              <ListItem button disabled={!isLoggedIn}>
-                <ListItemIcon>
-                  <AssignmentIcon />
-                </ListItemIcon>
-                <ListItemText primary="个人信息" />
-              </ListItem>
-            </Link>
+            <ListItem button component={Link} to="/my/userInfo" disabled={!isLoggedIn}>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary="个人信息" />
+            </ListItem>
 
             <ListItem button disabled={!isLoggedIn}>
               <ListItemIcon>

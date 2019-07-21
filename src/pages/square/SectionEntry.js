@@ -45,16 +45,18 @@ export default function CenteredGrid(props) {
   let username = '';
   let postTimeTemp = currentDayTime;
   const postList = JSON.parse(sessionStorage.getItem('postList'));
-  postList.forEach((item) => {
-    if ((item.sectionId === sectionId) && (item.postTime - currentDayTime > 0)) {
-      postCount += 1;
-      if (item.postTime > postTimeTemp) {
-        postTimeTemp = item.postTime;
-        postTitle = item.title;
-        username = item.userName;
+  if (postList !== null) {
+    postList.forEach((item) => {
+      if ((item.sectionId === sectionId) && (item.postTime - currentDayTime > 0)) {
+        postCount += 1;
+        if (item.postTime > postTimeTemp) {
+          postTimeTemp = item.postTime;
+          postTitle = item.title;
+          username = item.userName;
+        }
       }
-    }
-  });
+    });
+  }
   return (
   // <Slide direction="up" in mountOnEnter unmountOnExit>
     <Grid item xs={6}>

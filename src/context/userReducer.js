@@ -10,10 +10,6 @@ export const SET_SHOW_MSG = 'SET_SHOW_MSG';
 export const SET_UNSHOW_MSG = 'SET_UNSHOW_MSG';
 
 const setLogin = (state, userInfo) => {
-  if (state.isLoggedIn) {
-    return state;
-  }
-
   localStorage.setItem('userInfo', JSON.stringify({
     ...state,
     ...userInfo,

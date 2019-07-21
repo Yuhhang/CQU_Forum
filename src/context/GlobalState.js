@@ -83,6 +83,7 @@ const GlobalState = (props) => {
       if (res.data.success) {
         dispatch({ type: SET_LOGOUT });
         localStorage.removeItem('userInfo');
+        sessionStorage.clear();
       }
     });
   };

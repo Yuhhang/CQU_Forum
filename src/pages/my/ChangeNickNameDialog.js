@@ -1,21 +1,17 @@
-import React, { useContext, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import CloseIcon from '@material-ui/icons/Close';
-import Slide from '@material-ui/core/Slide';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import MenuItem from '@material-ui/core/MenuItem';
-import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
+import Slide from '@material-ui/core/Slide';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
+import React, { useContext, useState } from 'react';
 import instance from '../../components/axios';
 import userContext from '../../context/userContext';
 
@@ -40,6 +36,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const nickNameReg = /^[\u4e00-\u9fa5\w\d]{2,10}$/;
+
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 export default function ChangeNickNameDialog() {
@@ -49,6 +47,7 @@ export default function ChangeNickNameDialog() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [nickName, setNickname] = useState('');
+  const [nickNameErr, setNicknameErr] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
 
   function handleClickOpen() {
@@ -60,15 +59,24 @@ export default function ChangeNickNameDialog() {
   }
 
   function handleSubmit() {
+    if (!nickNameReg.test(nickName)) {
+      setNicknameErr(true);
+      return;
+    }
     setShowProgress(true);
     const url = 'changeNickName/';
     instance.post(url, {
       nickName,
     })
       .then((res) => {
-        // console.log(res.data);
         if (res.data.status === 'success') {
+          const userInfo = {
+            userName: nickName,
+          };
+          context.setLogin(userInfo);
           context.setShowMsgBar('success', '昵称修改成功');
+          setNickname('');
+          handleClose();
         } else {
           context.setShowMsgBar('error', res.data.msg);
         }
@@ -122,13 +130,19 @@ export default function ChangeNickNameDialog() {
             margin="normal"
           />
           <TextField
-            id="stuId"
+            error={nickNameErr}
+            id="newNickName"
             label="新昵称"
             className={classes.textField}
-            type="number"
             value={nickName}
             onChange={(e) => { setNickname(e.target.value); }}
+            onFocus={() => {
+              if (nickNameErr) {
+                setNicknameErr(false);
+              }
+            }}
             margin="normal"
+            helperText="仅限中英文、数字及下划线，2-10位"
           />
         </Paper>
       </Dialog>
