@@ -33,6 +33,7 @@ function MainPage() {
         sectionName={post.sectionName}
         title={post.title}
         content={post.content}
+        imgNum={post.imgNum}
         commentCount={post.commentCount}
         viewNum={post.views}
         postTime={`${post.postTime}000`} // MySQL里的时间戳是秒, JS中的是毫秒

@@ -18,6 +18,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import clsx from 'clsx';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ImgDisplay from './ImgDisplay';
 import RelativeTime from './RelativeTime';
 // import Slide from '@material-ui/core/Slide';
 
@@ -94,6 +95,7 @@ export default function PostCard(props) {
     sectionName,
     title,
     content,
+    imgNum,
     postTime,
     userName,
     // viewNum,
@@ -200,6 +202,7 @@ export default function PostCard(props) {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent className={classes.expandContent}>
           {content}
+          <ImgDisplay postId={postId} imgNum={imgNum} />
         </CardContent>
       </Collapse>
     </Card>

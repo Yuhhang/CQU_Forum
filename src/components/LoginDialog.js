@@ -100,7 +100,7 @@ export default function LoginDialog() {
       return false;
     }
     // 字母开头，允许5-16字节，允许字母数字下划线
-    const usernameReg = /^[a-zA-Z][a-zA-Z0-9_]{4,15}$/;
+    const usernameReg = /^[a-zA-Z]\w{4,15}$/;
     if (register && !usernameReg.test(values.username)) {
       setValues({ ...values, usernameError: true, usernameErrorText: '用户名以字母开头，5-16字节，允许字母数字下划线' });
       return false;
@@ -113,9 +113,9 @@ export default function LoginDialog() {
       setValues({ ...values, passwordError: true, passwordErrorText: '请填写密码' });
       return false;
     }
-    const pswdReg = /^[\s]*$/;
-    if (register && (values.password.length < 6 || pswdReg.test(values.password))) {
-      setValues({ ...values, passwordError: true, passwordErrorText: '密码不能包含空格，且不能少于6位' });
+    const pswdReg = /^\S{6,18}$/;
+    if (register && !pswdReg.test(values.password)) {
+      setValues({ ...values, passwordError: true, passwordErrorText: '密码6-18位，不能包含空格' });
       return false;
     }
     return true;
@@ -180,6 +180,7 @@ export default function LoginDialog() {
             ...values, showProgress: false,
           });
           handleRegister();
+          context.setShowMsgBar('success', '注册成功');
         } else { // 错误
           setValues({
             ...values, passwordError: true, showProgress: false, passwordErrorText: '网络错误',

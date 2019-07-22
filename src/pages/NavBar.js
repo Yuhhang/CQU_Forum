@@ -13,7 +13,7 @@ import Main from './index/index';
 import Square from './square/Square';
 import Inbox from './inbox/inbox';
 import My from './my/My';
-import UserInfo from './my/UserInfo';
+import UserInfo from './my/userInfo/UserInfo';
 import Section from '../components/Section';
 import PostDetail from '../components/PostDetail';
 

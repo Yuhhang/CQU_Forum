@@ -17,6 +17,7 @@ import React, { useEffect, useState } from 'react';
 import instance from '../axios';
 import CommentDialog from './CommentDialog';
 import CommentItem from './CommentItem';
+import ImgDisplay from '../ImgDisplay';
 
 const useStyles = makeStyles(theme => ({
   text: {
@@ -83,6 +84,8 @@ function PostInfo() {
     postTime,
     title,
     content,
+    postId,
+    imgNum,
     commentCount,
   } = JSON.parse(sessionStorage.getItem('currentPostInfo'));
 
@@ -118,6 +121,7 @@ function PostInfo() {
         <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p">
           {content}
         </Typography>
+        <ImgDisplay postId={postId} imgNum={imgNum} />
       </CardContent>
       <CardActions disableSpacing className={classes.cardAction}>
         <IconButton aria-label="views">

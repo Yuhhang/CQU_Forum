@@ -7,9 +7,9 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import React, { useContext, useState } from 'react';
-import instance from '../../components/axios';
-import userContext from '../../context/userContext';
+import React, { useContext, useState, useEffect } from 'react';
+import instance from '../../../components/axios';
+import userContext from '../../../context/userContext';
 
 const useStyles = makeStyles(() => ({
   dialog: {
@@ -17,23 +17,23 @@ const useStyles = makeStyles(() => ({
     maxWidth: '600px',
   },
 }));
+const cquMailReg = /^\w*@cqu.edu.cn$/;
 
 export default function VerifyDialog() {
   const context = useContext(userContext); // global user context
+  const { userState } = context;
 
   const [open, setOpen] = useState(false);
   const [mailAddr, setMailAddr] = useState('');
   const [mailErr, setMailErr] = useState(false);
   const [captcha, setCaptcha] = useState('');
   const [mailSent, setMailSent] = useState(false);
+  const [mailResend, setMailResend] = useState(30);
   const [showProgress, setShowProgress] = useState(false);
 
   const classes = useStyles();
 
-  const validateMailAddr = () => {
-    const cquMailReg = /\w*@cqu.edu.cn$/;
-    return cquMailReg.test(mailAddr);
-  };
+  const validateMailAddr = () => cquMailReg.test(mailAddr);
 
   function handleClose() {
     setOpen(false);
@@ -64,6 +64,19 @@ export default function VerifyDialog() {
       });
   }
 
+  function recoverSendMail() {
+    let countDown = 30;
+    const resendTime = setInterval(() => {
+      countDown -= 1;
+      setMailResend(prevTime => prevTime - 1);
+      if (countDown === 0) {
+        setMailSent(false);
+        setMailResend(30);
+        clearInterval(resendTime);
+      }
+    }, 1000);
+  }
+
   function handleSendMail() {
     if (!validateMailAddr()) {
       setMailErr(true);
@@ -91,6 +104,7 @@ export default function VerifyDialog() {
       })
       .finally(() => {
         setShowProgress(false);
+        recoverSendMail();
       });
   }
 
@@ -98,8 +112,9 @@ export default function VerifyDialog() {
     <div>
       <MenuItem
         onClick={() => setOpen(true)}
+        disabled={userState.auth.mode !== 'unVerified'}
       >
-        账号验证
+        {userState.auth.mode === 'unVerified' ? '账号验证' : '已验证'}
       </MenuItem>
       <Dialog
         open={open}
@@ -130,7 +145,7 @@ export default function VerifyDialog() {
               disabled={showProgress || mailSent}
               onClick={handleSendMail}
             >
-              发送验证码
+              {!mailSent ? '发送验证码' : `重新发送${mailResend}`}
             </Button>
           </div>
           <TextField

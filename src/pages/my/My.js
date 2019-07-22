@@ -25,7 +25,6 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import userContext from '../../context/userContext';
 
-
 const useStyles = makeStyles(() => ({
   root: {
     width: '100%',

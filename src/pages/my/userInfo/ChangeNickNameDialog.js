@@ -12,8 +12,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useContext, useState } from 'react';
-import instance from '../../components/axios';
-import userContext from '../../context/userContext';
+import instance from '../../../components/axios';
+import userContext from '../../../context/userContext';
 
 const useStyles = makeStyles(theme => ({
   appBar: {

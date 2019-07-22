@@ -4,13 +4,17 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import IconButton from '@material-ui/core/IconButton';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import MenuItem from '@material-ui/core/MenuItem';
 import Slide from '@material-ui/core/Slide';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
+import DeleteIcon from '@material-ui/icons/Delete';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import React, { useContext, useEffect, useState } from 'react';
 import userContext from '../context/userContext';
+import qiniuUpload from '../scripts/qiniuUpload';
 import instance from './axios';
 
 const titleMaxLength = 20;
@@ -30,6 +34,7 @@ export default function FormDialog() {
     anonymous: false,
   });
   const [sectionList, setSectionList] = useState(JSON.parse(sessionStorage.getItem('sectionList')));
+  const [filesToUpload, setFilesToUpload] = useState([]);
   const [titleErr, setTitleErr] = useState(false);
   const [contentErr, setContentErr] = useState(false);
   const [sectionIdErr, setSectionIdErr] = useState(false);
@@ -50,7 +55,7 @@ export default function FormDialog() {
       }).finally(() => {
 
       });
-  }, []);
+  }, [sectionList]);
 
   const validateInput = (type) => {
     switch (type) {
@@ -107,6 +112,27 @@ export default function FormDialog() {
     setClosePostDialog();
   }
 
+  function uploadFile(postId) {
+    qiniuUpload(filesToUpload, postId)
+      .then(() => {
+        // console.log(res);
+        context.setClosePostDialog();
+        context.setShowMsgBar('success', '发帖成功');
+        setValues({
+          title: '',
+          content: '',
+          section_id: 0,
+          anonymous: false,
+        });
+      })
+      .catch(() => {
+        context.setShowMsgBar('error', '图片上传失败');
+      })
+      .finally(() => {
+        setShowProgress(false);
+      });
+  }
+
   function handleSubmit() {
     if (!validateInput('title')) {
       setTitleErr(true);
@@ -126,28 +152,34 @@ export default function FormDialog() {
     const url = 'addPost/';
     instance.post(url, {
       ...values,
+      imgNum: filesToUpload.length,
     })
       .then((res) => {
         // console.log(res.data);
         if (res.data.post_status === 'success') { // 发帖成功
-          context.setClosePostDialog();
-          context.setShowMsgBar('success', '发帖成功');
-          setValues({
-            title: '',
-            content: '',
-            section_id: 0,
-            anonymous: false,
-          });
+          if (filesToUpload.length !== 0) {
+            uploadFile(res.data.post_id);
+          } else {
+            context.setClosePostDialog();
+            context.setShowMsgBar('success', '发帖成功');
+            setValues({
+              title: '',
+              content: '',
+              section_id: 0,
+              anonymous: false,
+            });
+          }
         } else {
           context.setShowMsgBar('error', '发生错误');
+          setShowProgress(false);
         }
       })
       .catch(() => {
         // handle error
         context.setShowMsgBar('error', '发生错误');
+        setShowProgress(false);
       })
       .finally(() => {
-        setShowProgress(false);
       });
   }
 
@@ -189,6 +221,31 @@ export default function FormDialog() {
             variant="filled"
             helperText={`${values.content.length}/${contentMaxLength}`}
           />
+          <input
+            multiple
+            accept="image/*"
+            style={{ display: 'none' }}
+            id="icon-button-file"
+            type="file"
+            onChange={e => setFilesToUpload(e.target.files)}
+          />
+          <label htmlFor="icon-button-file">
+            <IconButton
+              color="primary"
+              aria-label="Upload picture"
+              component="span"
+            >
+              <PhotoCamera />
+            </IconButton>
+          </label>
+          {`已选择${filesToUpload.length}张图片`}
+          <IconButton
+            disabled={filesToUpload.length === 0}
+            aria-label="Delete"
+            onClick={() => setFilesToUpload([])}
+          >
+            <DeleteIcon />
+          </IconButton>
           <TextField
             error={sectionIdErr}
             id="section"

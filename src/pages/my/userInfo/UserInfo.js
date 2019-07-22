@@ -14,7 +14,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import React, { useContext } from 'react';
 import ChangeNickNameDialog from './ChangeNickNameDialog';
 import VerifyDialog from './VerifyDialog';
-import userContext from '../../context/userContext';
+import ChangePswdDialog from './ChangePswdDialog';
+import userContext from '../../../context/userContext';
 
 
 const useStyles = makeStyles(theme => ({
@@ -109,7 +110,7 @@ export default function FullWidthTabs() {
         <MenuList>
           <ChangeNickNameDialog />
           <Divider />
-          <MenuItem>密码</MenuItem>
+          <ChangePswdDialog />
           <Divider />
           <VerifyDialog />
           <Divider />
