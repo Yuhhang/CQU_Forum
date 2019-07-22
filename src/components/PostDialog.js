@@ -160,6 +160,7 @@ export default function FormDialog() {
           if (filesToUpload.length !== 0) {
             uploadFile(res.data.post_id);
           } else {
+            setShowProgress(false);
             context.setClosePostDialog();
             context.setShowMsgBar('success', '发帖成功');
             setValues({
