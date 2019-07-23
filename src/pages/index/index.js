@@ -1,6 +1,7 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useContext, useEffect, useState } from 'react';
+// import InfiniteScroll from 'infinite-scroll';
 import instance from '../../components/axios';
 import Card from '../../components/Card';
 import userContext from '../../context/userContext';
@@ -124,7 +125,7 @@ function MainPage() {
   }, []);
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} id="container">
       {showProgress
         && <LinearProgress />
       }

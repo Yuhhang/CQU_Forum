@@ -9,8 +9,13 @@ const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
   },
+  grid: {
+    height: '120px',
+  },
   img: {
     width: '100%',
+    height: '100%',
+    objectFit: 'cover',
     position: 'relative',
     top: '50%',
     transform: 'translateY(-50%)',
@@ -19,7 +24,7 @@ const useStyles = makeStyles(() => ({
 
 export default function ImgDisplay({ postId, imgNum }) {
   const classes = useStyles();
-  if (imgNum === 0) {
+  if (imgNum === 0 || imgNum === undefined) {
     return null;
   }
   const imgs = [];
@@ -48,7 +53,7 @@ export default function ImgDisplay({ postId, imgNum }) {
       break;
     default:
       imgGrid = imgs.map(img => (
-        <Grid item xs={4} key={img.alt}>
+        <Grid item xs={4} key={img.alt} className={classes.grid}>
           <img src={img.url} alt={img.alt} className={classes.img} />
         </Grid>
       ));

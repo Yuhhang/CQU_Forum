@@ -58,6 +58,7 @@ export default function PaperSheet(props) {
             sectionName={post.sectionName}
             title={post.title}
             content={post.content}
+            imgNum={post.imgNum}
             commentCount={post.commentCount}
             viewNum={post.views}
             postTime={`${post.postTime}000`}
@@ -79,7 +80,7 @@ export default function PaperSheet(props) {
 
   return (
     <div>
-      <button type="button" onClick={() => { props.history.goBack(); }}>GO BACK</button>
+      {/* <button type="button" onClick={() => { props.history.goBack(); }}>GO BACK</button> */}
       {sectionInfo
       && (
         <Paper className={classes.header}>

@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
+import PhotoIcon from '@material-ui/icons/PhotoOutlined';
 import CommentIcon from '@material-ui/icons/Comment';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -33,8 +34,6 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: '8px',
   },
   subTitle: {
-    display: 'flex',
-    alignItems: 'center',
     fontSize: '0.8rem',
   },
   cardContentButton: {
@@ -106,7 +105,7 @@ export default function PostCard(props) {
   const userNameDot = userName.concat(' • ');
   const cardSubTitle = (
     <div className={classes.subTitle}>
-      <AlternateEmailIcon fontSize="small" />
+      <AlternateEmailIcon fontSize="small" style={{ verticalAlign: 'middle' }} />
       {userNameDot}
       <RelativeTime postTime={postTime} />
     </div>
@@ -126,7 +125,7 @@ export default function PostCard(props) {
             </Avatar>
           )}
           action={(
-            <IconButton aria-label="Settings">
+            <IconButton aria-label="Settings" disabled>
               <MoreVertIcon />
             </IconButton>
           )}
@@ -144,7 +143,7 @@ export default function PostCard(props) {
           </Avatar>
         )}
         action={(
-          <IconButton aria-label="Settings">
+          <IconButton aria-label="Settings" disabled>
             <MoreVertIcon />
           </IconButton>
         )}
@@ -167,6 +166,7 @@ export default function PostCard(props) {
           <CardContent className={classes.cardContent}>
             <Typography variant="h6" color="textPrimary">
               {title}
+              {imgNum !== 0 && <PhotoIcon style={{ verticalAlign: 'middle' }} />}
             </Typography>
             {!expanded
               && (
@@ -178,14 +178,14 @@ export default function PostCard(props) {
         </ButtonBase>
       </Link>
       <CardActions disableSpacing className={classes.cardAction}>
-        <IconButton aria-label="views">
+        <IconButton aria-label="views" disableRipple>
           <CommentIcon fontSize="small" />
         </IconButton>
         <Typography variant="body2" color="textSecondary" component="p">
           {/* {viewNum} */}
           {commentCount}
         </Typography>
-        <IconButton aria-label="Share">
+        <IconButton aria-label="Share" disabled>
           <ShareIcon fontSize="small" />
         </IconButton>
         <IconButton
