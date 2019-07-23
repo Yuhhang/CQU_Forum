@@ -11,7 +11,7 @@ import Slide from '@material-ui/core/Slide';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 import React, { useContext, useEffect, useState } from 'react';
 import userContext from '../context/userContext';
 import qiniuUpload from '../scripts/qiniuUpload';
@@ -80,31 +80,6 @@ export default function FormDialog() {
   };
 
   const handleChange = prop => (event) => {
-    switch (prop) {
-      case 'title':
-        if (!validateInput('title') && !titleErr) {
-          setTitleErr(true);
-        } else if (validateInput('title') && titleErr) {
-          setTitleErr(false);
-        }
-        break;
-      case 'content':
-        if (!validateInput('content') && !contentErr) {
-          setContentErr(true);
-        } else if (validateInput('content') && contentErr) {
-          setContentErr(false);
-        }
-        break;
-      case 'section_id':
-        if (!validateInput('section_id') && !sectionIdErr) {
-          setSectionIdErr(true);
-        } else if (validateInput('section_id') && sectionIdErr) {
-          setSectionIdErr(false);
-        }
-        break;
-      default:
-        break;
-    }
     setValues({ ...values, [prop]: event.target.value });
   };
 
@@ -203,6 +178,11 @@ export default function FormDialog() {
             variant="filled"
             value={values.title}
             onChange={handleChange('title')}
+            onFocus={() => {
+              if (titleErr) {
+                setTitleErr(false);
+              }
+            }}
             fullWidth
             helperText={`${values.title.length}/${titleMaxLength}`}
           />
@@ -218,6 +198,11 @@ export default function FormDialog() {
             rowsMax="25"
             value={values.content}
             onChange={handleChange('content')}
+            onFocus={() => {
+              if (contentErr) {
+                setContentErr(false);
+              }
+            }}
             margin="normal"
             variant="filled"
             helperText={`${values.content.length}/${contentMaxLength}`}
@@ -236,7 +221,7 @@ export default function FormDialog() {
               aria-label="Upload picture"
               component="span"
             >
-              <PhotoCamera />
+              <AddPhotoAlternateIcon />
             </IconButton>
           </label>
           {`已选择${filesToUpload.length}张图片`}
@@ -254,6 +239,11 @@ export default function FormDialog() {
             label="分区"
             value={values.section_id}
             onChange={handleChange('section_id')}
+            onFocus={() => {
+              if (sectionIdErr) {
+                setSectionIdErr(false);
+              }
+            }}
             helperText="请选择一个发帖分区"
             margin="dense"
             variant="filled"
@@ -265,12 +255,12 @@ export default function FormDialog() {
                   {item.name}
                 </MenuItem>
               ))}
-            {/* {!sectionList
+            {!sectionList
               && (
                 <MenuItem key="0" value="0" disabled>
                   加载失败
                 </MenuItem>
-              )} */}
+              )}
           </TextField>
           <FormControlLabel
             control={(

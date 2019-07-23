@@ -166,7 +166,7 @@ export default function PostCard(props) {
           <CardContent className={classes.cardContent}>
             <Typography variant="h6" color="textPrimary">
               {title}
-              {imgNum !== 0 && <PhotoIcon style={{ verticalAlign: 'middle' }} />}
+              {imgNum !== 0 && <PhotoIcon style={{ verticalAlign: 'sub', color: 'grey' }} />}
             </Typography>
             {!expanded
               && (

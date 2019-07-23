@@ -42,31 +42,25 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const nickNameReg = /^[\u4e00-\u9fa5\w\d]{2,10}$/;
 
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
-export default function ChangeNickNameDialog() {
+export default function ChangePswdDialog() {
   const context = useContext(userContext);
-  const { userState } = context;
 
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  // const [nickName, setNickname] = useState('');
-  // const [nickNameErr, setNicknameErr] = useState(false);
-  // const [showProgress, setShowProgress] = useState(false);
 
   const [values, setValues] = React.useState({
-    username: '',
-    password: '',
-    passwordValidate: '',
+    oldPswd: '',
+    newPswd: '',
+    newPswdValidate: '',
     showPassword: false,
-    passwordError: false,
-    passwordErrorText: '',
-    usernameError: false,
-    usernameErrorText: '',
+    pswdErr: false,
+    pswdErrText: '',
     showProgress: false,
   });
+
   function handleClickOpen() {
     setOpen(true);
   }
@@ -76,21 +70,25 @@ export default function ChangeNickNameDialog() {
   }
 
   function checkPassword() {
-    if (values.password === '') {
-      setValues({ ...values, passwordError: true, passwordErrorText: '请填写密码' });
+    if (values.oldPswd === '') {
+      setValues({ ...values, pswdErr: true, pswdErrText: '请填写旧密码' });
+      return false;
+    }
+    if (values.newPswd === '') {
+      setValues({ ...values, pswdErr: true, pswdErrText: '请填写密码' });
       return false;
     }
     const pswdReg = /^\S{6,18}$/;
-    if (!pswdReg.test(values.password)) {
-      setValues({ ...values, passwordError: true, passwordErrorText: '密码6-18位，不能包含空格' });
+    if (!pswdReg.test(values.newPswd)) {
+      setValues({ ...values, pswdErr: true, pswdErrText: '密码6-18位，不能包含空格' });
       return false;
     }
     return true;
   }
 
   function checkPswdSame() {
-    if (values.password !== values.passwordValidate) {
-      setValues({ ...values, passwordError: true, passwordErrorText: '两次密码输入不一致' });
+    if (values.newPswd !== values.newPswdValidate) {
+      setValues({ ...values, pswdErr: true, pswdErrText: '两次密码输入不一致' });
       return false;
     }
     return true;
@@ -103,14 +101,19 @@ export default function ChangeNickNameDialog() {
 
     const url = 'changePswd/';
     instance.post(url, {
-      username: values.username,
-      pswd: values.password,
-      // Token: captchaToken,
+      oldPswd: values.oldPswd,
+      newPswd: values.newPswd,
     })
       .then((res) => {
         if (res.data.status === 'success') {
           handleClose();
           context.setShowMsgBar('success', '密码修改成功');
+          setValues({
+            ...values,
+            oldPswd: '',
+            newPswd: '',
+            newPswdValidate: '',
+          });
         } else {
           context.setShowMsgBar('fail', res.data.msg);
         }
@@ -120,8 +123,9 @@ export default function ChangeNickNameDialog() {
       })
       .catch(() => {
         // handle error
+        context.setShowMsgBar('fail', '网络错误');
         setValues({
-          ...values, passwordError: true, showProgress: false, passwordErrorText: '网络错误',
+          ...values, showProgress: false,
         });
       });
   }
@@ -131,8 +135,8 @@ export default function ChangeNickNameDialog() {
   };
 
   function canclePswdErr() {
-    if (values.passwordError === true) {
-      setValues({ ...values, passwordError: false, passwordErrorText: '' });
+    if (values.pswdErr === true) {
+      setValues({ ...values, pswdErr: false, pswdErrText: '' });
     }
   }
   // 是否显示密码
@@ -169,14 +173,23 @@ export default function ChangeNickNameDialog() {
           && <LinearProgress />
         }
         <Paper className={classes.paper}>
+          <FormControl className={classes.textField} style={{ marginBottom: '20px' }}>
+            <InputLabel htmlFor="oldPassword">旧密码</InputLabel>
+            <Input
+              id="oldPassword"
+              type="password"
+              value={values.oldPswd}
+              onChange={handleChange('oldPswd')}
+            />
+          </FormControl>
           <FormControl className={classes.textField}>
             <InputLabel htmlFor="password">新密码</InputLabel>
             <Input
-              error={values.passwordError}
+              error={values.pswdErr}
               id="password"
               type={values.showPassword ? 'text' : 'password'}
-              value={values.password}
-              onChange={handleChange('password')}
+              value={values.newPswd}
+              onChange={handleChange('newPswd')}
               onFocus={canclePswdErr}
               endAdornment={(
                 <InputAdornment position="end">
@@ -189,17 +202,17 @@ export default function ChangeNickNameDialog() {
                 </InputAdornment>
               )}
             />
-            <FormHelperText className={classes.showPswdHelperText} error={values.passwordError}>
-              {values.passwordErrorText}
+            <FormHelperText error={values.pswdErr}>
+              {values.pswdErrText}
             </FormHelperText>
           </FormControl>
           <FormControl className={classes.textField}>
             <InputLabel htmlFor="passwordValidate">再次输入密码</InputLabel>
             <Input
-              error={values.passwordError}
+              error={values.pswdErr}
               id="passwordValidate"
               type="password"
-              onChange={handleChange('passwordValidate')}
+              onChange={handleChange('newPswdValidate')}
             />
           </FormControl>
         </Paper>
