@@ -58,8 +58,8 @@ function MainPage() {
         if (!res.data || res.data.length === 0) {
           if (offset !== -1) {
             context.setShowMsgBar('dufault', '没有更多帖子了');
+            fetchPostLock = true; // 禁止后续刷新
           }
-          fetchPostLock = true; // 禁止后续刷新
           return;
         }
         setTimeout(() => {
@@ -114,13 +114,12 @@ function MainPage() {
       setShowProgress(true);
     }
 
-
-    // const pullPost = setInterval(() => {
-    //   fetchNewData(-1);
-    // }, 1000 * 30);
+    const pullPost = setInterval(() => {
+      fetchNewData(-1);
+    }, 1000 * 30);
 
     return () => {
-      // clearInterval(pullPost);
+      clearInterval(pullPost);
       window.onscroll = null;
     };
   }, []);

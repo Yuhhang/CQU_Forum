@@ -10,12 +10,17 @@ import WarningIcon from '@material-ui/icons/Warning';
 import instance from './axios';
 import userContext from '../context/userContext';
 
-export default function CardMenu({ postId, userName, userId }) {
+export default function CardMenu(props) {
+  const {
+    postId,
+    userName,
+    userId,
+  } = props;
   const context = useContext(userContext);
   const { userState } = context;
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const [collected, setCollected] = useState(false);
+  const [collected, setCollected] = useState(Boolean(props.collected));
 
   function handleClick(event) {
     setAnchorEl(event.currentTarget);

@@ -101,6 +101,7 @@ export default function PostCard(props) {
     // viewNum,
     commentCount,
     inSection,
+    collected, // 是否被收藏
   } = props;
 
   function handleExpandClick() {
@@ -121,6 +122,7 @@ export default function PostCard(props) {
         postId={postId}
         userId={userId}
         userName={userName}
+        collected={collected}
       />
     );
     const avatar = (

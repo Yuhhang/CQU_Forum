@@ -137,27 +137,28 @@ export default function My() {
               <ListItemText primary="个人信息" />
             </ListItem>
 
-            <ListItem button disabled={!isLoggedIn}>
+            <ListItem button disabled>
               <ListItemIcon>
                 <HistoryIcon />
               </ListItemIcon>
               <ListItemText primary="浏览历史" />
             </ListItem>
 
-            <ListItem button disabled={!isLoggedIn}>
+            <ListItem button component={Link} to="/my/collect" disabled={!isLoggedIn}>
               <ListItemIcon>
                 <StarsIcon />
               </ListItemIcon>
               <ListItemText primary="我的收藏" />
             </ListItem>
 
-            <ListItem button disabled={!isLoggedIn}>
+            <ListItem button component={Link} to="/my/myposts" disabled={!isLoggedIn}>
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="我的发帖" />
             </ListItem>
-            <ListItem button disabled={!isLoggedIn}>
+
+            <ListItem button disabled>
               <ListItemIcon>
                 <PeopleIcon />
               </ListItemIcon>
