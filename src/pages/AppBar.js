@@ -82,8 +82,6 @@ export default function PrimarySearchAppBar(props) {
   const classes = useStyles();
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
   function handleMobileMenuClose() {
     setMobileMoreAnchorEl(null);
   }
@@ -100,7 +98,7 @@ export default function PrimarySearchAppBar(props) {
       id={mobileMenuId}
       keepMounted
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      open={isMobileMenuOpen}
+      open={Boolean(mobileMoreAnchorEl)}
       onClose={handleMobileMenuClose}
     >
       <MenuItem
@@ -115,22 +113,6 @@ export default function PrimarySearchAppBar(props) {
         </IconButton>
         <p>发帖</p>
       </MenuItem>
-      {/* <MenuItem>
-        <IconButton aria-label="Show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton aria-label="Show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem> */}
       <MenuItem onClick={() => {
         if (!isLoggedIn) { // 未登录
           context.setOpenLoginDialog();

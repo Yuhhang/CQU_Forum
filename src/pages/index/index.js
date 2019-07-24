@@ -29,6 +29,7 @@ function MainPage() {
     const postList = data.map(post => (
       <Card
         key={post.postId}
+        userId={post.userId}
         postId={post.postId}
         userName={post.nickName}
         sectionName={post.sectionName}

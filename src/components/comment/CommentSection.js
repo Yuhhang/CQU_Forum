@@ -18,6 +18,7 @@ import instance from '../axios';
 import CommentDialog from './CommentDialog';
 import CommentItem from './CommentItem';
 import ImgDisplay from '../ImgDisplay';
+import CardMenu from '../CardMenu';
 
 const useStyles = makeStyles(theme => ({
   text: {
@@ -32,6 +33,8 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     paddingBottom: 50,
+    margin: 'auto',
+    maxWidth: '500px',
   },
   list: {
     marginBottom: theme.spacing(2),
@@ -42,8 +45,8 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     borderRadius: 0,
-    // margin: 'auto',
-    // maxWidth: '400',
+    margin: 'auto',
+    maxWidth: '500px',
   },
   cardHeader: {
     paddingTop: '8px',
@@ -79,7 +82,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function PostInfo() {
+  const classes = useStyles();
+  const currentPostInfo = sessionStorage.getItem('currentPostInfo');
+  if (!currentPostInfo) {
+    return '该帖不存在';
+  }
   const {
+    userId,
     userName,
     postTime,
     title,
@@ -87,7 +96,7 @@ function PostInfo() {
     postId,
     imgNum,
     commentCount,
-  } = JSON.parse(sessionStorage.getItem('currentPostInfo'));
+  } = JSON.parse(currentPostInfo);
 
   const date = new Date(parseInt(postTime, 10));
   const dateStr = (date.getMonth() + 1).toString().concat('月')
@@ -95,7 +104,6 @@ function PostInfo() {
   + date.getHours().toString().concat('时')
   + date.getMinutes().toString().concat('分');
 
-  const classes = useStyles();
 
   return (
     <Card className={classes.card}>
@@ -106,11 +114,7 @@ function PostInfo() {
             {userName[0]}
           </Avatar>
         )}
-        action={(
-          <IconButton aria-label="Settings">
-            <MoreVertIcon />
-          </IconButton>
-        )}
+        action={<CardMenu postId={postId} userName={userName} userId={userId} />}
         title={userName}
         subheader={` 发表于 ${dateStr}`}
       />

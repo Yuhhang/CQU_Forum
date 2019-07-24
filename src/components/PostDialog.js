@@ -99,6 +99,8 @@ export default function FormDialog() {
           section_id: 0,
           anonymous: false,
         });
+        sessionStorage.removeItem('postList');
+        window.location.reload();
       })
       .catch(() => {
         context.setShowMsgBar('error', '图片上传失败');
