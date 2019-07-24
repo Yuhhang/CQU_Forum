@@ -64,6 +64,7 @@ export default function LabelBottomNavigation() {
         <Route path="/my/userInfo" component={UserInfo} />
         <Route path="/section/:id" component={Section} />
         <Route path="/post/:id" component={PostDetail} />
+        <Route component={Main} />
       </Router>
     </React.Fragment>
 

@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import WarningIcon from '@material-ui/icons/Warning';
 import instance from './axios';
@@ -14,7 +14,8 @@ export default function CardMenu({ postId, userName, userId }) {
   const context = useContext(userContext);
   const { userState } = context;
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [collected, setCollected] = useState(false);
 
   function handleClick(event) {
     setAnchorEl(event.currentTarget);
@@ -24,9 +25,23 @@ export default function CardMenu({ postId, userName, userId }) {
     setAnchorEl(null);
   }
 
-  // function handleCollect() {
-
-  // }
+  function handleCollect() {
+    instance.post('addCollect/', {
+      postId,
+      cancel: collected,
+    })
+      .then((res) => {
+        if (res.data.status === 'success') {
+          context.setShowMsgBar('success', res.data.msg);
+        } else {
+          context.setShowMsgBar('error', res.data.msg);
+        }
+        setCollected(!collected);
+      })
+      .catch(() => {
+        context.setShowMsgBar('error', '发生错误');
+      });
+  }
 
   // function handleReport() {
 
@@ -73,18 +88,12 @@ export default function CardMenu({ postId, userName, userId }) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem>
+        <MenuItem onClick={handleCollect}>
           <IconButton color="default">
-            <BookmarkIcon />
+            {collected ? <BookmarkIcon /> : <BookmarkBorderIcon />}
           </IconButton>
-          收藏
+          {collected ? '取消收藏' : '收藏'}
         </MenuItem>
-        {/* <MenuItem>
-          <IconButton color="default">
-            <VisibilityOffIcon />
-          </IconButton>
-          屏蔽
-        </MenuItem> */}
         <MenuItem>
           <IconButton color="default">
             <WarningIcon />
