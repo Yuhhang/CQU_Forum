@@ -23,6 +23,7 @@ import userContext from '../context/userContext';
 import CardMenu from './CardMenu';
 import ImgDisplay from './ImgDisplay';
 import RelativeTime from './RelativeTime';
+// import PhotoSwipeController from './PhotoSwipeController';
 // import Slide from '@material-ui/core/Slide';
 
 const useStyles = makeStyles(theme => ({
