@@ -6,6 +6,7 @@
     "@material-ui/core": "^4.0.1",
     "@material-ui/icons": "^4.0.1",
     "axios": "^0.19.0",
+    "clipboard": "^2.0.4",
     "clsx": "^1.0.4",
     "infinite-scroll": "^3.0.6",
     "qiniu-js": "^2.5.4",

@@ -16,8 +16,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PhotoIcon from '@material-ui/icons/PhotoOutlined';
 import ShareIcon from '@material-ui/icons/Share';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+import Clipboard from 'clipboard';
 import { Link } from 'react-router-dom';
+import userContext from '../context/userContext';
 import CardMenu from './CardMenu';
 import ImgDisplay from './ImgDisplay';
 import RelativeTime from './RelativeTime';
@@ -87,6 +89,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function PostCard(props) {
+  const context = useContext(userContext);
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const {
@@ -104,8 +107,19 @@ export default function PostCard(props) {
     collected, // 是否被收藏
   } = props;
 
+  useEffect(() => {
+    let clipboard = new Clipboard('.btn');
+    return (() => {
+      clipboard = null;
+    });
+  }, []);
+
   function handleExpandClick() {
     setExpanded(!expanded);
+  }
+
+  function handleShare() {
+    context.setShowMsgBar('default', '链接已复制');
   }
 
   function Header() {
@@ -176,7 +190,12 @@ export default function PostCard(props) {
             {/* {viewNum} */}
             {commentCount}
           </Typography>
-          <IconButton aria-label="Share" disabled>
+          <IconButton
+            className={'btn'}
+            aria-label="Share"
+            onClick={handleShare}
+            data-clipboard-text={`${window.location.href}post/${postId}`}
+          >
             <ShareIcon fontSize="small" />
           </IconButton>
           <IconButton

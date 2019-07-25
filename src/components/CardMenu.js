@@ -99,7 +99,7 @@ export default function CardMenu(props) {
           </IconButton>
           {collected ? '取消收藏' : '收藏'}
         </MenuItem>
-        <MenuItem>
+        <MenuItem disabled>
           <IconButton color="default">
             <WarningIcon />
           </IconButton>

@@ -52,7 +52,7 @@ export default function CenteredGrid(props) {
         if (item.postTime > postTimeTemp) {
           postTimeTemp = item.postTime;
           postTitle = item.title;
-          username = item.userName;
+          username = item.nickName;
         }
       }
     });
@@ -77,8 +77,10 @@ export default function CenteredGrid(props) {
               </Typography>
               <Typography variant="caption" color="textSecondary" noWrap>
                 <div className={classes.subTitle}>
-                  <AlternateEmailIcon fontSize="small" />
-                  {username || '无'}
+                  {username
+                    && <AlternateEmailIcon fontSize="small" />
+                  }
+                  {username || '________'}
                   {username && ' • '}
                   {username
                   && (

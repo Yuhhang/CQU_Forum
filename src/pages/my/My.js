@@ -164,7 +164,7 @@ export default function My() {
               </ListItemIcon>
               <ListItemText primary="我的关注" />
             </ListItem>
-            <ListItem button>
+            <ListItem button disabled>
               <ListItemIcon>
                 <InfoIcon />
               </ListItemIcon>

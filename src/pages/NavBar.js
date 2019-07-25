@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
+import { HashRouter, Route, Link, Switch, Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
@@ -49,7 +49,7 @@ export default function LabelBottomNavigation() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Router>
+      <HashRouter>
         <AppBar />
         {/* <SetPath path={window.location.pathname} /> */}
         <BottomNavigation value={value} onChange={handleChange} className={classes.navbar}>
@@ -71,7 +71,7 @@ export default function LabelBottomNavigation() {
           {/* No Match */}
           <Route component={Main} />
         </Switch>
-      </Router>
+      </HashRouter>
     </React.Fragment>
 
   );
