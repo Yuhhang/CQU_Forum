@@ -54,7 +54,7 @@ export default function PaperSheet(props) {
             inSection
             key={post.postId}
             postId={post.postId}
-            userName={post.nickName}
+            nickName={post.nickName}
             sectionName={post.sectionName}
             title={post.title}
             content={post.content}

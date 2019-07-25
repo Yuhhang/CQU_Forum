@@ -100,7 +100,7 @@ export default function PostCard(props) {
     content,
     imgNum,
     postTime,
-    userName,
+    nickName,
     // viewNum,
     commentCount,
     inSection,
@@ -127,7 +127,7 @@ export default function PostCard(props) {
     const cardSubTitle = (
       <div className={classes.subTitle}>
         <AlternateEmailIcon fontSize="small" style={{ verticalAlign: 'middle' }} />
-        {userName.concat(' • ')}
+        {nickName.concat(' • ')}
         <RelativeTime postTime={postTime} />
       </div>
     );
@@ -135,13 +135,13 @@ export default function PostCard(props) {
       <CardMenu
         postId={postId}
         userId={userId}
-        userName={userName}
+        userName={nickName}
         collected={collected}
       />
     );
     const avatar = (
       <Avatar className={classes.avatarSmall}>
-        {userName[0]}
+        {nickName[0]}
       </Avatar>
     );
     return (

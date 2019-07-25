@@ -31,7 +31,7 @@ function MainPage() {
         key={post.postId}
         userId={post.userId}
         postId={post.postId}
-        userName={post.nickName}
+        nickName={post.nickName}
         sectionName={post.sectionName}
         title={post.title}
         content={post.content}

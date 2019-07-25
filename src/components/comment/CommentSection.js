@@ -72,54 +72,89 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function PostInfo() {
+function PostInfo(props) {
+  const [postInfo, setPostInfo] = useState(null);
   const classes = useStyles();
-  const currentPostInfo = sessionStorage.getItem('currentPostInfo');
-  if (!currentPostInfo) {
-    return '该帖不存在';
+  const postIdInUrl = parseInt(props.postIdInUrl, 10);
+  function parseCard(currentPostInfo) {
+    const {
+      userId,
+      nickName,
+      postTime,
+      title,
+      content,
+      postId,
+      imgNum,
+      // commentCount,
+    } = currentPostInfo;
+
+    const date = new Date(parseInt(postTime, 10));
+    const dateStr = (date.getMonth() + 1).toString().concat('月')
+      + date.getDate().toString().concat('日 ')
+      + date.getHours().toString().concat('时')
+      + date.getMinutes().toString().concat('分');
+
+    const postinfo = (
+      <Card className={classes.card}>
+        <CardHeader
+          className={classes.cardHeader}
+          avatar={(
+            <Avatar className={classes.avatarSmall}>
+              {nickName[0]}
+            </Avatar>
+          )}
+          action={<CardMenu postId={postId} userName={nickName} userId={userId} />}
+          title={nickName}
+          subheader={` 发表于 ${dateStr}`}
+        />
+        <CardContent className={classes.cardContent}>
+          <Typography variant="h6" color="textPrimary">
+            {title}
+          </Typography>
+          <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p">
+            {content}
+          </Typography>
+          <ImgDisplay postId={postId} imgNum={imgNum} />
+        </CardContent>
+      </Card>
+    );
+    setPostInfo(postinfo);
   }
-  const {
-    userId,
-    userName,
-    postTime,
-    title,
-    content,
-    postId,
-    imgNum,
-    // commentCount,
-  } = JSON.parse(currentPostInfo);
 
-  const date = new Date(parseInt(postTime, 10));
-  const dateStr = (date.getMonth() + 1).toString().concat('月')
-  + date.getDate().toString().concat('日 ')
-  + date.getHours().toString().concat('时')
-  + date.getMinutes().toString().concat('分');
-
-
-  return (
-    <Card className={classes.card}>
-      <CardHeader
-        className={classes.cardHeader}
-        avatar={(
-          <Avatar className={classes.avatarSmall}>
-            {userName[0]}
-          </Avatar>
-        )}
-        action={<CardMenu postId={postId} userName={userName} userId={userId} />}
-        title={userName}
-        subheader={` 发表于 ${dateStr}`}
-      />
-      <CardContent className={classes.cardContent}>
-        <Typography variant="h6" color="textPrimary">
-          {title}
-        </Typography>
-        <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p">
-          {content}
-        </Typography>
-        <ImgDisplay postId={postId} imgNum={imgNum} />
-      </CardContent>
-    </Card>
-  );
+  useEffect(() => {
+    let currentPostInfo = sessionStorage.getItem('currentPostInfo');
+    if (!currentPostInfo) {
+      instance.get('/getPostById?postId='.concat(postIdInUrl))
+        .then((res) => {
+          if (res.data.status === 'fail') {
+            setPostInfo('该贴不存在');
+          } else {
+            parseCard(res.data[0]);
+          }
+        })
+        .catch(() => {
+          setPostInfo('网络错误');
+        });
+    } else {
+      currentPostInfo = JSON.parse(currentPostInfo);
+      if (currentPostInfo.postId !== postIdInUrl) {
+        instance.get('/getPostById?postId='.concat(postIdInUrl))
+          .then((res) => {
+            if (res.data.status === 'fail') {
+              setPostInfo('该贴不存在');
+            } else {
+              parseCard(res.data[0]);
+            }
+          })
+          .catch(() => {
+            setPostInfo('网络错误');
+          });
+      } else {
+        parseCard(currentPostInfo);
+      }
+    }
+  }, []);
+  return postInfo;
 }
 
 export default function CommentSection(props) {
@@ -160,17 +195,17 @@ export default function CommentSection(props) {
 
   return (
     <React.Fragment>
-      <PostInfo />
+      <PostInfo postIdInUrl={postId} />
       <Paper square className={classes.paper}>
         <Typography className={classes.text} variant="h5" gutterBottom>
           {comments ? '评论' : '暂无评论'}
         </Typography>
         {comments
-        && (
-          <List className={classes.list}>
-            {comments}
-          </List>
-        )}
+          && (
+            <List className={classes.list}>
+              {comments}
+            </List>
+          )}
       </Paper>
       <div className={classes.commentButton}>
         <CommentDialog postId={postId} />
