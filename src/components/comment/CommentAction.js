@@ -108,7 +108,10 @@ export default function CommentAction(props) {
   return (
     <React.Fragment>
       <div className={classes.action}>
-        <CommentDialog replyTo={commentId} postId={postId} />
+        <CommentDialog
+          replyTo={commentId}
+          postId={postId}
+        />
         <IconButton
           className={classes.button}
           aria-label="disLike"

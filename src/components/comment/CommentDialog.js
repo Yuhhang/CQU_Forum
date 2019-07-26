@@ -88,8 +88,8 @@ export default function CommentDialog(props) {
         </Fab>
       )}
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">
-          {replyTo ? '发表回复' : '发表评论'}
+        <DialogTitle>
+          {replyTo ? '回复' : '发表评论'}
         </DialogTitle>
         <DialogContent>
           <TextField

@@ -15,6 +15,7 @@ import Inbox from './inbox/inbox';
 import My from './my/My';
 import Collect from './my/Collect';
 import MyPosts from './my/MyPosts';
+import Admin from './my/admin/Admin';
 import UserInfo from './my/userInfo/UserInfo';
 import Section from '../components/Section';
 import PostDetail from '../components/PostDetail';
@@ -66,6 +67,7 @@ export default function LabelBottomNavigation() {
           <Route path="/my/collect" component={Collect} />
           <Route path="/my/myposts" component={MyPosts} />
           <Route path="/my/userInfo" component={UserInfo} />
+          <Route path="/my/admin" component={Admin} />
           <Route path="/section/:id" component={Section} />
           <Route path="/post/:id" component={PostDetail} />
           {/* No Match */}

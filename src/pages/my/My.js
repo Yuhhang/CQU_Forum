@@ -17,6 +17,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import HistoryIcon from '@material-ui/icons/History';
 import InfoIcon from '@material-ui/icons/Info';
 import PeopleIcon from '@material-ui/icons/People';
+import SecurityIcon from '@material-ui/icons/Security';
 import SchoolIcon from '@material-ui/icons/School'; // Verified Icon
 import SendIcon from '@material-ui/icons/Send';
 import StarsIcon from '@material-ui/icons/Stars';
@@ -97,6 +98,7 @@ export default function My() {
   const { setOpenLoginDialog } = context;
   const { userState } = context;
 
+  const { auth } = userState;
   const { isLoggedIn } = userState;
   const classes = useStyles();
 
@@ -164,6 +166,14 @@ export default function My() {
               </ListItemIcon>
               <ListItemText primary="我的关注" />
             </ListItem>
+
+            <ListItem button component={Link} to="/my/admin/admin" disabled={!['admin', 'superAdmin'].includes(auth.mode)}>
+              <ListItemIcon>
+                <SecurityIcon />
+              </ListItemIcon>
+              <ListItemText primary="管理入口" />
+            </ListItem>
+
             <ListItem button disabled>
               <ListItemIcon>
                 <InfoIcon />

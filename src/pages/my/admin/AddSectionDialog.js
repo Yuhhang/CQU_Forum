@@ -6,12 +6,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import MenuItem from '@material-ui/core/MenuItem';
 import Slide from '@material-ui/core/Slide';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import React from 'react';
-import instance from '../../components/axios';
+import instance from '../../../components/axios';
 
 const sectionNameMaxLength = 15;
 const msgMaxLength = 200;
@@ -49,7 +50,7 @@ function convertToBinary({ visitor, unVerified, verified }) {
   return verifiedBin | unVerifiedBin | visitorBin;
 }
 
-export default function FormDialog() {
+export default function AddSectionDialog({ disabled }) {
   const [open, setOpen] = React.useState(false);
 
   const [values, setValues] = React.useState({
@@ -228,9 +229,12 @@ export default function FormDialog() {
 
   return (
     <div>
-      <Button variant="contained" onClick={() => setOpen(true)}>
-        添加分区
-      </Button>
+      <MenuItem
+        disabled={disabled}
+        onClick={() => setOpen(true)}
+      >
+        增加分区
+      </MenuItem>
       <Dialog
         open={open}
         onClose={handleClose}

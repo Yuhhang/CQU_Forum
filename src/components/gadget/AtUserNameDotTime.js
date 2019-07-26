@@ -6,7 +6,7 @@ import UserLabel from './UserLabel';
 export default function AtUserNameDotTime({ nickName, postTime }) {
   return (
     <div style={{ fontSize: '0.8rem' }}>
-      <AlternateEmailIcon fontSize="small" style={{ verticalAlign: 'middle' }} />
+      <AlternateEmailIcon style={{ verticalAlign: 'middle', fontSize: '1rem' }} />
       {nickName.concat(' • ')}
       <RelativeTime postTime={postTime} />
       <UserLabel />

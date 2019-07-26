@@ -54,7 +54,7 @@ export default function Item(props) {
           alignItems="flex-start"
         >
           <ListItemAvatar className={classes.avatar}>
-            <Avatar>H</Avatar>
+            <Avatar>{nickName[0]}</Avatar>
             {/* <Avatar alt="Profile Picture" src={person} /> */}
           </ListItemAvatar>
           <ListItemText

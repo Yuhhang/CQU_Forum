@@ -34,7 +34,7 @@ export default function SectionBlock() {
     ));
   }
   return (
-    <Grid container>
+    <Grid container spacing={1}>
       {sectionListDump || '暂无数据'}
     </Grid>
 

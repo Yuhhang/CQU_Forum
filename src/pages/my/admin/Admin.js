@@ -6,9 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React, { useContext } from 'react';
 import userContext from '../../../context/userContext';
-import ChangeNickNameDialog from './ChangeNickNameDialog';
-import ChangePswdDialog from './ChangePswdDialog';
-import VerifyDialog from './VerifyDialog';
+import AddSectionDialog from './AddSectionDialog';
 
 
 const useStyles = makeStyles(theme => ({
@@ -21,6 +19,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function FullWidthTabs() {
   const context = useContext(userContext);
+  const { userState } = context;
+  const { auth } = userState;
 
   const classes = useStyles();
 
@@ -28,16 +28,14 @@ export default function FullWidthTabs() {
     <div>
       <Paper className={classes.paper}>
         <Typography variant="h5" component="h3">
-          账号信息
+          后台管理
         </Typography>
         <MenuList>
-          <ChangeNickNameDialog />
+          <AddSectionDialog disabled={auth.mode !== 'superAdmin'} />
           <Divider />
-          <ChangePswdDialog />
+          <MenuItem disabled>查看删帖</MenuItem>
           <Divider />
-          <VerifyDialog />
-          <Divider />
-          <MenuItem>申请管理员</MenuItem>
+          <MenuItem disabled>查看封禁</MenuItem>
           <Divider />
         </MenuList>
       </Paper>

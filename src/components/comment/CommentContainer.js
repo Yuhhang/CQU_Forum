@@ -65,11 +65,6 @@ const useStyles = makeStyles(theme => ({
     width: '35px',
     height: '35px',
   },
-  avatarSmall: {
-    backgroundColor: red[500],
-    width: '25px',
-    height: '25px',
-  },
 }));
 
 function parseComments(comments) {
@@ -112,7 +107,7 @@ function PostInfo(props) {
         <CardHeader
           className={classes.cardHeader}
           avatar={(
-            <Avatar className={classes.avatarSmall}>
+            <Avatar className={classes.avatar}>
               {nickName[0]}
             </Avatar>
           )}

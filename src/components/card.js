@@ -75,11 +75,6 @@ const useStyles = makeStyles(theme => ({
     width: '35px',
     height: '35px',
   },
-  avatarSmall: {
-    backgroundColor: red[500],
-    width: '25px',
-    height: '25px',
-  },
   chip: {
     height: '20px',
     fontSize: '0.7rem',
@@ -134,7 +129,7 @@ export default function PostCard(props) {
       />
     );
     const avatar = (
-      <Avatar className={classes.avatarSmall}>
+      <Avatar className={classes.avatar}>
         {nickName[0]}
       </Avatar>
     );
