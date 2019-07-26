@@ -3,15 +3,14 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ReplyIcon from '@material-ui/icons/Reply';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import clsx from 'clsx';
 import React, { useContext, useState } from 'react';
 import userContext from '../../context/userContext';
 import instance from '../axios';
-import ReplyCommentContainer from './ReplyCommentContainer';
 import CommentDialog from './CommentDialog';
+import ReplyCommentContainer from './ReplyCommentContainer';
 
 
 const useStyles = makeStyles(theme => ({

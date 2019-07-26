@@ -14,8 +14,8 @@ const useStyles = makeStyles(() => ({
 
 export default function UserLabel() {
   const classes = useStyles();
-
-  return (
-    <Chip label="超管" className={classes.chip} size="small" />
-  );
+  return null;
+  // return (
+  //   <Chip label="超管" className={classes.chip} size="small" />
+  // );
 }

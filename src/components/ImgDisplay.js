@@ -26,25 +26,37 @@ const useStyles = makeStyles(() => ({
 export default function ImgDisplay({ postId, imgNum }) {
   const [index, setIndex] = useState(0);
   const [openPhotoGallery, setOpenPhotoGallery] = useState(false);
+  const [imgConfig, setImgConfig] = useState(null);
+
   const classes = useStyles();
   if (imgNum === 0 || imgNum === undefined) {
     return null;
+  }
+  const imgs = [];
+  for (let i = 0; i < imgNum; i++) {
+    imgs.push({
+      src: `${cdnUrl}${folderPath}${postId}_${i}`,
+      alt: `${postId}_${i}`,
+      index: i,
+    });
   }
 
   function handleClose() {
     setOpenPhotoGallery(false);
   }
+
   function handleClickImg(i) {
+    const imgData = imgs.map((img) => {
+      const element = document.getElementById(img.alt);
+      return {
+        ...img,
+        w: element.naturalWidth,
+        h: element.naturalHeight,
+      };
+    });
+    setImgConfig(imgData);
     setIndex(i);
     setOpenPhotoGallery(true);
-  }
-  const imgs = [];
-  for (let i = 0; i < imgNum; i++) {
-    imgs.push({
-      url: `${cdnUrl}${folderPath}${postId}_${i}`,
-      alt: `${postId}_${i}`,
-      index: i,
-    });
   }
 
   // const imgNum = imgs.length % 3;
@@ -54,7 +66,8 @@ export default function ImgDisplay({ postId, imgNum }) {
       imgGrid = imgs.map(img => (
         <Grid item xs={12} key={img.alt}>
           <img
-            src={img.url}
+            id={img.alt}
+            src={img.src}
             alt={img.alt}
             className={classes.img}
             onClick={() => handleClickImg(img.index)}
@@ -66,7 +79,8 @@ export default function ImgDisplay({ postId, imgNum }) {
       imgGrid = imgs.map(img => (
         <Grid item xs={6} key={img.alt}>
           <img
-            src={img.url}
+            id={img.alt}
+            src={img.src}
             alt={img.alt}
             className={classes.img}
             onClick={() => handleClickImg(img.index)}
@@ -78,7 +92,8 @@ export default function ImgDisplay({ postId, imgNum }) {
       imgGrid = imgs.map(img => (
         <Grid item xs={4} key={img.alt} className={classes.grid}>
           <img
-            src={img.url}
+            id={img.alt}
+            src={img.src}
             alt={img.alt}
             className={classes.img}
             onClick={() => handleClickImg(img.index)}
@@ -94,7 +109,7 @@ export default function ImgDisplay({ postId, imgNum }) {
         {imgGrid}
       </Grid>
       {openPhotoGallery && (
-        <PhotoGallery imgs={imgs} index={index} handleClose={handleClose} />
+        <PhotoGallery imgs={imgConfig} index={index} handleClose={handleClose} />
       )}
     </React.Fragment>
   );
