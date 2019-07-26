@@ -72,6 +72,17 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+function parseComments(comments) {
+  const parsed = {};
+  comments.forEach((comment) => {
+    if (!parsed[comment.replyTo]) {
+      parsed[comment.replyTo] = [];
+    }
+    parsed[comment.replyTo].push(comment);
+  });
+  return parsed;
+}
+
 function PostInfo(props) {
   const [postInfo, setPostInfo] = useState(null);
   const classes = useStyles();
@@ -89,10 +100,12 @@ function PostInfo(props) {
     } = currentPostInfo;
 
     const date = new Date(parseInt(postTime, 10));
+    const hour = date.getHours().toString();
+    const min = date.getMinutes().toString();
     const dateStr = (date.getMonth() + 1).toString().concat('月')
       + date.getDate().toString().concat('日 ')
-      + date.getHours().toString().concat('时')
-      + date.getMinutes().toString().concat('分');
+      + (hour.length === 1 ? `0${hour}` : hour).concat(':')
+      + (min.length === 1 ? `0${min}` : min);
 
     const postinfo = (
       <Card className={classes.card}>
@@ -157,7 +170,7 @@ function PostInfo(props) {
   return postInfo;
 }
 
-export default function CommentSection(props) {
+export default function CommentContainer(props) {
   const { postId } = props;
   const classes = useStyles();
   const [comments, setComments] = useState(null);
@@ -169,9 +182,11 @@ export default function CommentSection(props) {
           return;
         }
         let data = res.data.sort((a, b) => b.commentTime - a.commentTime);
-        data = data.map(item => (
+        data = parseComments(data);
+        data = data[0].map(item => (
           <CommentItem
             key={item.commentId}
+            postId={item.postId}
             commentId={item.commentId}
             userId={item.userId}
             nickName={item.nickName}
@@ -179,6 +194,7 @@ export default function CommentSection(props) {
             likeCount={item.likeCount}
             dislikeCount={item.dislikeCount}
             replyTo={item.replyTo}
+            replys={data[item.commentId]}
             anonymous={item.anonymous}
             commentTime={`${item.commentTime}000`}
           />

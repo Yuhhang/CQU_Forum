@@ -1,22 +1,14 @@
-import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ReplyIcon from '@material-ui/icons/Reply';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import clsx from 'clsx';
-import React, { useContext, useState } from 'react';
+import React, { useState, useContext } from 'react';
 import userContext from '../../context/userContext';
 import instance from '../axios';
-import ReplyCommentContainer from './ReplyCommentContainer';
-import CommentDialog from './CommentDialog';
-
 
 const useStyles = makeStyles(theme => ({
   button: {
-    // fontSize: '10px',
     margin: theme.spacing(1),
   },
   icon: {
@@ -29,33 +21,19 @@ const useStyles = makeStyles(theme => ({
     paddingTop: '0px',
   },
   action: {
-    // marginLeft: '200px',
-    // marginRight: '20px',
     display: 'flex',
     justifyContent: 'flex-end',
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
   },
 }));
 
 export default function CommentAction(props) {
   const context = useContext(userContext); // global user context
-  const [expanded, setExpanded] = React.useState(false);
 
   const { userState } = context;
   const {
     commentId,
-    postId,
     likeCountInit,
     dislikeCountInit,
-    replys,
   } = props;
 
   const classes = useStyles();
@@ -107,48 +85,31 @@ export default function CommentAction(props) {
   };
 
   return (
-    <React.Fragment>
-      <div className={classes.action}>
-        <CommentDialog replyTo={commentId} postId={postId} />
-        <IconButton
-          className={classes.button}
-          aria-label="disLike"
-          color={dislike ? 'primary' : 'default'}
-          disabled={!userState.isLoggedIn || like}
-          onClick={handleDislike}
-        >
-          <ThumbDownIcon className={classes.icon} />
-          <Typography className={classes.countText} component="span">
-            {dislikeCount}
-          </Typography>
-        </IconButton>
-        <IconButton
-          className={classes.button}
-          aria-label="like"
-          color={like ? 'primary' : 'default'}
-          disabled={!userState.isLoggedIn || dislike}
-          onClick={handleLike}
-        >
-          <ThumbUpIcon className={classes.icon} />
-          <Typography className={classes.countText} component="span">
-            {likeCount}
-          </Typography>
-        </IconButton>
-        <IconButton
-          disabled={!replys}
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={() => setExpanded(!expanded)}
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </div>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        {replys && (
-          <ReplyCommentContainer replys={replys} />
-        )}
-      </Collapse>
-    </React.Fragment>
+    <div className={classes.action}>
+      <IconButton
+        className={classes.button}
+        aria-label="disLike"
+        color={dislike ? 'primary' : 'default'}
+        disabled={!userState.isLoggedIn || like}
+        onClick={handleDislike}
+      >
+        <ThumbDownIcon className={classes.icon} />
+        <Typography className={classes.countText} component="span">
+          {dislikeCount}
+        </Typography>
+      </IconButton>
+      <IconButton
+        className={classes.button}
+        aria-label="like"
+        color={like ? 'primary' : 'default'}
+        disabled={!userState.isLoggedIn || dislike}
+        onClick={handleLike}
+      >
+        <ThumbUpIcon className={classes.icon} />
+        <Typography className={classes.countText} component="span">
+          {likeCount}
+        </Typography>
+      </IconButton>
+    </div>
   );
 }

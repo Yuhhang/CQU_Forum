@@ -1,5 +1,5 @@
 import React from 'react';
-import CommentSection from './comment/CommentSection';
+import CommentContainer from './comment/CommentContainer';
 
 export default function PostDetail(props) {
   const { match } = props;
@@ -8,7 +8,7 @@ export default function PostDetail(props) {
 
   return (
     <div>
-      <CommentSection postId={id} />
+      <CommentContainer postId={id} />
     </div>
   );
 }

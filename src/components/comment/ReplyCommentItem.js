@@ -7,11 +7,12 @@ import Slide from '@material-ui/core/Slide';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import AtUserNameDotTime from '../gadget/AtUserNameDotTime';
-import CommentAction from './CommentAction';
+import ReplyCommentAction from './ReplyCommentAction';
 
 const useStyles = makeStyles(() => ({
   root: {
     paddingBottom: '0px',
+    paddingLeft: '50px',
   },
   avatar: {
     marginTop: '7px',
@@ -30,7 +31,6 @@ export default function Item(props) {
   const classes = useStyles();
 
   const {
-    postId,
     commentId,
     userId,
     nickName,
@@ -40,7 +40,6 @@ export default function Item(props) {
     replyTo,
     anonymous,
     commentTime,
-    replys,
   } = props;
   // const classes = useStyles();
   const commentTitle = <AtUserNameDotTime nickName={nickName} postTime={commentTime} />;
@@ -63,13 +62,11 @@ export default function Item(props) {
             secondary={content}
           />
         </ListItem>
-        <CommentAction
+        <ReplyCommentAction
           className={classes.action}
-          postId={postId}
           commentId={commentId}
           likeCountInit={likeCount}
           dislikeCountInit={dislikeCount}
-          replys={replys}
         />
         <Divider light />
       </div>

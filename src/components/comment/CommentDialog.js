@@ -1,13 +1,14 @@
-import { FormControlLabel, Switch, Fab } from '@material-ui/core';
+import { Fab } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import TextField from '@material-ui/core/TextField';
-import SendIcon from '@material-ui/icons/Send';
 import EditIcon from '@material-ui/icons/Edit';
+import ReplyIcon from '@material-ui/icons/Reply';
 import React, { useContext, useState } from 'react';
 import userContext from '../../context/userContext';
 import instance from '../axios';
@@ -44,7 +45,7 @@ export default function CommentDialog(props) {
     const url = 'addComment/';
     instance.post(url, {
       post_id: postId,
-      reply_to: replyTo,
+      reply_to: replyTo || 0,
       content,
       anonymous,
     })
@@ -68,16 +69,28 @@ export default function CommentDialog(props) {
   }
 
   return (
-    <div>
-      <Fab
-        disabled={!isLoggedIn}
-        color="primary"
-        onClick={handleClickOpen}
-      >
-        <EditIcon />
-      </Fab>
+    <React.Fragment>
+      {replyTo && (
+        <IconButton
+          disabled={!isLoggedIn}
+          onClick={handleClickOpen}
+        >
+          <ReplyIcon />
+        </IconButton>
+      )}
+      {!replyTo && (
+        <Fab
+          disabled={!isLoggedIn}
+          color="primary"
+          onClick={handleClickOpen}
+        >
+          <EditIcon />
+        </Fab>
+      )}
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">发表评论</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          {replyTo ? '发表回复' : '发表评论'}
+        </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -112,6 +125,6 @@ export default function CommentDialog(props) {
           && <LinearProgress />
         }
       </Dialog>
-    </div>
+    </React.Fragment>
   );
 }

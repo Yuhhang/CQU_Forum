@@ -1,6 +1,7 @@
 import React from 'react';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import RelativeTime from './RelativeTime';
+import UserLabel from './UserLabel';
 
 export default function AtUserNameDotTime({ nickName, postTime }) {
   return (
@@ -8,6 +9,7 @@ export default function AtUserNameDotTime({ nickName, postTime }) {
       <AlternateEmailIcon fontSize="small" style={{ verticalAlign: 'middle' }} />
       {nickName.concat(' • ')}
       <RelativeTime postTime={postTime} />
+      <UserLabel />
     </div>
   );
 }

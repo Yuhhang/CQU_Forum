@@ -107,6 +107,7 @@ export default function PostCard(props) {
   } = props;
 
   useEffect(() => {
+    // eslint-disable-next-line
     let clipboard = new Clipboard('.btn');
     return (() => {
       clipboard = null;
@@ -184,6 +185,7 @@ export default function PostCard(props) {
             {commentCount}
           </Typography>
           <IconButton
+            // eslint-disable-next-line
             className={'btn'}
             aria-label="Share"
             onClick={handleShare}
