@@ -10,20 +10,18 @@ import { red } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import CommentIcon from '@material-ui/icons/Comment';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PhotoIcon from '@material-ui/icons/PhotoOutlined';
 import ShareIcon from '@material-ui/icons/Share';
+import Clipboard from 'clipboard';
 import clsx from 'clsx';
 import React, { useContext, useEffect } from 'react';
-import Clipboard from 'clipboard';
 import { Link } from 'react-router-dom';
 import userContext from '../context/userContext';
 import CardMenu from './CardMenu';
+import AtUserNameDotTime from './gadget/AtUserNameDotTime';
 import ImgDisplay from './ImgDisplay';
-import RelativeTime from './RelativeTime';
-// import PhotoSwipeController from './PhotoSwipeController';
 // import Slide from '@material-ui/core/Slide';
 
 const useStyles = makeStyles(theme => ({
@@ -125,13 +123,7 @@ export default function PostCard(props) {
 
   function Header() {
     const cardTitle = <Chip className={classes.chip} label={sectionName} />;
-    const cardSubTitle = (
-      <div className={classes.subTitle}>
-        <AlternateEmailIcon fontSize="small" style={{ verticalAlign: 'middle' }} />
-        {nickName.concat(' • ')}
-        <RelativeTime postTime={postTime} />
-      </div>
-    );
+    const cardSubTitle = <AtUserNameDotTime nickName={nickName} postTime={postTime} />;
     const action = (
       <CardMenu
         postId={postId}

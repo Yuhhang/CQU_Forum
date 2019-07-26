@@ -8,7 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import RelativeTime from '../../components/RelativeTime';
+import AtUserNameDotTime from '../../components/gadget/AtUserNameDotTime';
+
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -81,11 +82,7 @@ export default function CenteredGrid(props) {
                     && <AlternateEmailIcon fontSize="small" />
                   }
                   {username || '________'}
-                  {username && ' • '}
-                  {username
-                  && (
-                    <RelativeTime postTime={`${postTimeTemp}000`} />
-                  )}
+                  {username && <AtUserNameDotTime nickName={username} postTime={postTimeTemp} />}
                 </div>
               </Typography>
             </CardContent>

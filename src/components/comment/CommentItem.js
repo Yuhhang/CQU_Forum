@@ -6,7 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Slide from '@material-ui/core/Slide';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import RelativeTime from '../RelativeTime';
+import AtUserNameDotTime from '../gadget/AtUserNameDotTime';
 import CommentAction from './CommentAction';
 
 const useStyles = makeStyles(() => ({
@@ -41,13 +41,7 @@ export default function Item(props) {
     commentTime,
   } = props;
   // const classes = useStyles();
-  const relativeTime = <RelativeTime postTime={commentTime} />;
-  const commentTitle = (
-    <div>
-      {nickName.concat(' • ')}
-      {relativeTime}
-    </div>
-  );
+  const commentTitle = <AtUserNameDotTime nickName={nickName} postTime={commentTime} />;
 
   return (
     <Slide direction="up" in mountOnEnter unmountOnExit>
