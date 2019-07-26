@@ -9,16 +9,19 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
+import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd'; // Teacher Icon
 import ErrorIcon from '@material-ui/icons/Error'; // Not Verified Icon
 import FaceIcon from '@material-ui/icons/Face';
 import HistoryIcon from '@material-ui/icons/History';
+import WbSunnyIcon from '@material-ui/icons/WbSunny';
+import Brightness2Icon from '@material-ui/icons/Brightness2';
 import InfoIcon from '@material-ui/icons/Info';
 import PeopleIcon from '@material-ui/icons/People';
-import SecurityIcon from '@material-ui/icons/Security';
 import SchoolIcon from '@material-ui/icons/School'; // Verified Icon
+import SecurityIcon from '@material-ui/icons/Security';
 import SendIcon from '@material-ui/icons/Send';
 import StarsIcon from '@material-ui/icons/Stars';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'; // Admin Icon
@@ -98,6 +101,7 @@ export default function My() {
   const { setOpenLoginDialog } = context;
   const { userState } = context;
 
+  const { darkTheme } = userState;
   const { auth } = userState;
   const { isLoggedIn } = userState;
   const classes = useStyles();
@@ -172,6 +176,18 @@ export default function My() {
                 <SecurityIcon />
               </ListItemIcon>
               <ListItemText primary="管理入口" />
+            </ListItem>
+
+            <ListItem>
+              <ListItemIcon>
+                {darkTheme ? <Brightness2Icon /> : <WbSunnyIcon />}
+              </ListItemIcon>
+              <ListItemText primary="黑暗模式" />
+              <Switch
+                value={darkTheme}
+                color="default"
+                onChange={() => context.toggleTheme()}
+              />
             </ListItem>
 
             <ListItem button disabled>

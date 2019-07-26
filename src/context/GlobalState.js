@@ -14,11 +14,13 @@ import {
   SET_UNSHOW_BACK_BUTTON,
   SET_SHOW_MSG,
   SET_UNSHOW_MSG,
+  TOGGLE_THEME,
 } from './userReducer';
 
 
 const GlobalState = (props) => {
   let initialState = {
+    darkTheme: false,
     openLoginDialog: false,
     openPostDialog: false,
     openMsgBar: false,
@@ -88,6 +90,11 @@ const GlobalState = (props) => {
     });
   };
 
+  const toggleTheme = () => {
+    dispatch({ type: TOGGLE_THEME });
+  };
+
+
   const { children } = props;
   return (
     <loginContext.Provider
@@ -103,6 +110,7 @@ const GlobalState = (props) => {
         setunShowBackButton,
         setShowMsgBar,
         setunShowMsgBar,
+        toggleTheme,
       }}
     >
       {children}

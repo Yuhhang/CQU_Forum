@@ -10,7 +10,6 @@ function Page() {
   return (
     <GlobalState>
       <React.Fragment>
-        {/* <Drawer /> */}
         <NavBar />
       </React.Fragment>
     </GlobalState>

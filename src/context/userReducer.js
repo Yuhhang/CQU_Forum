@@ -8,6 +8,8 @@ export const SET_SHOW_BACK_BUTTON = 'SET_SHOW_BACK_BUTTON';
 export const SET_UNSHOW_BACK_BUTTON = 'SET_UNSHOW_BACK_BUTTON';
 export const SET_SHOW_MSG = 'SET_SHOW_MSG';
 export const SET_UNSHOW_MSG = 'SET_UNSHOW_MSG';
+export const TOGGLE_THEME = 'TOGGLE_THEME';
+
 
 const setLogin = (state, userInfo) => {
   localStorage.setItem('userInfo', JSON.stringify({
@@ -72,6 +74,11 @@ const setunShowMsgBar = state => ({
   msgBarText: '',
 });
 
+const toggleTheme = state => ({
+  ...state,
+  darkTheme: !state.darkTheme,
+});
+
 export const userReducer = (state, action) => {
   switch (action.type) {
     case SET_LOGIN:
@@ -94,6 +101,8 @@ export const userReducer = (state, action) => {
       return setShowMsgBar(state, action.msgType, action.msg);
     case SET_UNSHOW_MSG:
       return setunShowMsgBar(state);
+    case TOGGLE_THEME:
+      return toggleTheme(state);
     default:
       return state;
   }
