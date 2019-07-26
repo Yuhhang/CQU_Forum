@@ -184,7 +184,6 @@ export default function My() {
               </ListItemIcon>
               <ListItemText primary="黑暗模式" />
               <Switch
-                value={darkTheme}
                 color="default"
                 onChange={() => context.toggleTheme()}
               />

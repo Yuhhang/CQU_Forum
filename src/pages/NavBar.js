@@ -1,12 +1,11 @@
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { createMuiTheme, makeStyles } from '@material-ui/core/styles';
+import { createMuiTheme, makeStyles, MuiThemeProvider } from '@material-ui/core/styles';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CategoryIcon from '@material-ui/icons/Category';
 import MailIcon from '@material-ui/icons/Mail';
 import ViewListIcon from '@material-ui/icons/ViewList';
-import { ThemeProvider } from '@material-ui/styles';
 import React, { useContext } from 'react';
 import {
   HashRouter, Link,
@@ -63,7 +62,7 @@ export default function LabelBottomNavigation() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <MuiThemeProvider theme={theme}>
       <React.Fragment>
         <CssBaseline />
         <HashRouter>
@@ -91,7 +90,7 @@ export default function LabelBottomNavigation() {
           </Switch>
         </HashRouter>
       </React.Fragment>
-    </ThemeProvider>
+    </MuiThemeProvider>
 
   );
 }
