@@ -11,8 +11,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Slide from '@material-ui/core/Slide';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import React from 'react';
+import React, { useContext } from 'react';
 import instance from '../../../components/axios';
+import userContext from '../../../context/userContext';
 
 const sectionNameMaxLength = 15;
 const msgMaxLength = 200;
@@ -51,6 +52,7 @@ function convertToBinary({ visitor, unVerified, verified }) {
 }
 
 export default function AddSectionDialog({ disabled }) {
+  const context = useContext(userContext);
   const [open, setOpen] = React.useState(false);
 
   const [values, setValues] = React.useState({
@@ -125,6 +127,10 @@ export default function AddSectionDialog({ disabled }) {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  function handleClose() {
+    setOpen(false);
+  }
+
   function handleSubmit() {
     setShowProgress(true);
     const url = 'addSection/';
@@ -138,21 +144,18 @@ export default function AddSectionDialog({ disabled }) {
       }),
     })
       .then((res) => {
-        // console.log(res.data);
-        if (res.data.login_status === 'success') { // 登陆成功
-
+        if (res.data.status === 'success') {
+          context.setShowMsgBar('success', '创建分区成功');
+        } else {
+          context.setShowMsgBar('fail', res.data.msg);
         }
+        handleClose();
       })
       .catch(() => {
-        // handle error
-        setShowProgress(false);
+        context.setShowMsgBar('fail', '发生错误');
       }).finally(() => {
         setShowProgress(false);
       });
-  }
-
-  function handleClose() {
-    setOpen(false);
   }
 
   function FormRow() {

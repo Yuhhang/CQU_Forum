@@ -12,7 +12,7 @@ import {
   Route, Switch,
 } from 'react-router-dom';
 import PostDetail from '../components/PostDetail';
-import Section from '../components/Section';
+import Section from './square/Section';
 import userContext from '../context/userContext';
 import AppBar from './AppBar';
 import Inbox from './inbox/inbox';

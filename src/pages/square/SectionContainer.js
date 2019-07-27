@@ -1,9 +1,18 @@
 import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import SectionEntry from './SectionEntry';
 import instance from '../../components/axios';
+import SectionEntry from './SectionEntry';
 
+const useStyles = makeStyles(() => ({
+  root: {
+    width: '100%',
+    paddingBottom: '56px',
+  },
+}));
 export default function SectionBlock() {
+  const classes = useStyles();
+
   const [sectionList, setSectionList] = useState(JSON.parse(sessionStorage.getItem('sectionList')));
   useEffect(() => {
     if (sectionList !== null) {
@@ -34,9 +43,8 @@ export default function SectionBlock() {
     ));
   }
   return (
-    <Grid container spacing={1}>
+    <Grid container spacing={1} className={classes.root}>
       {sectionListDump || '暂无数据'}
     </Grid>
-
   );
 }

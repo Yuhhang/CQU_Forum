@@ -1,19 +1,20 @@
 import Avatar from '@material-ui/core/Avatar';
-import { grey } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
-import Card from './Card';
-import instance from './axios';
+import instance from '../../components/axios';
+import Card from '../../components/Card';
 
 const useStyles = makeStyles(theme => ({
   header: {
     padding: theme.spacing(3, 2),
-    backgroundColor: grey[100],
+    margin: 'auto',
+    // backgroundColor: theme.,
     // display: 'flex',
     alignItems: 'center',
+    maxWidth: '500px',
   },
   avatarGrid: {
     display: 'flex',
@@ -86,7 +87,9 @@ export default function PaperSheet(props) {
         <Paper className={classes.header}>
           <Grid container justify="center" alignContent="center">
             <Grid className={classes.avatarGrid} item xs={3}>
-              <Avatar className={classes.avatar}>H</Avatar>
+              <Avatar className={classes.avatar}>
+                {sectionInfo.name[0]}
+              </Avatar>
             </Grid>
             <Grid item xs={9}>
               <Typography variant="h6">

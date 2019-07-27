@@ -12,6 +12,7 @@ import AtUserNameDotTime from '../../components/gadget/AtUserNameDotTime';
 
 const useStyles = makeStyles(() => ({
   card: {
+    margin: 'auto',
     maxWidth: '200px',
   },
   cardContent: {
@@ -59,7 +60,7 @@ export default function CenteredGrid(props) {
   }
   return (
     // <Slide direction="up" in mountOnEnter unmountOnExit>
-    <Grid item xs={6}>
+    <Grid item xs={6} sm={4} lg={3}>
       <Card className={classes.card}>
         <ButtonBase
           className={classes.cardContentButton}

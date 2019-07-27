@@ -171,7 +171,7 @@ export default function My() {
               <ListItemText primary="我的关注" />
             </ListItem>
 
-            <ListItem button component={Link} to="/my/admin/admin" disabled={!['admin', 'superAdmin'].includes(auth.mode)}>
+            <ListItem button component={Link} to="/my/admin" disabled={!['admin', 'superAdmin'].includes(auth.mode)}>
               <ListItemIcon>
                 <SecurityIcon />
               </ListItemIcon>
@@ -184,6 +184,7 @@ export default function My() {
               </ListItemIcon>
               <ListItemText primary="黑暗模式" />
               <Switch
+                checked={darkTheme}
                 color="default"
                 onChange={() => context.toggleTheme()}
               />
