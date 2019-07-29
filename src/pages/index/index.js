@@ -44,6 +44,11 @@ const dataFetchReducer = (state, action) => {
         isError: false,
         data,
       };
+    case 'FETCH_NODATA':
+      return {
+        ...state,
+        isLoading: false,
+      };
     case 'FETCH_FAILURE':
       return {
         ...state,
@@ -76,6 +81,7 @@ const useDataApi = (initialUrl, initialData) => {
 
         if (!unmounted) {
           if (result.data.length === 0) {
+            dispatch({ type: 'FETCH_NODATA' });
             context.setShowMsgBar('default', '没有更多帖子了');
             return;
           }
