@@ -1,11 +1,13 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext, useEffect, useState, useMemo,
+} from 'react';
 // import InfiniteScroll from 'infinite-scroll';
 import instance from '../../components/axios';
 import Card from '../../components/Card';
 import userContext from '../../context/userContext';
-
+import RefreshFab from './RefreshFab';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -59,6 +61,8 @@ function MainPage() {
           if (offset !== -1) {
             context.setShowMsgBar('dufault', '没有更多帖子了');
             fetchPostLock = true; // 禁止后续刷新
+          } else {
+            context.setShowMsgBar('dufault', '暂无新帖');
           }
           return;
         }
@@ -108,18 +112,18 @@ function MainPage() {
       renderCard(dataOld);
       latestPostTime = dataOld[0].postTime;
       offsetCount = parseInt(dataOld.length / offsetBase, 10);
-      fetchNewData(-1);
+      // fetchNewData(-1);
     } else {
       fetchNewData(0);
       setShowProgress(true);
     }
 
-    const pullPost = setInterval(() => {
-      fetchNewData(-1);
-    }, 1000 * 30);
+    // const pullPost = setInterval(() => {
+    //   fetchNewData(-1);
+    // }, 1000 * 30);
 
     return () => {
-      clearInterval(pullPost);
+      // clearInterval(pullPost);
       window.onscroll = null;
     };
   }, []);
@@ -130,6 +134,7 @@ function MainPage() {
         && <LinearProgress />
       }
       {posts}
+      <RefreshFab fetchNewData={fetchNewData} />
     </div>
   );
 }
