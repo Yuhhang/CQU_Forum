@@ -1,142 +1,155 @@
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { makeStyles } from '@material-ui/core/styles';
 import React, {
-  useContext, useEffect, useState, useMemo,
+  useState,
+  useEffect,
+  useReducer,
+  useContext,
 } from 'react';
-// import InfiniteScroll from 'infinite-scroll';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import instance from '../../components/axios';
 import Card from '../../components/Card';
 import userContext from '../../context/userContext';
 import RefreshFab from './RefreshFab';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    marginBottom: '56px',
-  },
-}));
-
-let fetchPostLock = false;
-
 const offsetBase = 20;
 let offsetCount = 1;
 let latestPostTime = 0;
 
-function MainPage() {
-  const context = useContext(userContext); // global user context
-  const [posts, setPosts] = useState(null);
-  const [showProgress, setShowProgress] = useState(false);
-  const classes = useStyles();
+let fetchPostLock = false;
 
-  function renderCard(data) {
-    const postList = data.map(post => (
-      <Card
-        key={post.postId}
-        userId={post.userId}
-        postId={post.postId}
-        nickName={post.nickName}
-        sectionName={post.sectionName}
-        title={post.title}
-        content={post.content}
-        imgNum={post.imgNum}
-        commentCount={post.commentCount}
-        viewNum={post.views}
-        postTime={`${post.postTime}000`} // MySQL里的时间戳是秒, JS中的是毫秒
-      />
-    ));
-    setPosts(postList);
+const dataFetchReducer = (state, action) => {
+  let data;
+  switch (action.type) {
+    case 'FETCH_INIT':
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+      };
+    case 'FETCH_SUCCESS':
+      data = action.payload;
+      data = state.data
+        // 合并并去除重复项
+        ? state.data.concat(data.filter(
+          item => !(state.data.find(x => x.postId === item.postId) || false),
+        ))
+        : data;
+      data = data.sort((a, b) => b.postTime - a.postTime);
+      latestPostTime = data[0].postTime;
+      sessionStorage.setItem('postList', JSON.stringify(data.slice(0, 20)));
+      fetchPostLock = false; // 解除分页刷新限制
+
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        data,
+      };
+    case 'FETCH_FAILURE':
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+    default:
+      throw new Error();
   }
+};
 
-  function fetchNewData(offset) {
-    const dataOld = JSON.parse(sessionStorage.getItem('postList'));
-    let url = '';
-    if (offset === -1) {
-      // 获取最新发帖
-      url = '/getPost?time='.concat(latestPostTime);
-    } else {
-      url = '/getPost?offset='.concat(offset);
-    }
-    instance.get(url)
-      .then((res) => {
-        if (!res.data || res.data.length === 0) {
-          if (offset !== -1) {
-            context.setShowMsgBar('dufault', '没有更多帖子了');
-            fetchPostLock = true; // 禁止后续刷新
-          } else {
-            context.setShowMsgBar('dufault', '暂无新帖');
+const useDataApi = (initialUrl, initialData) => {
+  const context = useContext(userContext);
+  const [url, setUrl] = useState(initialUrl);
+
+  const [state, dispatch] = useReducer(dataFetchReducer, {
+    isLoading: false,
+    isError: false,
+    data: initialData,
+  });
+
+  useEffect(() => {
+    let unmounted = false; // 防止组件卸载后，仍处理网络请求
+
+    const fetchData = async () => {
+      dispatch({ type: 'FETCH_INIT' });
+
+      try {
+        const result = await instance.get(url);
+
+        if (!unmounted) {
+          if (result.data.length === 0) {
+            context.setShowMsgBar('default', '没有更多帖子了');
+            return;
           }
-          return;
+          dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
         }
-        setTimeout(() => {
-          fetchPostLock = false;
-        }, 5000);
+      } catch (error) {
+        if (!unmounted) {
+          context.setShowMsgBar('fail', '网络错误');
+          dispatch({ type: 'FETCH_FAILURE' });
+        }
+      }
+    };
 
-        let { data } = res;
-        latestPostTime = data[0].postTime > latestPostTime ? data[0].postTime : latestPostTime;
-        if (dataOld && JSON.stringify(dataOld[0]) === JSON.stringify(data[0])) {
-          return;
-        }
+    fetchData();
 
-        data = dataOld
-          // 合并并去除重复项
-          ? dataOld.concat(data.filter(
-            item => !(dataOld.find(x => x.postId === item.postId) || false),
-          ))
-          : data;
-        data = data.sort((a, b) => b.postTime - a.postTime);
-        sessionStorage.setItem('postList', JSON.stringify(data));
-        renderCard(data);
-      })
-      .catch(() => {
-        offsetCount = 1;
-        // sessionStorage.clear();
-        // window.location.reload();
-      })
-      .finally(() => {
-        if (offset === 0) {
-          setShowProgress(false);
-        }
-      });
+    return () => {
+      unmounted = true;
+    };
+  }, [url]);
+
+  return [state, setUrl];
+};
+
+export default function MainPage() {
+  let initData = sessionStorage.getItem('postList');
+  if (initData) {
+    initData = JSON.parse(initData);
+  } else {
+    initData = [];
   }
+
+  const [{ data, isLoading, isError }, doFetch] = useDataApi(
+    'getPost?offset=0',
+    initData,
+  );
 
   window.onscroll = () => {
     if (((window.innerHeight + window.scrollY) > document.body.offsetHeight) && !fetchPostLock) {
       fetchPostLock = true;
-      fetchNewData(offsetCount * offsetBase);
+      doFetch(`getPost?offset=${offsetCount * offsetBase}`);
       offsetCount += 1;
     }
   };
-
   useEffect(() => {
-    const dataOld = JSON.parse(sessionStorage.getItem('postList'));
-    if (dataOld !== null) {
-      renderCard(dataOld);
-      latestPostTime = dataOld[0].postTime;
-      offsetCount = parseInt(dataOld.length / offsetBase, 10);
-      // fetchNewData(-1);
-    } else {
-      fetchNewData(0);
-      setShowProgress(true);
-    }
-
-    // const pullPost = setInterval(() => {
-    //   fetchNewData(-1);
-    // }, 1000 * 30);
-
+    // no action
     return () => {
-      // clearInterval(pullPost);
       window.onscroll = null;
     };
   }, []);
 
   return (
-    <div className={classes.root} id="container">
-      {showProgress
-        && <LinearProgress />
-      }
-      {posts}
-      <RefreshFab fetchNewData={fetchNewData} />
+    <div style={{ marginBottom: '56px' }} id="container">
+      <RefreshFab fetchNewData={() => doFetch(`getPost?time=${++latestPostTime}`)} />
+
+      {isError && <div>发生错误</div>}
+
+      {isLoading && <LinearProgress />}
+      {data && (
+        data.map(post => (
+          <Card
+            key={post.postId}
+            userId={post.userId}
+            postId={post.postId}
+            nickName={post.nickName}
+            sectionName={post.sectionName}
+            title={post.title}
+            content={post.content}
+            imgNum={post.imgNum}
+            commentCount={post.commentCount}
+            viewNum={post.views}
+            postTime={`${post.postTime}000`} // MySQL里的时间戳是秒, JS中的是毫秒
+          />
+        ))
+      )}
     </div>
   );
 }
-
-export default MainPage;

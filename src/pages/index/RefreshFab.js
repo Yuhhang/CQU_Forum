@@ -20,7 +20,10 @@ export default function RefreshFab({ fetchNewData }) {
       <Fab
         color="primary"
         className={classes.fab}
-        onClick={() => fetchNewData(-1)}
+        onClick={() => {
+          console.log("sss");
+          fetchNewData()
+        }}
       >
         <RefreshIcon />
       </Fab>
