@@ -59,6 +59,7 @@ const useStyles = makeStyles(theme => ({
   cardContentText: {
     textOverflow: 'ellipsis',
     overflow: 'hidden',
+    whiteSpace: 'pre-wrap',
   },
   avatar: {
     backgroundColor: red[500],

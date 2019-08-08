@@ -17,7 +17,8 @@ const useStyles = makeStyles(() => ({
     marginTop: '7px',
   },
   commentContent: {
-    width: '100%',
+    // width: '100%',
+    whiteSpace: 'pre-wrap',
   },
   action: {
     float: 'right',
@@ -58,7 +59,7 @@ export default function Item(props) {
             {/* <Avatar alt="Profile Picture" src={person} /> */}
           </ListItemAvatar>
           <ListItemText
-            // className={classes.commentContent}
+            className={classes.commentContent}
             primary={commentTitle}
             secondary={content}
           />
