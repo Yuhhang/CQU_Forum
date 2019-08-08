@@ -21,7 +21,7 @@ import {
 
 const GlobalState = (props) => {
   let initialState = {
-    darkTheme: useMediaQuery('(prefers-color-scheme)', { noSsr: true }),
+    darkTheme: useMediaQuery('(prefers-color-scheme: dark)', { noSsr: true }),
     openLoginDialog: false,
     openPostDialog: false,
     openMsgBar: false,
