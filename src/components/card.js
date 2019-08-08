@@ -55,6 +55,7 @@ const useStyles = makeStyles(theme => ({
   },
   expandContent: {
     paddingTop: '0px',
+    whiteSpace: 'pre-wrap',
   },
   cardAction: {
     paddingTop: '0px',

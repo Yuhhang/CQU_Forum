@@ -1,5 +1,4 @@
 import React, { useReducer } from 'react';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import instance from '../components/axios';
 
 import loginContext from './userContext';
@@ -20,27 +19,28 @@ import {
 
 
 const GlobalState = (props) => {
-  let initialState = {
-    darkTheme: useMediaQuery('(prefers-color-scheme: dark)', { noSsr: true }),
-    openLoginDialog: false,
-    openPostDialog: false,
-    openMsgBar: false,
-    msgBarType: '',
-    msgBarText: '',
-    showBackButton: false,
-    backFunction: null,
-    isLoggedIn: false,
-    userName: '',
-    avatar: '',
-    auth: {
-      mode: 'visitor',
-      sections: [],
-    },
-  };
-
+  let initialState;
   const userInfoTemp = localStorage.getItem('userInfo');
   if (userInfoTemp !== null) {
     initialState = JSON.parse(userInfoTemp);
+  } else {
+    initialState = {
+      darkTheme: false,
+      openLoginDialog: false,
+      openPostDialog: false,
+      openMsgBar: false,
+      msgBarType: '',
+      msgBarText: '',
+      showBackButton: false,
+      backFunction: null,
+      isLoggedIn: false,
+      userName: '',
+      avatar: '',
+      auth: {
+        mode: 'visitor',
+        sections: [],
+      },
+    };
   }
 
   const [userState, dispatch] = useReducer(userReducer, initialState);

@@ -6,11 +6,12 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CategoryIcon from '@material-ui/icons/Category';
 import MailIcon from '@material-ui/icons/Mail';
 import ViewListIcon from '@material-ui/icons/ViewList';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   HashRouter, Link,
   Route, Switch,
 } from 'react-router-dom';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import PostDetail from '../components/PostDetail';
 import Section from './square/Section';
 import userContext from '../context/userContext';
@@ -48,6 +49,13 @@ export default function LabelBottomNavigation() {
   const context = useContext(userContext);
   const { userState } = context;
   const { darkTheme } = userState;
+  const darkThemeSys = useMediaQuery('(prefers-color-scheme: dark)', { noSsr: true });
+
+  useEffect(() => {
+    if (darkTheme !== darkThemeSys) {
+      context.toggleTheme();
+    }
+  }, [darkThemeSys]);
 
   const theme = createMuiTheme({
     palette: {
