@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import instance from '../components/axios';
 
 import loginContext from './userContext';
@@ -20,7 +21,7 @@ import {
 
 const GlobalState = (props) => {
   let initialState = {
-    darkTheme: false,
+    darkTheme: useMediaQuery('(prefers-color-scheme)', { noSsr: true }),
     openLoginDialog: false,
     openPostDialog: false,
     openMsgBar: false,

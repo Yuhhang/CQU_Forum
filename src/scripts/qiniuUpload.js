@@ -4,6 +4,10 @@ import instance from '../components/axios';
 const config = {
   useCdnDomain: true,
   region: qiniu.region.z2,
+  quality: 0.8,
+  noCompressIfLarger: true,
+  maxWidth: 1000,
+  maxHeight: 1000,
 };
 const putExtra = {
   fname: '',
