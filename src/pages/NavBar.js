@@ -12,6 +12,7 @@ import {
   Route, Switch,
 } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { blueGrey, indigo } from '@material-ui/core/colors';
 import PostDetail from '../components/PostDetail';
 import Section from './square/Section';
 import userContext from '../context/userContext';
@@ -59,6 +60,12 @@ export default function LabelBottomNavigation() {
 
   const theme = createMuiTheme({
     palette: {
+      primary: {
+        // light: blue[300],
+        main: darkTheme ? blueGrey[700] : indigo[500],
+        // dark: grey[700],
+        // contrastText: getContrastText(palette.primary[500]),
+      },
       type: darkTheme ? 'dark' : 'light',
     },
   });

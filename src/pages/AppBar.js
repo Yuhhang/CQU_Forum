@@ -30,7 +30,7 @@ function HideOnScroll(props) {
 }
 
 const useStyles = makeStyles(theme => ({
-  appBar: {
+  root: {
     marginBottom: '56px',
   },
   grow: {
@@ -58,7 +58,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function PrimarySearchAppBar(props) {
+export default function MainAppBar(props) {
   const context = useContext(userContext); // global user context
   const { userState } = context;
   const { setOpenPostDialog } = context;
@@ -128,7 +128,7 @@ export default function PrimarySearchAppBar(props) {
   );
 
   return (
-    <div className={classes.appBar}>
+    <div className={classes.root}>
       <MsgBar />
       <HideOnScroll {...props}>
         <AppBar>
