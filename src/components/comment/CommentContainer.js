@@ -79,99 +79,132 @@ function parseComments(comments) {
   return parsed;
 }
 
-function PostInfo(props) {
-  const [postInfo, setPostInfo] = useState(null);
+function PostInfo({ postInfo }) {
   const classes = useStyles();
-  const postIdInUrl = parseInt(props.postIdInUrl, 10);
-  function parseCard(currentPostInfo) {
-    const {
-      userId,
-      nickName,
-      postTime,
-      title,
-      content,
-      postId,
-      imgNum,
-      // commentCount,
-    } = currentPostInfo;
+  const {
+    userId,
+    nickName,
+    postTime,
+    title,
+    content,
+    postId,
+    imgNum,
+    // commentCount,
+  } = postInfo;
 
-    const date = new Date(parseInt(postTime, 10));
-    const hour = date.getHours().toString();
-    const min = date.getMinutes().toString();
-    const dateStr = (date.getMonth() + 1).toString().concat('月')
-      + date.getDate().toString().concat('日 ')
-      + (hour.length === 1 ? `0${hour}` : hour).concat(':')
-      + (min.length === 1 ? `0${min}` : min);
+  const date = new Date(parseInt(postTime, 10));
+  const hour = date.getHours().toString();
+  const min = date.getMinutes().toString();
+  const dateStr = (date.getMonth() + 1).toString().concat('月')
+    + date.getDate().toString().concat('日 ')
+    + (hour.length === 1 ? `0${hour}` : hour).concat(':')
+    + (min.length === 1 ? `0${min}` : min);
 
-    const postinfo = (
-      <Card className={classes.card}>
-        <CardHeader
-          className={classes.cardHeader}
-          avatar={(
-            <Avatar className={classes.avatar}>
-              {nickName[0]}
-            </Avatar>
-          )}
-          action={<CardMenu postId={postId} userName={nickName} userId={userId} />}
-          title={nickName}
-          subheader={` 发表于 ${dateStr}`}
-        />
-        <CardContent className={classes.cardContent}>
-          <Typography variant="h6" color="textPrimary">
-            {title}
-          </Typography>
-          <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p">
-            {content}
-          </Typography>
-          <ImgDisplay postId={postId} imgNum={imgNum} />
-        </CardContent>
-      </Card>
-    );
-    setPostInfo(postinfo);
-  }
-
-  useEffect(() => {
-    let currentPostInfo = sessionStorage.getItem('currentPostInfo');
-    if (!currentPostInfo) {
-      instance.get('/getPostById?postId='.concat(postIdInUrl))
-        .then((res) => {
-          if (res.data.status === 'fail') {
-            setPostInfo('该贴不存在');
-          } else {
-            parseCard(res.data[0]);
-          }
-        })
-        .catch(() => {
-          setPostInfo('网络错误');
-        });
-    } else {
-      currentPostInfo = JSON.parse(currentPostInfo);
-      if (currentPostInfo.postId !== postIdInUrl) {
-        instance.get('/getPostById?postId='.concat(postIdInUrl))
-          .then((res) => {
-            if (res.data.status === 'fail') {
-              setPostInfo('该贴不存在');
-            } else {
-              parseCard(res.data[0]);
-            }
-          })
-          .catch(() => {
-            setPostInfo('网络错误');
-          });
-      } else {
-        parseCard(currentPostInfo);
-      }
-    }
-  }, []);
-  return postInfo;
+  return (
+    <Card className={classes.card}>
+      <CardHeader
+        className={classes.cardHeader}
+        avatar={(
+          <Avatar className={classes.avatar}>
+            {nickName[0]}
+          </Avatar>
+        )}
+        action={<CardMenu postId={postId} userName={nickName} userId={userId} />}
+        title={nickName}
+        subheader={` 发表于 ${dateStr}`}
+      />
+      <CardContent className={classes.cardContent}>
+        <Typography variant="h6" color="textPrimary">
+          {title}
+        </Typography>
+        <Typography className={classes.cardContentText} variant="body2" color="textSecondary" component="p">
+          {content}
+        </Typography>
+        <ImgDisplay postId={postId} imgNum={imgNum} />
+      </CardContent>
+    </Card>
+  );
 }
 
 export default function CommentContainer(props) {
   const { postId } = props;
   const classes = useStyles();
   const [comments, setComments] = useState(null);
+  const [postInfo, setPostInfo] = useState({
+    userId: 0,
+    nickName: '无',
+    postTime: 0,
+    title: '加载中',
+    content: 'Loading...',
+    postId: 0,
+    imgNum: 0,
+  });
 
   useEffect(() => {
+    let currentPostInfo = sessionStorage.getItem('currentPostInfo');
+    if (!currentPostInfo) {
+      instance.get('/getPostById?postId='.concat(postId))
+        .then((res) => {
+          if (res.data.status === 'fail') {
+            setPostInfo({
+              userId: 0,
+              nickName: '无',
+              postTime: 0,
+              title: '该贴不存在',
+              content: '',
+              postId: 0,
+              imgNum: 0,
+            });
+          } else {
+            setPostInfo(res.data[0]);
+          }
+        })
+        .catch(() => {
+          setPostInfo({
+            userId: 0,
+            nickName: '无',
+            postTime: 0,
+            title: '网络错误',
+            content: '',
+            postId: 0,
+            imgNum: 0,
+          });
+        });
+    } else {
+      currentPostInfo = JSON.parse(currentPostInfo);
+      if (currentPostInfo.postId !== postId) {
+        instance.get('/getPostById?postId='.concat(postId))
+          .then((res) => {
+            if (res.data.status === 'fail') {
+              setPostInfo({
+                userId: 0,
+                nickName: '无',
+                postTime: 0,
+                title: '该贴不存在',
+                content: '',
+                postId: 0,
+                imgNum: 0,
+              });
+            } else {
+              setPostInfo(res.data[0]);
+            }
+          })
+          .catch(() => {
+            setPostInfo({
+              userId: 0,
+              nickName: '无',
+              postTime: 0,
+              title: '网络错误',
+              content: '',
+              postId: 0,
+              imgNum: 0,
+            });
+          });
+      } else {
+        setPostInfo(currentPostInfo);
+      }
+    }
+
     instance.get('/getComment?postId='.concat(postId))
       .then((res) => {
         if (!res.data[0]) {
@@ -207,7 +240,7 @@ export default function CommentContainer(props) {
 
   return (
     <React.Fragment>
-      <PostInfo postIdInUrl={postId} />
+      <PostInfo postInfo={postInfo} />
       <Paper square className={classes.paper}>
         <Typography className={classes.text} variant="h5" gutterBottom>
           {comments ? '评论' : '暂无评论'}
