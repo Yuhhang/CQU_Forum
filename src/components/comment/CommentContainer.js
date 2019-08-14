@@ -172,7 +172,7 @@ export default function CommentContainer(props) {
         });
     } else {
       currentPostInfo = JSON.parse(currentPostInfo);
-      if (currentPostInfo.postId !== postId) {
+      if (currentPostInfo.postId !== parseInt(postId, 10)) {
         instance.get('/getPostById?postId='.concat(postId))
           .then((res) => {
             if (res.data.status === 'fail') {
