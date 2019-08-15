@@ -37,7 +37,7 @@ export default function FullWidthTabs() {
           <Divider />
           <VerifyDialog />
           <Divider />
-          <MenuItem>申请管理员</MenuItem>
+          <MenuItem disabled>申请管理员</MenuItem>
           <Divider />
         </MenuList>
       </Paper>

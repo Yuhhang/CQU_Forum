@@ -6,13 +6,14 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Chip from '@material-ui/core/Chip';
 import Collapse from '@material-ui/core/Collapse';
-import { red } from '@material-ui/core/colors';
+import { red, grey } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CommentIcon from '@material-ui/icons/Comment';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PhotoIcon from '@material-ui/icons/PhotoOutlined';
+import FaceIcon from '@material-ui/icons/Face';
 import ShareIcon from '@material-ui/icons/Share';
 import Clipboard from 'clipboard';
 import clsx from 'clsx';
@@ -100,6 +101,7 @@ export default function PostCard(props) {
     commentCount,
     inSection,
     collected, // 是否被收藏
+    anonymous,
   } = props;
 
   useEffect(() => {
@@ -130,8 +132,11 @@ export default function PostCard(props) {
       />
     );
     const avatar = (
-      <Avatar className={classes.avatar}>
-        {nickName[0]}
+      <Avatar
+        className={classes.avatar}
+        style={{ backgroundColor: anonymous && grey[500] }}
+      >
+        {anonymous ? <FaceIcon /> : nickName[0]}
       </Avatar>
     );
     return (

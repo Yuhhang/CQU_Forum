@@ -62,6 +62,7 @@ export default function PaperSheet(props) {
             imgNum={post.imgNum}
             commentCount={post.commentCount}
             viewNum={post.views}
+            anonymous={post.anonymous}
             postTime={`${post.postTime}000`}
           />
         ));

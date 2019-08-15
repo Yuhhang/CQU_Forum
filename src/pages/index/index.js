@@ -152,6 +152,7 @@ export default function MainPage() {
             imgNum={post.imgNum}
             commentCount={post.commentCount}
             viewNum={post.views}
+            anonymous={post.anonymous}
             postTime={`${post.postTime}000`} // MySQL里的时间戳是秒, JS中的是毫秒
           />
         ))
