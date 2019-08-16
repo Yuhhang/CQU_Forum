@@ -13,7 +13,7 @@ import userContext from '../../context/userContext';
 import RefreshFab from './RefreshFab';
 
 const offsetBase = 20;
-let offsetCount = 0;
+// let offsetCount = 0;
 let latestPostTime = 0;
 
 const dataFetchReducer = (state, action) => {
@@ -42,6 +42,11 @@ const dataFetchReducer = (state, action) => {
         isLoading: false,
         isError: false,
         data,
+      };
+    case 'FETCH_INCROFFSET':
+      return {
+        ...state,
+        offsetCount: state.offsetCount + 1,
       };
     case 'FETCH_NONEWDATA':
       return {
@@ -72,6 +77,7 @@ const useDataApi = (initialUrl, initialData) => {
   const [state, dispatch] = useReducer(dataFetchReducer, {
     isLoading: false,
     isError: false,
+    offsetCount: 0,
     hasMore: true,
     data: initialData,
   });
@@ -87,7 +93,7 @@ const useDataApi = (initialUrl, initialData) => {
 
         if (!unmounted) {
           if (url.search('offset') !== -1) {
-            offsetCount++;
+            dispatch({ type: 'FETCH_INCROFFSET' });
           }
           if (result.data.length === 0) {
             if (url.search('offset') !== -1) {
@@ -135,6 +141,7 @@ const useDataApi = (initialUrl, initialData) => {
 };
 
 export default function MainPage() {
+  // offsetCount = 0;
   let initData = sessionStorage.getItem('postList');
   if (initData) {
     initData = JSON.parse(initData);
@@ -143,7 +150,11 @@ export default function MainPage() {
   }
 
   const [{
-    data, isLoading, isError, hasMore,
+    data,
+    isLoading,
+    isError,
+    offsetCount,
+    hasMore,
   }, doFetch] = useDataApi(
     'getPost?offset=0',
     initData,
@@ -160,6 +171,7 @@ export default function MainPage() {
         pageStart={0}
         loadMore={() => doFetch(`getPost?offset=${offsetCount * offsetBase}`)}
         hasMore={hasMore}
+        threshold={400}
         loader={<div style={{ textAlign: 'center', marginTop: 10 }} key={0}><CircularProgress /></div>}
       >
         {data && (
