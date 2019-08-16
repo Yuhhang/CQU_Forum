@@ -5,6 +5,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Slide from '@material-ui/core/Slide';
 import { makeStyles } from '@material-ui/core/styles';
+import FaceIcon from '@material-ui/icons/Face';
 import React from 'react';
 import AtUserNameDotTime from '../gadget/AtUserNameDotTime';
 import CommentAction from './CommentAction';
@@ -55,7 +56,7 @@ export default function Item(props) {
           alignItems="flex-start"
         >
           <ListItemAvatar className={classes.avatar}>
-            <Avatar>{nickName[0]}</Avatar>
+            <Avatar>{anonymous ? <FaceIcon /> : nickName[0]}</Avatar>
             {/* <Avatar alt="Profile Picture" src={person} /> */}
           </ListItemAvatar>
           <ListItemText

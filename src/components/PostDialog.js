@@ -265,6 +265,7 @@ export default function FormDialog() {
               )}
           </TextField>
           <FormControlLabel
+            style={{ float: 'right' }}
             control={(
               <Switch
                 checked={values.anonymous}

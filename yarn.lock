@@ -8348,7 +8348,7 @@ react-event-listener@^0.6.0:
     prop-types "^15.6.0"
     warning "^4.0.1"
 
-react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
+react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6, react-is@^16.9.0:
   version "16.9.0"
   resolved "https://registry.npm.taobao.org/react-is/download/react-is-16.9.0.tgz?cache=0&sync_timestamp=1565318004244&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-is%2Fdownload%2Freact-is-16.9.0.tgz#21ca9561399aad0ff1a7701c01683e8ca981edcb"
   integrity sha1-IcqVYTmarQ/xp3AcAWg+jKmB7cs=
@@ -8488,6 +8488,16 @@ react-swipeable-views@^0.13.3:
     react-swipeable-views-core "^0.13.1"
     react-swipeable-views-utils "^0.13.3"
     warning "^4.0.1"
+
+react-test-renderer@^16.9.0:
+  version "16.9.0"
+  resolved "https://registry.npm.taobao.org/react-test-renderer/download/react-test-renderer-16.9.0.tgz#7ed657a374af47af88f66f33a3ef99c9610c8ae9"
+  integrity sha1-ftZXo3SvR6+I9m8zo++ZyWEMiuk=
+  dependencies:
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    react-is "^16.9.0"
+    scheduler "^0.15.0"
 
 react-transition-group@^4.0.0:
   version "4.2.2"

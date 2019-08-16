@@ -1,4 +1,4 @@
-import { Fab } from '@material-ui/core';
+import { Fab, FormControlLabel, Switch } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -101,18 +101,18 @@ export default function CommentDialog(props) {
             type="text"
             fullWidth
           />
+          <FormControlLabel
+            style={{ float: 'right' }}
+            control={(
+              <Switch
+                checked={anonymous}
+                onChange={() => { setAnonymous(!anonymous); }}
+                color="primary"
+              />
+            )}
+            label="匿名发表"
+          />
         </DialogContent>
-        {/* <FormControlLabel
-          control={(
-            <Switch
-              disabled
-              checked={anonymous}
-              onChange={() => { setAnonymous(!anonymous); }}
-              color="primary"
-            />
-          )}
-          label="开启匿名"
-        /> */}
         <DialogActions>
           <Button onClick={handleClose} color="secondary">
             取消
