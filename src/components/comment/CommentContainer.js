@@ -3,10 +3,11 @@ import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import { red } from '@material-ui/core/colors';
+import { red, grey } from '@material-ui/core/colors';
 import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
+import FaceIcon from '@material-ui/icons/Face';
 import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
 import instance from '../axios';
@@ -89,6 +90,7 @@ function PostInfo({ postInfo }) {
     content,
     postId,
     imgNum,
+    anonymous,
     // commentCount,
   } = postInfo;
 
@@ -105,8 +107,11 @@ function PostInfo({ postInfo }) {
       <CardHeader
         className={classes.cardHeader}
         avatar={(
-          <Avatar className={classes.avatar}>
-            {nickName[0]}
+          <Avatar
+            className={classes.avatar}
+            style={{ backgroundColor: anonymous && grey[500] }}
+          >
+            {anonymous ? <FaceIcon /> : nickName[0]}
           </Avatar>
         )}
         action={<CardMenu postId={postId} userName={nickName} userId={userId} />}

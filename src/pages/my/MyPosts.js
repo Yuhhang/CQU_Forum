@@ -20,18 +20,7 @@ export default function MyPosts() {
     const postList = data.map(post => (
       <Card
         key={post.postId}
-        userId={post.userId}
-        postId={post.postId}
-        nickName={post.nickName}
-        sectionName={post.sectionName}
-        title={post.title}
-        content={post.content}
-        imgNum={post.imgNum}
-        commentCount={post.commentCount}
-        viewNum={post.views}
-        anonymous={post.anonymous}      
-        collected
-        postTime={`${post.postTime}000`} // MySQL里的时间戳是秒, JS中的是毫秒
+        data={post}
       />
     ));
     setPosts(postList);

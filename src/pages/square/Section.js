@@ -52,18 +52,9 @@ export default function PaperSheet(props) {
         const data = res.data.sort((a, b) => b.postTime - a.postTime);
         const postList = data.map(post => (
           <Card
-            inSection
             key={post.postId}
-            postId={post.postId}
-            nickName={post.nickName}
-            sectionName={post.sectionName}
-            title={post.title}
-            content={post.content}
-            imgNum={post.imgNum}
-            commentCount={post.commentCount}
-            viewNum={post.views}
-            anonymous={post.anonymous}
-            postTime={`${post.postTime}000`}
+            data={post}
+            inSection
           />
         ));
         setPosts(postList);

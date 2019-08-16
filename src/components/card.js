@@ -84,7 +84,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function PostCard(props) {
+export default function PostCard({ data, inSection, collected }) {
   const context = useContext(userContext);
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -92,17 +92,17 @@ export default function PostCard(props) {
     userId,
     postId,
     sectionName,
+    sectionId,
     title,
     content,
     imgNum,
-    postTime,
     nickName,
     // viewNum,
     commentCount,
-    inSection,
-    collected, // 是否被收藏
     anonymous,
-  } = props;
+  } = data;
+  let { postTime } = data;
+  postTime = `${postTime}000`;
 
   useEffect(() => {
     // eslint-disable-next-line
@@ -121,7 +121,15 @@ export default function PostCard(props) {
   }
 
   function Header() {
-    const cardTitle = <Chip className={classes.chip} label={sectionName} />;
+    // const cardTitle = <Chip className={classes.chip} label={sectionName} />;
+    const cardTitle = (
+      <ButtonBase
+        component={Link}
+        to={'/section/'.concat(sectionId)}
+      >
+        <Chip className={classes.chip} label={sectionName} />
+      </ButtonBase>
+    );
     const cardSubTitle = <AtUserNameDotTime nickName={nickName} postTime={postTime} />;
     const action = (
       <CardMenu
@@ -160,7 +168,7 @@ export default function PostCard(props) {
           to={'/post/'.concat(postId)}
           className={classes.cardContentButton}
           onClick={() => {
-            sessionStorage.setItem('currentPostInfo', JSON.stringify(props));
+            sessionStorage.setItem('currentPostInfo', JSON.stringify(data));
           }}
         >
           <CardContent className={classes.cardContent}>

@@ -48,6 +48,7 @@ export default function LoginDialog() {
 
   const useStyles = makeStyles(theme => ({
     root: {
+      maxWidth: 250,
       display: 'flex',
       flexWrap: 'wrap',
     },
@@ -236,11 +237,6 @@ export default function LoginDialog() {
   // }
   return (
     <div>
-      {/* <LoginAndOut
-        isLoggedIn={isLoggedIn}
-        handleClickOpen={handleClickOpen}
-        handleLogout={handleLogout}
-      /> */}
       <Dialog
         open={openLoginDialog}
         onClose={handleClose}
