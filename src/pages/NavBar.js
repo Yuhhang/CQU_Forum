@@ -4,7 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, makeStyles, MuiThemeProvider } from '@material-ui/core/styles';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CategoryIcon from '@material-ui/icons/Category';
-import MailIcon from '@material-ui/icons/Mail';
+// import MailIcon from '@material-ui/icons/Mail';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import React, { useContext, useEffect } from 'react';
 import {
@@ -86,23 +86,25 @@ export default function LabelBottomNavigation() {
           <BottomNavigation value={value} onChange={handleChange} className={classes.navbar}>
             <BottomNavigationAction label="主页" value="index" icon={<ViewListIcon />} component={Link} to="/" />
             <BottomNavigationAction label="广场" value="square" icon={<CategoryIcon />} component={Link} to="/square" />
-            <BottomNavigationAction label="消息" value="inbox" icon={<MailIcon />} component={Link} to="/inbox" disabled />
+            {/* <BottomNavigationAction label="消息" value="inbox" icon={<MailIcon />} component={Link} to="/inbox" disabled /> */}
             <BottomNavigationAction label="我的" value="my" icon={<AccountCircleIcon />} component={Link} to="/my" />
           </BottomNavigation>
-          <Switch>
-            <Route path="/" exact component={Main} />
-            <Route path="/square" component={Square} />
-            <Route path="/inbox" component={Inbox} />
-            <Route path="/my" exact component={My} />
-            <Route path="/my/collect" component={Collect} />
-            <Route path="/my/myposts" component={MyPosts} />
-            <Route path="/my/userInfo" component={UserInfo} />
-            <Route path="/my/admin" component={Admin} />
-            <Route path="/section/:id" component={Section} />
-            <Route path="/post/:id" component={PostDetail} />
-            {/* No Match */}
-            <Route component={Main} />
-          </Switch>
+          <div style={{ paddingTop: 56, paddingBottom: 60 }}>
+            <Switch>
+              <Route path="/" exact component={Main} />
+              <Route path="/square" component={Square} />
+              <Route path="/inbox" component={Inbox} />
+              <Route path="/my" exact component={My} />
+              <Route path="/my/collect" component={Collect} />
+              <Route path="/my/myposts" component={MyPosts} />
+              <Route path="/my/userInfo" component={UserInfo} />
+              <Route path="/my/admin" component={Admin} />
+              <Route path="/section/:id" component={Section} />
+              <Route path="/post/:id" component={PostDetail} />
+              {/* No Match */}
+              <Route component={Main} />
+            </Switch>
+          </div>
         </HashRouter>
       </React.Fragment>
     </MuiThemeProvider>

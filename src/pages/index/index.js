@@ -4,17 +4,17 @@ import React, {
   useReducer,
   useContext,
 } from 'react';
-import LinearProgress from '@material-ui/core/LinearProgress';
+// import LinearProgress from '@material-ui/core/LinearProgress';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import InfiniteScroll from 'react-infinite-scroller';
 import instance from '../../components/axios';
 import Card from '../../components/Card';
 import userContext from '../../context/userContext';
 import RefreshFab from './RefreshFab';
 
 const offsetBase = 20;
-let offsetCount = 1;
+let offsetCount = 0;
 let latestPostTime = 0;
-
-let fetchPostLock = false;
 
 const dataFetchReducer = (state, action) => {
   let data;
@@ -36,7 +36,6 @@ const dataFetchReducer = (state, action) => {
       data = data.sort((a, b) => b.postTime - a.postTime);
       latestPostTime = data[0].postTime;
       sessionStorage.setItem('postList', JSON.stringify(data.slice(0, 20)));
-      fetchPostLock = false; // 解除分页刷新限制
 
       return {
         ...state,
@@ -44,9 +43,15 @@ const dataFetchReducer = (state, action) => {
         isError: false,
         data,
       };
+    case 'FETCH_NONEWDATA':
+      return {
+        ...state,
+        isLoading: false,
+      };
     case 'FETCH_NODATA':
       return {
         ...state,
+        hasMore: false,
         isLoading: false,
       };
     case 'FETCH_FAILURE':
@@ -67,6 +72,7 @@ const useDataApi = (initialUrl, initialData) => {
   const [state, dispatch] = useReducer(dataFetchReducer, {
     isLoading: false,
     isError: false,
+    hasMore: true,
     data: initialData,
   });
 
@@ -80,16 +86,39 @@ const useDataApi = (initialUrl, initialData) => {
         const result = await instance.get(url);
 
         if (!unmounted) {
+          if (url.search('offset') !== -1) {
+            offsetCount++;
+          }
           if (result.data.length === 0) {
-            dispatch({ type: 'FETCH_NODATA' });
+            if (url.search('offset') !== -1) {
+              dispatch({ type: 'FETCH_NODATA' });
+            } else {
+              dispatch({ type: 'FETCH_NONEWDATA' });
+            }
             context.setShowMsgBar('default', '没有更多帖子了');
             return;
           }
           dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
         }
-      } catch (error) {
+      } catch (err) {
         if (!unmounted) {
-          context.setShowMsgBar('fail', '网络错误');
+          switch (err.response.status) {
+            case 401:
+              context.setShowMsgBar('fail', err.response.data.msg);
+              break;
+            case 403:
+              context.setShowMsgBar('fail', err.response.data.msg);
+              break;
+            case 500:
+              context.setShowMsgBar('fail', '服务器发生错误，请稍后再试。');
+              break;
+            case 502:
+              context.setShowMsgBar('fail', '服务器无响应，请稍后再试。');
+              break;
+            default:
+              context.setShowMsgBar('fail', `发生错误${err.response.status}`);
+              break;
+          }
           dispatch({ type: 'FETCH_FAILURE' });
         }
       }
@@ -113,50 +142,45 @@ export default function MainPage() {
     initData = [];
   }
 
-  const [{ data, isLoading, isError }, doFetch] = useDataApi(
+  const [{
+    data, isLoading, isError, hasMore,
+  }, doFetch] = useDataApi(
     'getPost?offset=0',
     initData,
   );
 
-  window.onscroll = () => {
-    if (((window.innerHeight + window.scrollY) > document.body.offsetHeight) && !fetchPostLock) {
-      fetchPostLock = true;
-      doFetch(`getPost?offset=${offsetCount * offsetBase}`);
-      offsetCount += 1;
-    }
-  };
-  useEffect(() => {
-    // no action
-    return () => {
-      window.onscroll = null;
-    };
-  }, []);
-
   return (
-    <div style={{ marginBottom: '56px' }} id="container">
+    <div>
       <RefreshFab fetchNewData={() => doFetch(`getPost?time=${++latestPostTime}`)} />
 
       {isError && <div>发生错误</div>}
 
-      {isLoading && <LinearProgress />}
-      {data && (
-        data.map(post => (
-          <Card
-            key={post.postId}
-            userId={post.userId}
-            postId={post.postId}
-            nickName={post.nickName}
-            sectionName={post.sectionName}
-            title={post.title}
-            content={post.content}
-            imgNum={post.imgNum}
-            commentCount={post.commentCount}
-            viewNum={post.views}
-            anonymous={post.anonymous}
-            postTime={`${post.postTime}000`} // MySQL里的时间戳是秒, JS中的是毫秒
-          />
-        ))
-      )}
+      {/* {isLoading && <LinearProgress />} */}
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={() => doFetch(`getPost?offset=${offsetCount * offsetBase}`)}
+        hasMore={hasMore}
+        loader={<div style={{ textAlign: 'center', marginTop: 10 }} key={0}><CircularProgress /></div>}
+      >
+        {data && (
+          data.map(post => (
+            <Card
+              key={post.postId}
+              userId={post.userId}
+              postId={post.postId}
+              nickName={post.nickName}
+              sectionName={post.sectionName}
+              title={post.title}
+              content={post.content}
+              imgNum={post.imgNum}
+              commentCount={post.commentCount}
+              viewNum={post.views}
+              anonymous={post.anonymous}
+              postTime={`${post.postTime}000`} // MySQL里的时间戳是秒, JS中的是毫秒
+            />
+          ))
+        )}
+      </InfiniteScroll>
     </div>
   );
 }

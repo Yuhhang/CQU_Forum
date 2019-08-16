@@ -12,6 +12,7 @@
     "qiniu-js": "^2.5.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-infinite-scroller": "^1.2.4",
     "react-photoswipe": "^1.3.0",
     "react-recaptcha-v3": "^1.1.0",
     "react-router-dom": "^5.0.1",

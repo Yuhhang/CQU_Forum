@@ -132,7 +132,7 @@ export default function CommentContainer(props) {
   const [comments, setComments] = useState(null);
   const [postInfo, setPostInfo] = useState({
     userId: 0,
-    nickName: '无',
+    nickName: ' ',
     postTime: 0,
     title: '加载中',
     content: 'Loading...',
@@ -148,7 +148,7 @@ export default function CommentContainer(props) {
           if (res.data.status === 'fail') {
             setPostInfo({
               userId: 0,
-              nickName: '无',
+              nickName: ' ',
               postTime: 0,
               title: '该贴不存在',
               content: '',
@@ -230,11 +230,24 @@ export default function CommentContainer(props) {
         ));
         setComments(data);
       })
-      .catch(() => {
-        // handle error
-        setComments('网络错误');
-      }).finally(() => {
-
+      .catch((err) => {
+        switch (err.response.status) {
+          case 401:
+            setComments(err.response.data.msg);
+            break;
+          case 403:
+            setComments(err.response.data.msg);
+            break;
+          case 500:
+            setComments('服务器发生错误，请稍后再试。');
+            break;
+          case 502:
+            setComments('服务器无响应，请稍后再试。');
+            break;
+          default:
+            setComments(`发生错误${err.response.status}`);
+            break;
+        }
       });
   }, []);
 

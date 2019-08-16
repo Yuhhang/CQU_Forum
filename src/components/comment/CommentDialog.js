@@ -51,19 +51,18 @@ export default function CommentDialog(props) {
     })
       .then((res) => {
         // console.log(res.data);
-        if (res.data.comment_status === 'success') {
+        if (res.data.status === 'success') {
           context.setShowMsgBar('success', '评论成功');
           setContent('');
+          handleClose();
           window.location.reload();
           return;
         }
-        context.setShowMsgBar('error', '发生错误');
+        context.setShowMsgBar('error', res.data.msg);
       })
       .catch(() => {
-        // handle error
-        context.setShowMsgBar('error', '发生错误');
+        context.setShowMsgBar('error', '网络请求失败');
       }).finally(() => {
-        handleClose();
         setShowProgress(false);
       });
   }

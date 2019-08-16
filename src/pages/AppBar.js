@@ -30,9 +30,6 @@ function HideOnScroll(props) {
 }
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    marginBottom: '56px',
-  },
   grow: {
     flexGrow: 1,
   },
@@ -128,7 +125,7 @@ export default function MainAppBar(props) {
   );
 
   return (
-    <div className={classes.root}>
+    <div>
       <MsgBar />
       <HideOnScroll {...props}>
         <AppBar>
@@ -138,7 +135,7 @@ export default function MainAppBar(props) {
               && (
                 <Typography className={classes.title} variant="h6">
                   <ForumIcon />
-                  民主湖[v0.1.3]
+                  民主湖[v0.1.4]
                 </Typography>
               )
             }
