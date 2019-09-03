@@ -237,17 +237,14 @@ export default function CommentContainer(props) {
       })
       .catch((err) => {
         switch (err.response.status) {
+          case 400:
           case 401:
-            setComments(err.response.data.msg);
-            break;
           case 403:
             setComments(err.response.data.msg);
             break;
           case 500:
-            setComments('服务器发生错误，请稍后再试。');
-            break;
           case 502:
-            setComments('服务器无响应，请稍后再试。');
+            setComments('服务器发生错误，请稍后再试。');
             break;
           default:
             setComments(`发生错误${err.response.status}`);

@@ -55,17 +55,14 @@ const useDataApi = (initialUrl, initialData) => {
       } catch (err) {
         if (!unmounted) {
           switch (err.response.status) {
+            case 400:
             case 401:
-              context.setShowMsgBar('fail', err.response.data.msg);
-              break;
             case 403:
               context.setShowMsgBar('fail', err.response.data.msg);
               break;
             case 500:
-              context.setShowMsgBar('fail', '服务器发生错误，请稍后再试。');
-              break;
             case 502:
-              context.setShowMsgBar('fail', '服务器无响应，请稍后再试。');
+              context.setShowMsgBar('fail', '服务器发生错误，请稍后再试。');
               break;
             default:
               context.setShowMsgBar('fail', `发生错误${err.response.status}`);

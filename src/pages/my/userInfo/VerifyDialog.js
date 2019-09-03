@@ -7,7 +7,8 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useReducer } from 'react';
+import verifyEmailReducer from './reducers/verifyEmail';
 import instance from '../../../components/axios';
 import userContext from '../../../context/userContext';
 
@@ -23,13 +24,29 @@ export default function VerifyDialog() {
   const context = useContext(userContext); // global user context
   const { userState } = context;
 
+  const [state, dispatch] = useReducer(verifyEmailReducer, {
+    isSend: false,
+    disableSendMail: false,
+    disableSubmit: true,
+    isLoading: false,
+    captchaErr: false,
+  });
+  const {
+    isSend,
+    disableSendMail,
+    disableSubmit,
+    isLoading,
+    captchaErr,
+  } = state;
+
   const [open, setOpen] = useState(false);
   const [mailAddr, setMailAddr] = useState('');
   const [mailErr, setMailErr] = useState(false);
   const [captcha, setCaptcha] = useState('');
-  const [mailSent, setMailSent] = useState(false);
-  const [mailResend, setMailResend] = useState(30);
-  const [showProgress, setShowProgress] = useState(false);
+  const [mailResendCountdown, setMailResendCountdown] = useState(30);
+  // const [mailSent, setMailSent] = useState(false);
+  // const [mailResend, setMailResend] = useState(false);
+  // const [showProgress, setShowProgress] = useState(false);
 
   const classes = useStyles();
 
@@ -39,73 +56,77 @@ export default function VerifyDialog() {
     setOpen(false);
   }
 
-  function handleSendCaptcha() {
-    setShowProgress(true);
+  async function handleSendCaptcha() {
+    dispatch({ type: 'VERIFY_INIT' });
 
-    const url = 'mailAuth/';
-    instance.post(url, {
-      captcha,
-    })
-      .then((res) => {
-        // console.log(res.data);
-        if (res.data.status === 'success') {
-          setOpen(false);
-          context.setShowMsgBar('success', '验证成功，请重新登录');
-        } else {
-          context.setShowMsgBar('error', res.data.msg);
-        }
-      })
-      .catch(() => {
-        // handle error
-        context.setShowMsgBar('error', '发生错误');
-      })
-      .finally(() => {
-        setShowProgress(false);
-      });
+    try {
+      await instance.post('mailAuth/', { captcha });
+
+      dispatch({ type: 'VERIFY_SUCCESS' });
+      setOpen(false);
+      context.setShowMsgBar('success', '验证成功，请重新登录');
+    } catch (err) {
+      dispatch({ type: 'VERIFY_FAIL' });
+      switch (err.response.status) {
+        case 400:
+        case 401:
+        case 403:
+          context.setShowMsgBar('fail', err.response.data.msg);
+          break;
+        case 500:
+        case 502:
+          context.setShowMsgBar('fail', '服务器发生错误，请稍后再试。');
+          break;
+        default:
+          context.setShowMsgBar('fail', `发生错误${err.response.status}`);
+          break;
+      }
+    }
   }
 
   function recoverSendMail() {
     let countDown = 30;
     const resendTime = setInterval(() => {
       countDown -= 1;
-      setMailResend(prevTime => prevTime - 1);
+      setMailResendCountdown(prevTime => prevTime - 1);
       if (countDown === 0) {
-        setMailSent(false);
-        setMailResend(30);
+        dispatch({ type: 'SENDMAIL_TIMEOUT' });
+        setMailResendCountdown(30);
         clearInterval(resendTime);
       }
     }, 1000);
   }
 
-  function handleSendMail() {
+  async function handleSendMail() {
     if (!validateMailAddr()) {
       setMailErr(true);
       return;
     }
-    // 显示加载条并禁用提交
-    setShowProgress(true);
+    dispatch({ type: 'SENDMAIL_INIT' });
 
-    const url = 'mailAuth/';
-    instance.post(url, {
-      mailAddr,
-    })
-      .then((res) => {
-        // console.log(res.data);
-        if (res.data.status === 'success') {
-          setMailSent(true);
-          context.setShowMsgBar('success', '发送成功，请查看邮箱');
-        } else {
-          context.setShowMsgBar('error', res.data.msg);
-        }
-      })
-      .catch(() => {
-        // handle error
-        context.setShowMsgBar('error', '发生错误');
-      })
-      .finally(() => {
-        setShowProgress(false);
-        recoverSendMail();
-      });
+    try {
+      await instance.post('mailAuth/', { mailAddr });
+
+      dispatch({ type: 'SENDMAIL_SUCCESS' });
+      context.setShowMsgBar('success', '发送成功，请查看邮箱');
+      recoverSendMail();
+    } catch (err) {
+      dispatch({ type: 'SENDMAIL_FAIL' });
+      switch (err.response.status) {
+        case 400:
+        case 401:
+        case 403:
+          context.setShowMsgBar('fail', err.response.data.msg);
+          break;
+        case 500:
+        case 502:
+          context.setShowMsgBar('fail', '服务器发生错误，请稍后再试。');
+          break;
+        default:
+          context.setShowMsgBar('fail', `发生错误${err.response.status}`);
+          break;
+      }
+    }
   }
 
   return (
@@ -142,15 +163,15 @@ export default function VerifyDialog() {
           <div>
             <Button
               variant="contained"
-              disabled={showProgress || mailSent}
+              disabled={isLoading || disableSendMail}
               onClick={handleSendMail}
             >
-              {!mailSent ? '发送验证码' : `重新发送${mailResend}`}
+              {!isSend ? '发送验证码' : `重新发送${mailResendCountdown}`}
             </Button>
           </div>
           <TextField
-            // error={contentErr}
-            disabled={!mailSent}
+            error={captchaErr}
+            disabled={disableSubmit}
             id="content"
             label="验证码"
             type="text"
@@ -165,14 +186,14 @@ export default function VerifyDialog() {
             取消
           </Button>
           <Button
-            disabled={showProgress || !mailSent}
+            disabled={isLoading || disableSubmit}
             onClick={handleSendCaptcha}
             color="primary"
           >
             验证
           </Button>
         </DialogActions>
-        {showProgress
+        {isLoading
           && <LinearProgress />
         }
       </Dialog>
