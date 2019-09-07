@@ -135,7 +135,7 @@ export default function MainAppBar(props) {
               && (
                 <Typography className={classes.title} variant="h6">
                   <ForumIcon />
-                  民主湖[v0.2.0]
+                  民主湖[v0.2.1]
                 </Typography>
               )
             }

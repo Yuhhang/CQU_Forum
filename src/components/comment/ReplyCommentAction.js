@@ -14,9 +14,6 @@ const useStyles = makeStyles(theme => ({
   icon: {
     fontSize: '1.2rem',
   },
-  countText: {
-    paddingLeft: '3px',
-  },
   expandContent: {
     paddingTop: '0px',
   },
@@ -94,7 +91,7 @@ export default function CommentAction(props) {
         onClick={handleDislike}
       >
         <ThumbDownIcon className={classes.icon} />
-        <Typography className={classes.countText} component="span">
+        <Typography component="span" style={{ position: 'relative', left: '5px', top: '1px' }}>
           {dislikeCount}
         </Typography>
       </IconButton>
@@ -106,7 +103,7 @@ export default function CommentAction(props) {
         onClick={handleLike}
       >
         <ThumbUpIcon className={classes.icon} />
-        <Typography className={classes.countText} component="span">
+        <Typography component="span" style={{ position: 'relative', left: '5px', top: '1px' }}>
           {likeCount}
         </Typography>
       </IconButton>

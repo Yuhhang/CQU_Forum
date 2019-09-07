@@ -122,7 +122,7 @@ export default function TimelineLatest() {
         pageStart={0}
         loadMore={() => doFetch(nextPageUrl)}
         hasMore={hasMore}
-        threshold={400}
+        threshold={200}
         loader={<div style={{ textAlign: 'center', marginTop: 10 }} key={0}><CircularProgress /></div>}
       >
         {data && (

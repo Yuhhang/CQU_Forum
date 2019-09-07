@@ -4,7 +4,6 @@ import React, {
   useReducer,
   useContext,
 } from 'react';
-// import LinearProgress from '@material-ui/core/LinearProgress';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InfiniteScroll from 'react-infinite-scroller';
 import instance from '../../components/axios';
@@ -83,9 +82,7 @@ const useDataApi = (initialUrl, initialData) => {
   return [state, setUrl];
 };
 
-export default function TimelineLatest() {
-  // offsetCount = 0;
-
+export default function TimelineHot() {
   const [{
     data,
     // isLoading,
@@ -116,7 +113,7 @@ export default function TimelineLatest() {
         pageStart={0}
         loadMore={() => doFetch(nextPageUrl)}
         hasMore={hasMore}
-        threshold={400}
+        threshold={200}
         loader={<div style={{ textAlign: 'center', marginTop: 10 }} key={0}><CircularProgress /></div>}
       >
         {data && (

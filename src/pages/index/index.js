@@ -38,14 +38,17 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
+    margin: 'auto',
+    maxWidth: '500px',
   },
 }));
 
 export default function SimpleTabs() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(parseInt(sessionStorage.getItem('currentIndexItem'), 10) || 0);
 
   function handleChange(event, newValue) {
+    sessionStorage.setItem('currentIndexItem', newValue);
     setValue(newValue);
   }
 

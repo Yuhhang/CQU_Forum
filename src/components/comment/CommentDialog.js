@@ -7,6 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
 import ReplyIcon from '@material-ui/icons/Reply';
 import React, { useContext, useState } from 'react';
@@ -17,6 +18,7 @@ export default function CommentDialog(props) {
   const {
     postId,
     replyTo,
+    replyCount,
   } = props;
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
@@ -75,6 +77,9 @@ export default function CommentDialog(props) {
           onClick={handleClickOpen}
         >
           <ReplyIcon />
+          <Typography component="span" style={{ position: 'relative', left: '2px', top: '1px' }}>
+            {replyCount}
+          </Typography>
         </IconButton>
       )}
       {!replyTo && (
@@ -86,7 +91,7 @@ export default function CommentDialog(props) {
           <EditIcon />
         </Fab>
       )}
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
           {replyTo ? '回复' : '发表评论'}
         </DialogTitle>
