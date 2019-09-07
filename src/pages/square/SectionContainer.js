@@ -1,18 +1,8 @@
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import instance from '../../components/axios';
-import SectionEntry from './SectionEntry';
+import SectionCategory from './SectionCategory';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    width: '100%',
-    paddingBottom: '56px',
-  },
-}));
 export default function SectionBlock() {
-  const classes = useStyles();
-
   const [sectionList, setSectionList] = useState(JSON.parse(sessionStorage.getItem('sectionList')));
   useEffect(() => {
     if (sectionList !== null) {
@@ -29,22 +19,29 @@ export default function SectionBlock() {
       }).finally(() => {
 
       });
-  }, []);
-  let sectionListDump = null;
+  }, [sectionList]);
+
+  const sectionListSet = {};
   if (sectionList !== null) {
-    sectionListDump = sectionList.map(section => (
-      <SectionEntry
-        key={section.section_id}
-        sectionId={section.section_id}
-        sectionName={section.name}
-        mode={section.mode}
-        msg={section.msg}
-      />
-    ));
+    sectionList.forEach((section) => {
+      // console.log(section);
+      if (!sectionListSet[section.category_id]) {
+        sectionListSet[section.category_id] = [];
+      }
+      sectionListSet[section.category_id].push(section);
+    });
   }
   return (
-    <Grid container spacing={1} className={classes.root}>
-      {sectionListDump || '暂无数据'}
-    </Grid>
+    <React.Fragment>
+      {sectionList
+        ? Object.values(sectionListSet).map((set => (
+          <SectionCategory
+            key={set[0].category_id}
+            description={set[0].description}
+            sectionList={set}
+          />
+        )))
+        : '暂无数据'}
+    </React.Fragment>
   );
 }
