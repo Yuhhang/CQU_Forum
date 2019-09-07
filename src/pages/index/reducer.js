@@ -16,7 +16,6 @@ export default function (state, action) {
         ))
         : data;
       data = data.sort((a, b) => b.postTime - a.postTime);
-      sessionStorage.setItem('postList', JSON.stringify(data.slice(0, 20)));
 
       return {
         ...state,

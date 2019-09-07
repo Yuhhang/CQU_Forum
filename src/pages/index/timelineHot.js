@@ -44,9 +44,9 @@ const useDataApi = (initialUrl, initialData) => {
             if (url.search('offset') !== -1) {
               dispatch({ type: 'FETCH_NODATA' });
             } else {
+              context.setShowMsgBar('default', '没有更多帖子了');
               dispatch({ type: 'FETCH_NONEWDATA' });
             }
-            context.setShowMsgBar('default', '没有更多帖子了');
             return;
           }
           dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
@@ -83,6 +83,13 @@ const useDataApi = (initialUrl, initialData) => {
 };
 
 export default function TimelineHot() {
+  let initData = sessionStorage.getItem('postListHot');
+  if (initData) {
+    initData = JSON.parse(initData);
+  } else {
+    initData = [];
+  }
+
   const [{
     data,
     // isLoading,
@@ -94,6 +101,7 @@ export default function TimelineHot() {
     'getPostHot?offset=0',
     [],
   );
+  if (data) { sessionStorage.setItem('postListHot', JSON.stringify(data.slice(0, 20))); }
 
   function latestPostUrl() {
     return `getPostHot?time=${latestPostTime}?rand=${Math.random()}`;
