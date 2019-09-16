@@ -67,7 +67,7 @@ export default function SimpleTabs() {
         >
           <Tab label="最新发帖" {...a11yProps(0)} />
           <Tab label="近期热门" {...a11yProps(1)} />
-          <Tab disabled label="更多" {...a11yProps(2)} />
+          {/* <Tab disabled label="更多" {...a11yProps(2)} /> */}
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -76,9 +76,9 @@ export default function SimpleTabs() {
       <TabPanel value={value} index={1}>
         <TimelineHot />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      {/* <TabPanel value={value} index={2}>
         ......
-      </TabPanel>
+      </TabPanel> */}
     </div>
   );
 }

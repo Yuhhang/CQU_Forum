@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const instance = axios.create({
   baseURL: 'https://minzhuhu.cn/api/',
+  // baseURL: 'https://cqu.minzhuhu.cn/api/',
   withCredentials: true,
   timeout: 10000,
   // headers: {
